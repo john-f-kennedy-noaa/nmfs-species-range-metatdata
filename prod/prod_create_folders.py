@@ -45,8 +45,10 @@ def main(project_folder=str(), folders=list()):
 
 if __name__ == '__main__':
     try:
-        project_folder = rf"{os.path.dirname(os.path.dirname(__file__))}"
-        folders = ["Export", "Layers", "Publish", "dev", "test", "prod"]
+        #project_folder = rf"{os.path.dirname(os.path.dirname(__file__))}"
+        project_folder = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\DisMAP-ArcGIS-Analysis"
+        #folders = ["Export", "Layers", "Publish", "dev", "test", "prod"]
+        folders = ["build", "data", "dev", "dist", "helpDoc", "prod", "samples", "src", "test"]
         main(project_folder=project_folder, folders=folders)
         del project_folder, folders
     except Warning as w:
