@@ -1,0 +1,140 @@
+<metadata xml:lang="en">
+    <Esri>
+        <CreaDate>20200916</CreaDate>
+        <CreaTime>14161300</CreaTime>
+        <ArcGISFormat>1.0</ArcGISFormat>
+        <ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle>
+        <SyncOnce>TRUE</SyncOnce>
+        <ModDate>20250106</ModDate>
+        <ModTime>16292600</ModTime>
+        <scaleRange>
+            <minScale>150000000</minScale>
+            <maxScale>5000</maxScale>
+        </scaleRange>
+        <ArcGISProfile>ISO19139</ArcGISProfile>
+        <DataProperties>
+            <itemProps>
+                <imsContentType export="False"></imsContentType>
+            </itemProps>
+        </DataProperties>
+    </Esri>
+    <dataIdInfo>
+        <idPurp>This geodatabase includes the ranges of entities listed under the Endangered Species Act (ESA). An ESA listed entity can be a species, sub-species, Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). The range is considered to be the general geographical area within which that listed entity can be found (i.e., occurs) at the time FWS or NMFS makes any particular status determination. The ranges are stored as feature classes, organized by the listed entity and identified by polygon and/or polyline geometries. Proposed listed entities are identified as such. To assist users with displays and queries, all range polygon feature classes were merged into the All_Ranges_poly feature class, and all polyline feature classes were merged into the All_Ranges_line feature class.  In addition to the ranges of DPSs, we may also provide users with that species' range. Because such species are not listed entities, we do not include them in the merged "All_Ranges" features classes.</idPurp>
+        <idCitation xmlns="">
+            <resTitle>NMFS ESA Ranges</resTitle>
+            <date>
+                <pubDate>2025-01-01T00:00:00</pubDate>
+            </date>
+            <citRespParty xmlns="">
+                <editorSource>external</editorSource>
+                <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                <rpIndName>Nikki Wildart</rpIndName>
+                <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                <rpPosName>Biologist</rpPosName>
+                <rpCntInfo xmlns="">
+                    <cntAddress addressType="both">
+                        <delPoint>1315 East West Highway</delPoint>
+                        <city>Silver Spring</city>
+                        <adminArea>MD</adminArea>
+                        <postCode>20910</postCode>
+                        <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                        <country>US</country>
+                    </cntAddress>
+                    <cntPhone>
+                        <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                        <faxNum>(301) 427-8443</faxNum>
+                    </cntPhone>
+                    <cntHours>0700 - 1800 EST/EDT</cntHours>
+                    <cntOnlineRes>
+                        <linkage>http://www.st.nmfs.noaa.gov/</linkage>
+                        <orName>Fisheries OST</orName>
+                        <orDesc>NOAA Fisheries Office of Science and Technology</orDesc>
+                        <orFunct>
+                            <OnFunctCd value="002"></OnFunctCd>
+                        </orFunct>
+                    </cntOnlineRes>
+                </rpCntInfo>
+                <editorSave>True</editorSave>
+                <displayName>Nikki Wildart</displayName>
+                <role>
+                    <RoleCd value="002"></RoleCd>
+                </role>
+            </citRespParty>
+        </idCitation>
+        <searchKeys>
+            <keyword>Endangered Species Act; Species; Habitat range</keyword>
+        </searchKeys>
+        <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;This geodatabase (NMFS_ESA_Ranges.gdb) was created to gather and standardize National Marine Fisheries Service species' range spatial data.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
+        <idCredit>NOAA Fisheries Service. 2024. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR).</idCredit>
+        <resConst>
+            <Consts>
+                <useLimit>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;*** Attribution *** Whenever NMFS material is reproduced and re-disseminated, we request that users attribute the material appropriately. Pursuant to 17 U.S. C. 403, parties who produce copyrighted works consisting predominantly of material created by the Federal Government are encouraged to provide notice with such work(s) identifying the U.S. Government material incorporated and stating that such material is not subject to copyright protection. Please cite the species range datasets as indicated in the metadata for each species, or if not indicated, as follows with the appropriate information substituted for all text in {CURLY BRACKETS}: &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;NOAA Fisheries Service. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR) [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;***No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of this data. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Proper Usage *** The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public. Before using information obtained from this server, special attention should be given to the date and time of the data and products being displayed. This information shall not be modified in content and then presented as official government material. This dataset was created to generally represent our best professional judgment of the ranges of listed species based on the best available information at the time of publication, including: geographic factors, time of year, and the biology of each species. The dataset should not be used to infer information regarding the existence or details of other marine features or resources, including, but not limited to, navigable waters, coastlines, bathymetry, submerged features, or man-made structures. Users assume responsibility for determining the appropriate use of this dataset. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Temporal Considerations *** Species’ ranges are subject to change or modification. Generally, we become aware of these changes during the 5-year review of the species’ status, as required under the ESA. If changes to the range are deemed necessary, we will make such changes in the database, which will be archived and replaced by an updated version as soon as feasible. It is the user’s responsibility to ensure the most recent species’ range data are being used. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Shorelines/Base Layers *** The accuracy of this dataset is dependent upon the accuracy and resolution of the datasets (e.g. shoreline, hydrography, bathymetry, shared administrative boundaries) used in the creation process. Source datasets used are specified in the metadata. These data sources were selected for their suitability to a broad audience, and may not be suitable for specific uses requiring higher-resolution information. Coastlines and water body boundaries change. Unless otherwise noted, where the National Hydrography Dataset or NOAA Medium Resolution Shoreline is used, assume the boundary reaches the most current river, estuary, or coastal shoreline delineation available.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Data Limitations ***&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;Our data may lack the spatial resolution to capture the entire range of a species, especially outside of a major waterway (e.g., in a very small tributary, or shallow area near a marsh). For section 7 consultations, we recommend that Federal action agencies request technical assistance to verify presence/absence of listed species within their action area.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</useLimit>
+            </Consts>
+        </resConst>
+        <dataLang>
+            <languageCode value="eng"></languageCode>
+        </dataLang>
+        <dataChar>
+            <CharSetCd value="004"></CharSetCd>
+        </dataChar>
+        <tpCat>
+            <TopicCatCd value="002"></TopicCatCd>
+        </tpCat>
+        <tpCat>
+            <TopicCatCd value="007"></TopicCatCd>
+        </tpCat>
+        <tpCat>
+            <TopicCatCd value="014"></TopicCatCd>
+        </tpCat>
+    </dataIdInfo>
+    <mdHrLv>
+        <ScopeCd value="005"></ScopeCd>
+    </mdHrLv>
+    <mdDateSt Sync="TRUE">20250106</mdDateSt>
+    <mdLang>
+        <languageCode value="eng"></languageCode>
+    </mdLang>
+    <mdChar>
+        <CharSetCd value="004"></CharSetCd>
+    </mdChar>
+    <mdContact xmlns="">
+        <editorSource>external</editorSource>
+        <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+        <rpIndName>Nikki Wildart</rpIndName>
+        <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+        <rpPosName>Biologist</rpPosName>
+        <rpCntInfo xmlns="">
+            <cntAddress addressType="both">
+                <delPoint>1315 East West Highway</delPoint>
+                <city>Silver Spring</city>
+                <adminArea>MD</adminArea>
+                <postCode>20910</postCode>
+                <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                <country>US</country>
+            </cntAddress>
+            <cntPhone>
+                <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                <faxNum>(301) 427-8443</faxNum>
+            </cntPhone>
+            <cntHours>0700 - 1800 EST/EDT</cntHours>
+            <cntOnlineRes>
+                <linkage>http://www.st.nmfs.noaa.gov/</linkage>
+                <orName>Fisheries OST</orName>
+                <orDesc>NOAA Fisheries Office of Science and Technology</orDesc>
+                <orFunct>
+                    <OnFunctCd value="002"></OnFunctCd>
+                </orFunct>
+            </cntOnlineRes>
+        </rpCntInfo>
+        <editorSave>True</editorSave>
+        <displayName>Nikki Wildart</displayName>
+        <role>
+            <RoleCd value="011"></RoleCd>
+        </role>
+    </mdContact>
+    <mdMaint xmlns="">
+        <maintFreq>
+            <MaintFreqCd value="009"></MaintFreqCd>
+        </maintFreq>
+    </mdMaint>
+</metadata>

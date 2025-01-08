@@ -1,0 +1,428 @@
+<metadata xml:lang="en">
+    <mdChar>
+        <CharSetCd value="004"></CharSetCd>
+    </mdChar>
+    <mdHrLv>
+        <ScopeCd value="005" Sync="FALSE"></ScopeCd>
+    </mdHrLv>
+    <mdContact>
+        <rpIndName>Tim Haverland</rpIndName>
+        <rpOrgName>NOAA Fisheries Office of Science and Technology</rpOrgName>
+        <rpPosName>IT Specialist</rpPosName>
+        <role>
+            <RoleCd value="005"></RoleCd>
+        </role>
+        <rpCntInfo>
+            <cntAddress addressType="both">
+                <delPoint>1315 East-West Highway</delPoint>
+                <city>Silver Spring</city>
+                <adminArea>MD</adminArea>
+                <postCode>20910</postCode>
+                <eMailAdd>tim.haverland@noaa.gov</eMailAdd>
+                <country>US</country>
+            </cntAddress>
+            <cntPhone>
+                <voiceNum>301-427-8137</voiceNum>
+            </cntPhone>
+            <cntOnlineRes>
+                <linkage>https://cetsound.noaa.gov</linkage>
+                <orFunct>
+                    <OnFunctCd value="002"></OnFunctCd>
+                </orFunct>
+                <protocol>https</protocol>
+            </cntOnlineRes>
+        </rpCntInfo>
+    </mdContact>
+    <distInfo>
+        <distFormat>
+            <formatVer>6.1</formatVer>
+            <fileDecmTech>ZIP</fileDecmTech>
+        </distFormat>
+        <distTranOps>
+            <unitsODist>MB</unitsODist>
+            <transSize>19</transSize>
+            <onLineSrc>
+                <linkage>https://noaa.maps.arcgis.com/home/item.html?id=566b4ad31f1d40eeb65b8cf3a4f087ca</linkage>
+                <protocol>https</protocol>
+                <orFunct>
+                    <OnFunctCd value="001"></OnFunctCd>
+                </orFunct>
+            </onLineSrc>
+        </distTranOps>
+    </distInfo>
+    <dataIdInfo>
+        <idCitation>
+            <resTitle>Bairds beaked whale Density - Summer-Fall - CCE 2020b</resTitle>
+            <date>
+                <pubDate>2020-12-01T00:00:00</pubDate>
+            </date>
+            <citRespParty>
+                <rpOrgName>Southwest Fisheries Science Center</rpOrgName>
+                <role>
+                    <RoleCd value="006"></RoleCd>
+                </role>
+            </citRespParty>
+        </idCitation>
+        <dataExt>
+            <exDesc>California, Oregon, Washington, Eastern Pacific Ocean</exDesc>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>1991-07-01T00:00:00</tmBegin>
+                            <tmEnd>1991-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>1993-07-01T00:00:00</tmBegin>
+                            <tmEnd>1993-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>1996-07-01T00:00:00</tmBegin>
+                            <tmEnd>1996-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2001-07-01T00:00:00</tmBegin>
+                            <tmEnd>2001-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2005-07-01T00:00:00</tmBegin>
+                            <tmEnd>2005-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2008-07-01T00:00:00</tmBegin>
+                            <tmEnd>2008-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2009-07-01T00:00:00</tmBegin>
+                            <tmEnd>2009-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2014-07-01T00:00:00</tmBegin>
+                            <tmEnd>2014-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+            <tempEle>
+                <TempExtent>
+                    <exTemp>
+                        <TM_Period>
+                            <tmBegin>2018-07-01T00:00:00</tmBegin>
+                            <tmEnd>2018-11-30T00:00:00</tmEnd>
+                        </TM_Period>
+                    </exTemp>
+                </TempExtent>
+            </tempEle>
+        </dataExt>
+        <idPurp>These models have been used by the Navy and others to assess potential impacts on cetaceans in compliance with U.S. regulations such as the Endangered Species Act and Marine Mammal Protection Act, which require species-specific assessments of the number of animals potentially affected by their activities. </idPurp>
+        <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;To develop improved species distribution models (SDMs) and to update US West Coast cetacean stock abundance estimates, sighting data from NOAA’s Southwest Fisheries Science Center 2018 California Current Ecosystem Survey were combined with previous line-transect survey data collected within the study area to create a robust modeling database spanning more than 25 years (1991–2018). Habitat models were developed based on previously established methods that allow for the incorporation of segment-specific estimates of detection probability and included dynamic covariates from an ocean model calibrated to the California Current Ecosystem study area. In addition, recently-developed techniques for deriving more comprehensive estimates of uncertainty in SDM predictions were used to provide variance estimates for the model-based abundance estimates. SDMs were developed for short-beaked common dolphin (Delphinus delphis delphis), long-beaked common dolphin (Delphinus delphis bairdii), northern right whale dolphin (Lissodelphis borealis), Pacific white-sided dolphin (Lagenorhynchus obliquidens), striped dolphin (Stenella coeruleoalba), common bottlenose dolphin (Tursiops truncatus), Risso’s dolphin (Grampus griseus), Dall’s porpoise (Phocoenoides dalli), sperm whale (Physeter macrocephalus), blue whale (Balaenoptera musculus), fin whale (B. physalus), humpback whale (Megaptera novaeangliae), Baird’s beaked whale (Berardius bairdii), and a “small beaked whale guild” that included Mesoplodonts (Mesoplodon spp.) and Cuvier’s beaked whale (Ziphius cavirostris).  Sample sizes were also sufficient to develop the first model-based density estimates for minke whale (B. acutorostrata) in this study area.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
+        <idCredit>Elizabeth A. Becker, Karin A. Forney, David L. Miller, Paul C. Fiedler, Jay Barlow, and Jeff E. Moore. 2020. Habitat-based density estimates for cetaceans in the California Current Ecosystem based on 1991-2018 survey data, U.S. Department of Commerce, NOAA Technical Memorandum NMFS-SWFSC-638.  https://doi.org/10.25923/3znq-yx13</idCredit>
+        <searchKeys>
+            <keyword>cetacean</keyword>
+            <keyword>distribution</keyword>
+            <keyword>density</keyword>
+            <keyword>California Current Ecosystem</keyword>
+            <keyword>Stenella coeruleoalba</keyword>
+            <keyword>Delphinus delphis delphis</keyword>
+            <keyword>Delphinus delphis bairdii</keyword>
+            <keyword>Lagenorhynchus obliquidens</keyword>
+            <keyword>Lissodelphis borealis</keyword>
+            <keyword>Grampus griseus</keyword>
+            <keyword>Tursiops truncatus</keyword>
+            <keyword>Phocoenoides</keyword>
+            <keyword>dalli</keyword>
+            <keyword>Physeter macrocephalus</keyword>
+            <keyword>Balaenoptera acutostrata</keyword>
+            <keyword>Balaenoptera physalus</keyword>
+            <keyword>Balaenoptera musculus</keyword>
+            <keyword>Megaptera novaeangliae</keyword>
+            <keyword>Berardius bairdii</keyword>
+            <keyword>small beaked whales</keyword>
+        </searchKeys>
+        <placeKeys>
+            <keyword>California, Oregon, Washington, Eastern Pacific Ocean</keyword>
+        </placeKeys>
+        <themeKeys>
+            <keyword>cetacean, distribution, density, California Current Ecosystem, Stenella coeruleoalba, Delphinus delphis delphis, Delphinus delphis bairdii, Lagenorhynchus obliquidens, Lissodelphis borealis, Grampus griseus, Tursiops truncatus, Phocoenoides, dalli, Physeter macrocephalus, Balaenoptera acutostrata, Balaenoptera physalus, Balaenoptera musculus, Megaptera novaeangliae, Berardius bairdii, small beaked whales</keyword>
+        </themeKeys>
+        <dataChar>
+            <CharSetCd value="004"></CharSetCd>
+        </dataChar>
+        <idStatus>
+            <ProgCd value="001"></ProgCd>
+        </idStatus>
+        <idPoC>
+            <rpOrgName>Southwest Fisheries Science Center</rpOrgName>
+            <role>
+                <RoleCd value="006"></RoleCd>
+            </role>
+            <displayName>NOAA Southwest Fisheries Science Center</displayName>
+        </idPoC>
+        <resMaint>
+            <maintFreq>
+                <MaintFreqCd value="010"></MaintFreqCd>
+            </maintFreq>
+        </resMaint>
+        <suppInfo>This modeling project was funded by the Navy, Commander, U.S. Pacific Fleet (U.S. Navy), the Bureau of Ocean Energy Management (BOEM), and by the National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Southwest Fisheries Science Center (SWFSC). The 2018 survey was conducted as part of the Pacific Marine Assessment Program for Protected Species (PacMAPPS), a collaborative effort between NOAA Fisheries, the U.S. Navy, and BOEM to collect data necessary to produce updated abundance estimates for cetaceans in the CCE study area. </suppInfo>
+        <resConst>
+            <Consts>
+                <useLimit>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;*** No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of these data.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</useLimit>
+            </Consts>
+        </resConst>
+        <tpCat>
+            <TopicCatCd value="002"></TopicCatCd>
+        </tpCat>
+        <tpCat>
+            <TopicCatCd value="014"></TopicCatCd>
+        </tpCat>
+    </dataIdInfo>
+    <mdMaint>
+        <maintFreq>
+            <MaintFreqCd value="010"></MaintFreqCd>
+        </maintFreq>
+    </mdMaint>
+    <dqInfo>
+        <dataLineage>
+            <statement>Original data were developed by ManTech.</statement>
+            <dataSource>
+                <srcDesc>Model outputs</srcDesc>
+                <srcMedName>
+                    <MedNameCd value="031"></MedNameCd>
+                </srcMedName>
+                <srcCitatn>
+                    <resTitle>Model outputs</resTitle>
+                    <date>
+                        <pubDate>2020-05-11T00:00:00</pubDate>
+                    </date>
+                </srcCitatn>
+            </dataSource>
+            <prcStep>
+                <stepDesc>Outputs from models were assigned to cells in the study area.</stepDesc>
+                <stepDateTm>2020-12-01T00:00:00</stepDateTm>
+                <stepProc>
+                    <rpOrgName>Southwest Fisheries Science Center</rpOrgName>
+                    <role>
+                        <RoleCd value="006"></RoleCd>
+                    </role>
+                    <displayName>NOAA Southwest Fisheries Science Center</displayName>
+                </stepProc>
+            </prcStep>
+        </dataLineage>
+        <report type="DQConcConsis" dimension="horizontal">
+            <measDesc>No measure of horizontal quality was performed.</measDesc>
+        </report>
+        <report type="DQCompOm" dimension="horizontal">
+            <measDesc>The entire study area was divided into 0.1° cells (ranging from approximately 10km x 11km in the south to 7km x 11km in the north), and density, area, and abundance calculated for each.</measDesc>
+        </report>
+        <dqScope>
+            <scpLvl>
+                <ScopeCd value="005"></ScopeCd>
+            </scpLvl>
+        </dqScope>
+    </dqInfo>
+    <refSysInfo>
+        <RefSystem dimension="horizontal"></RefSystem>
+    </refSysInfo>
+    <eainfo>
+        <detailed Name="Bairds_beaked_whale_summer_fall">
+            <enttyp>
+                <enttypd>Cells ranging from approximately 10km x 11km in the south to 7km x 11km in the north, representing the density of species</enttypd>
+                <enttypds>NOAA Fisheries Southwest Fisheries Science Center</enttypds>
+            </enttyp>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef Sync="TRUE">Internal feature number.</attrdef>
+                <attrdefs Sync="TRUE">ESRI</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">None</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef Sync="TRUE">Feature geometry.</attrdef>
+                <attrdefs Sync="TRUE">ESRI</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">None</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Supposed to be a unique ID Field for species per study area, not used.</attrdef>
+                <attrdefs Sync="TRUE">NOAA Southwest Fisheries Science Center</attrdefs>
+                <attrvai>
+                    <attrva>Not used</attrva>
+                </attrvai>
+                <attrdomv>
+                    <udom Sync="TRUE">Not used</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Species common name</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Value assigned by staff</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Species scientific name</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Value assigned by staff</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Month number 01-12
+Value of NULL; This field NOT USED because densities are averaged over multiple months.</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Value of NULL; This field NOT USED because densities are averaged over multiple months.</udom>
+                </attrdomv>
+                <attrvai>
+                    <attrva>Value always 0 ... assume NOT USED</attrva>
+                </attrvai>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Month name, e.g. January
+Empty NOT USED because densities are averaged over multiple months.</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Empty NOT USED because densities are averaged over multiple months.</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Source/study information</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Single value</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Stratum name
+Always CCE (California Current Ecosystem) for this series</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Always CCE (California Current Ecosystem) for this series</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Identifies what type of model was used to calculate density. </attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Can be "habitat-based density model," "HBDM pro rated by ratio of win spr to sum fall" (Humpback whale winter spring), or "Telemetry based habitat model" (Blue whale winter spring)</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Density value in animals/km^2</attrdef>
+                <attrdefs Sync="TRUE">From model</attrdefs>
+                <attrdomv>
+                    <rdom>
+                        <rdommin>0</rdommin>
+                        <rdommax>9999</rdommax>
+                    </rdom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Numerical uncertainty value (CV). When the models for a species/guild do not have dynamic predictors, uncertainty info is not available. In this case the field has a value of -99999.</attrdef>
+                <attrdefs Sync="TRUE">From model</attrdefs>
+                <attrdomv>
+                    <rdom>
+                        <rdommin>0</rdommin>
+                        <rdommax>9999</rdommax>
+                    </rdom>
+                </attrdomv>
+                <attrdomv>
+                    <udom Sync="TRUE">When the models for a species/guild do not have dynamic predictors, uncertainty info is not available. In this case the field has a value of -99999.</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Qualitative uncertainty value (description of uncertainty when numerical value is not present or to describe additional qualitative information. Duke used this column to further define the type of model that was used which called back to other documentation that described how the model was run and how it performed) Elizabeth Becker should be providing this info</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Not used; value always empty</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Duke created field for tracking Duke models used as input- not needed for NAEMO modeling but may be used for your own internal model tracking.</attrdef>
+                <attrdefs Sync="TRUE">Varies</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Not used; value always NULL.</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Identifies version of data - NAEMO specific. Not used.</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Not used. Allways NULL.</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">To be populated to capture season information. Spring, Summer, Fall, Winter. For data that span multiple seasons Summer-Fall or Winter-Spring may be used.</attrdef>
+                <attrdefs Sync="TRUE">NOAA Fisheries Southwest Fisheries Science Center</attrdefs>
+                <attrdomv>
+                    <udom Sync="TRUE">Spring, Summer, Fall, Winter or Summer-Fall, Winter-Spring</udom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Area in square kilometers. Features must be projected, calculated and then reprojected to WGS84. Projection must be documented in metadata</attrdef>
+                <attrdefs Sync="TRUE">Calculated from shapefile</attrdefs>
+                <attrdomv>
+                    <rdom>
+                        <rdommin>0.000002</rdommin>
+                        <rdommax>100</rdommax>
+                    </rdom>
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrdef Sync="TRUE">Density * area of cell in km^2</attrdef>
+                <attrdefs Sync="TRUE">Calculated</attrdefs>
+                <attrdomv>
+                    <rdom>
+                        <rdommin>0</rdommin>
+                        <rdommax>400</rdommax>
+                    </rdom>
+                </attrdomv>
+            </attr>
+        </detailed>
+    </eainfo>
+</metadata>

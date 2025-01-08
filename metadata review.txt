@@ -1,0 +1,90 @@
+Things to check
+
+1) Title: check if the title is the same as the feature class and that it can 
+be used for a Feature Service name
+
+2) Thumbnail: check if one exists, if not create one
+
+3) Summary (Purpose): check if text matches the boiler plate, but has been 
+updated for the current feature layer
+
+4) Description (Abstract): check if text matches the boiler plate, but has been 
+updated for the current feature layer
+
+5) Credits: check if text matches the boiler plate and the current version
+
+6) Use Limitations: check if text matches the boiler plate  and the current 
+version. For example: [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}
+
+7) Topic Categories: check if list is complete
+
+8) Theme Keywords: not the same as Tags, but can include those terms. Check 
+if list is approperiate for species. Check if the correct thesaurus is list, 
+add if not
+
+9) Place Keywords: not the same as Tags, but can include those terms. Check 
+if list is approperiate for species. Check if the correct thesaurus is list, 
+add if not
+
+10) Temporal Keywords: not the same as Tags, but can include those terms. Check 
+if list is approperiate for species. Check if the correct thesaurus is list, 
+add if not
+
+11) Other Keywords: not the same as Tags, but can include those terms. Check 
+if list is approperiate for species. Check if the correct thesaurus is list, 
+add if not
+
+12) Alternative Title: Similar to Tilte, but can be most descriptive
+
+13) Collective Title: Refers to the larger work this dataset is a part of
+
+14) Citation Contact: The person responsible for the collective 
+work.
+
+15) Metadata Contact: The person responsible for the creation and maintanance of
+the metadata for this dataset
+
+16) Extents > Description: A description of the geographic extent of the dataset
+
+17) Extents > Temporal: Begin and End or instant date/time
+
+18) Point of Contact: The person responsible for review of the dataset and metadata
+
+19) Quality > Report Type: Conceptual Consistency
+
+20) Quality > Report Type: Conceptual Omission
+
+21) Lineage > Statement: A general description of the origins, creation, and
+maintanance of the dataset
+
+22) Linage > Data Source > Description: A description of the overall source for
+the dataset
+
+23) Data Source > Source Citation > Title: The title of the main citation
+
+24) Data Source > Source Citation > Online Resource > Linkage: The URL for the citation
+
+25) Data Source > Source Citation > Online Resource > Description:
+
+26) Data Source > Source Citation > Online Resource > Name:
+
+27) Data Source > Source Citation > Online Resource > Function:
+
+28) Data Source > Source Citation > Online Resource > Date Published:
+
+29) Data Source > Source Citation > Contact: The Point of Contact for this citation
+
+30) Lineage > Process Step > Process Description:
+
+31) Lineage > Process Step > Process Ste Date:
+
+32) Lineage > Process Step > Processor Name: The contact information for the 
+person who processed the dataset for this step
+
+33) Distribution >
+
+34) Entity
+
+35) Attribute
+
+
