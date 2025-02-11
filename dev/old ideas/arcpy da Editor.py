@@ -35,6 +35,7 @@ def main():
                 edit.stopEditing(False)  ## Stop the edit session with False to abandon the changes
                 arcpy.AddMessage("edit stopped in except")
     except:
+        import traceback
         traceback.print_exc()
     finally:
         # Cleanup
