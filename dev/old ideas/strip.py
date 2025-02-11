@@ -3,7 +3,7 @@ from lxml import etree
 
 parser = etree.XMLParser(remove_blank_text=True)
 # Parse the XML
-tree = etree.parse("SpeciesRangeMetadataTemplate.xml", parser=parser)
+tree = etree.parse("species_range_boilerplate.xml", parser=parser)
 
 # Pretty print
 xml_string = etree.tostring(tree, pretty_print=True, encoding="utf-8").decode()

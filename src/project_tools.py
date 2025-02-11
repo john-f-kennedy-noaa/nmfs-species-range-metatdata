@@ -19,11 +19,12 @@ limitations under the License.
 import os, sys
 import traceback, inspect
 
-# Third-party modules are loaded second
-import arcpy
 
 def create_project_gdb(project_gdb):
     try:
+        # Third-party modules are loaded second
+        import arcpy
+
         project_folder = os.path.dirname(project_gdb)
         # Test of the Project GDB exists. If not, then create the Project GDB
         if not arcpy.Exists(project_gdb):
@@ -57,32 +58,39 @@ def create_project_gdb(project_gdb):
 
     except:
         traceback.print_exc()
-        raise Exception(f"In function: '{inspect.stack()[0][3]}'")
     else:
         return True
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
     finally:
-        pass
+        # Cleanup
+        arcpy.management.ClearWorkspaceCache()
+        # Imports
+        del arcpy
 
 def create_folders(project_folder, folders=[]):
     try:
-
         for folder in folders:
+            directory_path = rf"{project_folder}\{folder}"
             # Test of the Export folder exists. If not, then create the folder
-            if not arcpy.Exists(f"{project_folder}\{folder}"):
-                arcpy.AddMessage(f"Creating Folder: {folder}")
-                # Execute CreateFolder
-                arcpy.management.CreateFolder(project_folder, folder)
-                msg = f"\tCreating Folder: {folder}:\n\t\t"+arcpy.GetMessages().replace("\n", "\n\t\t")+"\n"
-                arcpy.AddMessage(f"{msg}"); del msg
+            if not os.path.isdir(directory_path):
+                print(f"Creating Folder: {folder}")
+                # Create the directory
+                os.mkdir(directory_path)
             else:
-                arcpy.AddMessage(f"The {folder} folder exists")
+                print(f"The {folder} folder exists")
             del folder
-        del folders
-
+            del directory_path
+        # Function parameters
+        del folders, project_folder
     except:
         traceback.print_exc()
-        raise Exception(f"In function: '{inspect.stack()[0][3]}'")
     else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         return True
     finally:
         pass
@@ -102,7 +110,7 @@ def pretty_format_xml_file(xml=""):
             etree.indent(tree, space="    ")
 
             # Pretty print
-            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode()
+            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8", xml_declaration=True).decode()
 
             xml_string = xml_string.replace(' code="0">\n', ' code="0">')
             xml_string = xml_string.replace(' code="4">\n', ' code="4">')
@@ -152,7 +160,7 @@ def pretty_format_xml_file(xml=""):
             del parser, tree
 
         else:
-            arcpy.AddWarning(f"\t###--->>> {os.path.basename(xml)} is missing!! <<<---###")
+            print(f"\t###--->>> {os.path.basename(xml)} is missing!! <<<---###")
 
         # Imports
         del etree
@@ -166,7 +174,7 @@ def pretty_format_xml_file(xml=""):
         return True
     finally:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def check_and_repair_geometry(fc_path):
     try:
@@ -225,18 +233,18 @@ def check_and_repair_geometry(fc_path):
     finally:
         del bad_geometry_fc
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def main():
     try:
         from time import gmtime, localtime, strftime, time
         # Set a start time so that we can see how log things take
         start_time = time()
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         print(f"Python Script:  {os.path.basename(__file__)}")
         print(f"Location:       {os.path.dirname(__file__)}")
         print(f"Python Version: {sys.version} Environment: {os.path.basename(sys.exec_prefix)}")
-        print(f"{'-' * 90}\n")
+        print(f"{'-' * 80}\n")
 
         CreateProjectGDB = False
         if CreateProjectGDB:
@@ -305,10 +313,10 @@ def main():
         # Elapsed time
         end_time = time()
         elapse_time =  end_time - start_time
-        print(f"\n{'-' * 90}")
+        print(f"\n{'-' * 80}")
         print(f"Python script: {os.path.basename(__file__)} successfully completed {strftime('%a %b %d %I:%M %p', localtime())}")
         print(u"Elapsed Time {0} (H:M:S)".format(strftime("%H:%M:%S", gmtime(elapse_time))))
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         del elapse_time, end_time, start_time
         del gmtime, localtime, strftime, time
 
@@ -317,10 +325,8 @@ def main():
     else:
         return True
     finally:
-        # Cleanup
-        arcpy.management.ClearWorkspaceCache()
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\n Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 if __name__ == '__main__':
     try:

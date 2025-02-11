@@ -296,7 +296,7 @@ def create_feature_class(project_gdb="", source_gdb=""):
         return True
     finally:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def create_feature_class2(gdb=""):
     try:
@@ -560,7 +560,7 @@ def process_list():
         return True
     finally:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def update_access_constraints():
     try:
@@ -575,7 +575,7 @@ def update_access_constraints():
         return True
     finally:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def main():
     try:
@@ -584,11 +584,11 @@ def main():
         # Set a start time so that we can see how log things take
         start_time = time()
 
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         print(f"Python Script:  {os.path.basename(__file__)}")
         print(f"Location:       {os.path.dirname(__file__)}")
         print(f"Python Version: {sys.version} Environment: {os.path.basename(sys.exec_prefix)}")
-        print(f"{'-' * 90}\n")
+        print(f"{'-' * 80}\n")
 
         folder = rf"{os.path.dirname(__file__)}\Export"
 
@@ -604,10 +604,10 @@ def main():
         end_time = time()
         elapse_time =  end_time - start_time
 
-        print(f"\n{'-' * 90}")
+        print(f"\n{'-' * 80}")
         print(f"Python script: {os.path.basename(__file__)} successfully completed {strftime('%a %b %d %I:%M %p', localtime())}")
         print(u"Elapsed Time {0} (H:M:S)".format(strftime("%H:%M:%S", gmtime(elapse_time))))
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         del elapse_time, end_time, start_time
         del gmtime, localtime, strftime, time
 
@@ -621,7 +621,7 @@ def main():
         return True
     finally:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\nWARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 if __name__ == '__main__':
     main()

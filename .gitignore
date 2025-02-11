@@ -239,3 +239,13 @@ sync.txt
 RoleCd.txt
 contributing.md
 Publish
+# Add by JFK Feb 11, 2025
+*.zip
+.pyHistory
+*.xml
+*.csv
+*.xls
+*.xlsx
+*.aprx
+*.atbx
+

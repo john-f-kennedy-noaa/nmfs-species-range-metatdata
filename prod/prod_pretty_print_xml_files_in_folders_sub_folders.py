@@ -67,7 +67,7 @@ def main(project_folder=str()):
         # Cleanup
         arcpy.management.ClearWorkspaceCache()
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\n Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 if __name__ == '__main__':
     try:

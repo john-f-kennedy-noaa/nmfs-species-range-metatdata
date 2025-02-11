@@ -1,6 +1,11 @@
 # nmfs-species-range-metatdata
 Collection of Utilities to Read/Write a Dataset's Metadata.
 
+1. Gather and organize source files
+2. Create/Use Python script to create folders and GDBs
+3. Create/Use Python script to unzip source files
+
+
 # What inspired nmfs-species-range-metatdata? 
 There was a need to automate and update nmfs species range metatdata. It also 
 was developed to help people deal with metadata in the Python environment.

@@ -450,10 +450,6 @@ def main():
     #xml_root = etree.fromstring(xml, parser)
     #print(etree.tostring(xml_root, pretty_print=True).decode(), end='')
 
-
-
-
-
     print(f"\n{'--PRINT' * 10}--\n")
 
 if __name__ == '__main__':

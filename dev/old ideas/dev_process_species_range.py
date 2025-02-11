@@ -1381,7 +1381,7 @@ def create_feature_class_layers(project_gdb=""):
 
         del project_folder, scratch_folder, scratch_workspace
 
-        arcpy.AddMessage(f"{'-' * 90}\n")
+        arcpy.AddMessage(f"{'-' * 80}\n")
 
         aprx = arcpy.mp.ArcGISProject(project_file)
         home_folder = aprx.homeFolder
@@ -1973,7 +1973,7 @@ def create_feature_class_services(project_gdb=""):
 ##
 ##        project_gdb = rf"{home_folder}\{project}.gdb"
 ##
-##        arcpy.AddMessage(f"{'-' * 90}\n")
+##        arcpy.AddMessage(f"{'-' * 80}\n")
 ##
 ##        # DatasetCode, CSVFile, TransformUnit, TableName, GeographicArea, CellSize,
 ##        # PointFeatureType, FeatureClassName, Region, Season, DateCode, Status,
@@ -3898,11 +3898,11 @@ def main():
         from time import gmtime, localtime, strftime, time
         # Set a start time so that we can see how log things take
         start_time = time()
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         print(f"Python Script:  {os.path.basename(__file__)}")
         print(f"Location:       {os.path.dirname(__file__)}")
         print(f"Python Version: {sys.version} Environment: {os.path.basename(sys.exec_prefix)}")
-        print(f"{'-' * 90}\n")
+        print(f"{'-' * 80}\n")
 
         current_folder = os.path.dirname(__file__)
         #project_folder = rf"{current_folder}\Metadata Folder"
@@ -3918,6 +3918,7 @@ def main():
         del current_folder
         del project_folder, project_gdb
         del source_gdb
+
         CopyFeatureClasses = False
         if CopyFeatureClasses:
             SourceZipFile = False
@@ -3958,7 +3959,7 @@ def main():
             schema_field_report(gdb=project_gdb)
         del SchemaFieldReport
 
-        ImportMetadata = False
+        ImportMetadata = True
         if ImportMetadata:
             #_project_folder = os.path.dirname(project_gdb)
             #_project_gdb = rf"{project_folder}\Metadata Folder\National Mapper.gdb"
@@ -4039,10 +4040,10 @@ def main():
         end_time = time()
         elapse_time =  end_time - start_time
 
-        print(f"\n{'-' * 90}")
+        print(f"\n{'-' * 80}")
         print(f"Python script: {os.path.basename(__file__)} successfully completed {strftime('%a %b %d %I:%M %p', localtime())}")
         print(u"Elapsed Time {0} (H:M:S)".format(strftime("%H:%M:%S", gmtime(elapse_time))))
-        print(f"{'-' * 90}")
+        print(f"{'-' * 80}")
         del elapse_time, end_time, start_time
         del gmtime, localtime, strftime, time
 
@@ -4054,7 +4055,7 @@ def main():
         # Cleanup
         arcpy.management.ClearWorkspaceCache()
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"\n Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 if __name__ == '__main__':
     try:
@@ -4069,11 +4070,11 @@ if __name__ == '__main__':
 ##        # Set a start time so that we can see how log things take
 ##        start_time = time()
 ##
-##        print(f"{'-' * 90}")
+##        print(f"{'-' * 80}")
 ##        print(f"Python Script:  {os.path.basename(__file__)}")
 ##        print(f"Location:       {os.path.dirname(__file__)}")
 ##        print(f"Python Version: {sys.version} Environment: {os.path.basename(sys.exec_prefix)}")
-##        print(f"{'-' * 90}\n")
+##        print(f"{'-' * 80}\n")
 ##        current_folder = os.path.dirname(__file__)
 ##        #project_folder = rf"{current_folder}\Metadata Folder"
 ##        project_folder = rf"{current_folder}"
@@ -4093,10 +4094,10 @@ if __name__ == '__main__':
 ##        end_time = time()
 ##        elapse_time =  end_time - start_time
 ##
-##        print(f"\n{'-' * 90}")
+##        print(f"\n{'-' * 80}")
 ##        print(f"Python script: {os.path.basename(__file__)} successfully completed {strftime('%a %b %d %I:%M %p', localtime())}")
 ##        print(u"Elapsed Time {0} (H:M:S)".format(strftime("%H:%M:%S", gmtime(elapse_time))))
-##        print(f"{'-' * 90}")
+##        print(f"{'-' * 80}")
 ##        del elapse_time, end_time, start_time
 ##        del gmtime, localtime, strftime, time
 ##
