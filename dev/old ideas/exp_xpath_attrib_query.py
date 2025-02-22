@@ -17,7 +17,7 @@ def main():
     try:
         from lxml import etree
 
-        target_xml = r'C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export\WhaleBlue_20201014.xml'
+        target_xml = r'{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export\WhaleBlue_20201014.xml'
 
         parser = etree.XMLParser(remove_blank_text=True)
         # Parse the XML

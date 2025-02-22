@@ -19,7 +19,7 @@ import os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, "C:\\SVN Repositories\\git_hub\\CIGTDCTools\\hermes_sphinx\\hermes\\src")
-sys.path.insert(0, r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\hermes-master\src")
+sys.path.insert(0, r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\hermes-master\src")
 #os.path.abspath('.'))
 
 # -- General configuration ------------------------------------------------

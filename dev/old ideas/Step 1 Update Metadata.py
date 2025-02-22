@@ -63,7 +63,7 @@ def pretty_print(xml):
         etree.indent(tree, space="    ")
 
         # Pretty print
-        xml_string = etree.tostring(tree, pretty_print=True, encoding="utf-8").decode()
+        xml_string = etree.tostring(tree, encoding="utf-8", pretty_print=True).decode()
 
         xml_string = xml_string.replace(' Sync="TRUE">\n', ' Sync="TRUE">')
         xml_string = xml_string.replace(' value="001">\n', ' value="001">')

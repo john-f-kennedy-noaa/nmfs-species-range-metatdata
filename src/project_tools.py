@@ -19,6 +19,80 @@ limitations under the License.
 import os, sys
 import traceback, inspect
 
+def parse_xml_file_format_and_save(xml_file="", sort=False):
+    try:
+        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+
+        from lxml import etree
+
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
+        tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+
+        if sort:
+            root = tree.getroot()
+            for child in root.xpath("."):
+                child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+                del child
+            del root
+        del sort
+        etree.indent(tree, space='   ')
+        tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+        del tree
+        del xml_file, etree
+        del root_dict
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
+
+def print_xml_file(xml_file="", sort=False):
+    try:
+        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+
+        from lxml import etree
+        parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
+        tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+
+        if sort:
+            root = tree.getroot()
+            for child in root.xpath("."):
+                child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+                del child
+            del root
+        del sort
+        etree.indent(tree, space='   ')
+        print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        del tree
+        del xml_file, etree
+        del root_dict
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 def create_project_gdb(project_gdb):
     try:
@@ -105,7 +179,9 @@ def pretty_format_xml_file(xml=""):
 
             parser = etree.XMLParser(remove_blank_text=True)
             # Parse the XML
+
             tree = etree.parse(xml, parser=parser)
+
 
             etree.indent(tree, space="    ")
 
@@ -171,10 +247,12 @@ def pretty_format_xml_file(xml=""):
         traceback.print_exc()
         raise Exception(f"In function: '{inspect.stack()[0][3]}'")
     else:
-        return True
-    finally:
+        # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
         if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 def check_and_repair_geometry(fc_path):
     try:
@@ -182,7 +260,7 @@ def check_and_repair_geometry(fc_path):
         fc  = os.path.basename(fc_path)
         gdb = os.path.dirname(fc_path)
 
-        bad_geometry_fc = {}
+        __bad_geometry_fc = {}
 
         out_table = rf"{gdb}\CheckGeometryTable_{fc}"
 
@@ -199,7 +277,7 @@ def check_and_repair_geometry(fc_path):
 
             with arcpy.da.SearchCursor(ot, field_names) as cursor:
                 for row in cursor:
-                    bad_geometry_fc[os.path.basename(row[0])] = {"CLASS" : row[0], "FEATURE_ID" : row[1], "PROBLEM" : row[2]}
+                    __bad_geometry_fc[os.path.basename(row[0])] = {"CLASS" : row[0], "FEATURE_ID" : row[1], "PROBLEM" : row[2]}
                     del row
             del cursor
             arcpy.management.Delete(ot)
@@ -229,11 +307,12 @@ def check_and_repair_geometry(fc_path):
         traceback.print_exc()
         raise Exception(f"In function: '{inspect.stack()[0][3]}'")
     else:
-        return bad_geometry_fc
-    finally:
-        del bad_geometry_fc
+        # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
         if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return __bad_geometry_fc
+    finally:
+        del __bad_geometry_fc
 
 def main():
     try:
@@ -322,11 +401,14 @@ def main():
 
     except:
         traceback.print_exc()
+        raise Exception(f"In function: '{inspect.stack()[0][3]}'")
     else:
-        return True
-    finally:
+        # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
         if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 if __name__ == '__main__':
     try:

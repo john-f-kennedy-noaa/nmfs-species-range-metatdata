@@ -17,7 +17,7 @@ def main():
         from io import StringIO
         from src.project_tools import pretty_format_xml_file
 
-        target_xml = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export\AbaloneBlack_20210712.xml"
+        target_xml = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export\AbaloneBlack_20210712.xml"
         target_tree = etree.parse(target_xml)
         # print(etree.tostring(tree.getroot(), pretty_print=True).decode(), end='')
         target_root = target_tree.getroot()

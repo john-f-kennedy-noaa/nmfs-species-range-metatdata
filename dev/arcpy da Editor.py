@@ -12,7 +12,7 @@ import arcpy
 
 def main():
     try:
-        workspace = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\National Mapper\National Mapper.gdb"
+        workspace = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\National Mapper\National Mapper.gdb"
         edit = arcpy.da.Editor(workspace)
         arcpy.AddMessage("edit created")
         edit.startEditing()

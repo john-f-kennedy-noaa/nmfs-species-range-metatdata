@@ -48,8 +48,12 @@ def get_missing_item_attrs(portal_item, item_profile):
     non_compliance.append(portal_item.url)
     return non_compliance
 
-def ideas_1():
+def ideas_1(project_folder):
     try:
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        del urllib3
+
         import pandas as pd
         from arcgis.gis import GIS
         gis = GIS("pro")
@@ -144,7 +148,7 @@ def ideas_1():
         del user
         del titles
 
-        #print(item_profile_status)
+        print(item_profile_status)
         new_item_profile = item_profile + ['itemID', 'url']
         #print(new_item_profile)
 
@@ -171,25 +175,24 @@ def ideas_1():
     except:
         traceback.print_exc()
     else:
-        try:
-            remaining_keys = [key for key in locals().keys() if not key.startswith('__')]
-            if remaining_keys:
-                arcpy.AddWarning(f"Remaining Keys in '{inspect.stack()[0][3]}': ##--> '{', '.join(remaining_keys)}' <--## Line Number: {traceback.extract_stack()[-1].lineno}")
-            del remaining_keys
-            return True
-        except:
-            traceback.print_exc()
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
     finally:
         pass
 
-def ideas2():
+def ideas_2(project_folder):
     try:
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        del urllib3
         from arcgis.gis import GIS
         gis = GIS("pro")
 
         import datetime as dt
 
-        day_start = dt.datetime(2024, 12, 30, 0, 0, 0, 0)
+        day_start = dt.datetime(2023, 12, 30, 0, 0, 0, 0)
         day_end = dt.datetime(2025, 1, 10, 23, 59, 59, 999999)
 
         start_timestamp = int(day_start.timestamp() * 1000)
@@ -221,6 +224,12 @@ def ideas2():
                 if item.title in titles:
                     item_profile_status[item.title[:100]] = missing_item_atts
                     fss.append(item.title)
+                xml_string = item.download_metadata(rf"{project_folder}\Export")
+                if xml_string:
+                    print(xml_string)
+                else:
+                    pass
+                del xml_string
                 del item
         else:
             pass
@@ -246,20 +255,20 @@ def ideas2():
 
         del user
 
-        for key in item_profile_status:
-            #print(f"{content.title:<40}{content.type:25}{readable_date(content.created):40}")
-            print(f"{key:<40} {item_profile_status[key][:4]}")
-
-            del key
-
-        print(len(item_profile_status.keys()))
-        print(len(list(set(titles))))
-        print(len(list(set(fss))))
-
-        if len(list(set(titles))) >= len(list(set(fss))):
-            print([t for t in titles if t not in fss])
-        else:
-            print([fs for fs in fss if fs not in titles])
+##        for key in item_profile_status:
+##            #print(f"{content.title:<40}{content.type:25}{readable_date(content.created):40}")
+##            print(f"{key:<40} {item_profile_status[key][:4]}")
+##
+##            del key
+##
+##        print(len(item_profile_status.keys()))
+##        print(len(list(set(titles))))
+##        print(len(list(set(fss))))
+##
+##        if len(list(set(titles))) >= len(list(set(fss))):
+##            print([t for t in titles if t not in fss])
+##        else:
+##            print([fs for fs in fss if fs not in titles])
 
 
         #print(list(set(titles)))
@@ -277,21 +286,20 @@ def ideas2():
         # Imports
         del GIS, dt
 
+        # Function parameters
+        del project_folder
+
     except:
         traceback.print_exc()
     else:
-        try:
-            remaining_keys = [key for key in locals().keys() if not key.startswith('__')]
-            if remaining_keys:
-                arcpy.AddWarning(f"Remaining Keys in '{inspect.stack()[0][3]}': ##--> '{', '.join(remaining_keys)}' <--## Line Number: {traceback.extract_stack()[-1].lineno}")
-            del remaining_keys
-            return True
-        except:
-            traceback.print_exc()
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
     finally:
         pass
 
-def main():
+def main(project_folder):
     try:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -302,7 +310,7 @@ def main():
 
         gis = GIS("pro")
 
-        day_start = dt.datetime(2024, 12, 30, 0, 0, 0, 0)
+        day_start = dt.datetime(2023, 12, 30, 0, 0, 0, 0)
         day_end = dt.datetime(2025, 1, 10, 23, 59, 59, 999999)
 
         start_timestamp = int(day_start.timestamp() * 1000)
@@ -329,16 +337,24 @@ def main():
     except:
         traceback.print_exc()
     else:
-        try:
-            remaining_keys = [key for key in locals().keys() if not key.startswith('__')]
-            if remaining_keys:
-                arcpy.AddWarning(f"Remaining Keys in '{inspect.stack()[0][3]}': ##--> '{', '.join(remaining_keys)}' <--## Line Number: {traceback.extract_stack()[-1].lineno}")
-            del remaining_keys
-            return True
-        except:
-            traceback.print_exc()
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
     finally:
         pass
 
 if __name__ == '__main__':
-    main()
+    try:
+        # Append the location of this scrip to the System Path
+        #sys.path.append(os.path.dirname(__file__))
+        sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+        project_folder = rf"{os.path.dirname(os.path.dirname(__file__))}"
+
+        #main(project_folder)
+        #ideas_1(project_folder)
+        ideas_2(project_folder)
+
+    except:
+        traceback.print_exc()

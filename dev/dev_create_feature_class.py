@@ -18,9 +18,7 @@ import inspect
 
 def new_function():
     try:
-
         pass
-
     except:
         traceback.print_exc()
     else:
@@ -47,6 +45,26 @@ def file_size(file_path):
     if os.path.isfile(file_path):
         file_info = os.stat(file_path)
         return convert_bytes(file_info.st_size)
+
+def replace_element(tree, element, xml):
+    try:
+        _element = tree.xpath(f"./{element}")[0]
+        root = etree.XML(xml)
+        target_root.replace(_element, root)
+        del root, _element
+        del tree, element, xml
+    except:
+        traceback.print_exc()
+
+def insert_element(tree, element, xml):
+    try:
+        _element = tree.xpath(f"./{element}")[0]
+        root = etree.XML(xml)
+        target_root.replace(_element, root)
+        del root, _element
+        del tree, element, xml
+    except:
+        traceback.print_exc()
 
 def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
     try:
@@ -99,34 +117,34 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         #etree.indent(target_root, space="    ")
         #print(etree.tostring(target_root, xml_declaration=True, encoding="utf-8").decode())
 
-        # ######################################################################
-        #               ###--->>> Esri section Start <<<---###
-        # ######################################################################
-
-        Esri = target_tree.xpath(f"./Esri")
-        if len(Esri) == 0:
-            xml = '''<Esri><CreaDate>20250201</CreaDate><CreaTime>12234100</CreaTime><ArcGISFormat>1.0</ArcGISFormat><ArcGISStyle>ISO 19139 Metadata Implementation Specification</ArcGISStyle><SyncOnce>FALSE</SyncOnce><DataProperties><itemProps><itemName Sync="TRUE">SpeciesRangeTemplate</itemName><imsContentType Sync="TRUE">002</imsContentType><nativeExtBox><westBL Sync="TRUE">-82.000000</westBL><eastBL Sync="TRUE">-72.000000</eastBL><southBL Sync="TRUE">11.000000</southBL><northBL Sync="TRUE">24.000000</northBL><exTypeCode Sync="TRUE">1</exTypeCode></nativeExtBox></itemProps><coordRef><type Sync="TRUE">Geographic</type><geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn><csUnits Sync="TRUE">Angular Unit: Degree (0.017453)</csUnits><peXml Sync="TRUE">&lt;GeographicCoordinateSystem xsi:type='typens:GeographicCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.4.0'&gt;&lt;WKT&gt;GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433],AUTHORITY[&amp;quot;EPSG&amp;quot;,4326]]&lt;/WKT&gt;&lt;XOrigin&gt;-400&lt;/XOrigin&gt;&lt;YOrigin&gt;-400&lt;/YOrigin&gt;&lt;XYScale&gt;999999999.99999988&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;8.983152841195215e-09&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;LeftLongitude&gt;-180&lt;/LeftLongitude&gt;&lt;WKID&gt;4326&lt;/WKID&gt;&lt;LatestWKID&gt;4326&lt;/LatestWKID&gt;&lt;/GeographicCoordinateSystem&gt;</peXml></coordRef></DataProperties><SyncDate>20250202</SyncDate><SyncTime>14404400</SyncTime><ModDate>20250202</ModDate><ModTime>14404400</ModTime><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ISO19139</ArcGISProfile></Esri>'''
-            position = root_dict["Esri"]
-            esri_root = etree.XML(xml)
-            #print("Inserting Esri at position: {position}")
-            idCitation.insert(position, esri_root)
-            target_root.insert(position, element)
-            del position, esri_root
-            del xml
-        elif len(Esri) == 1:
-            pass
-            #print(f"{len(Esri)} {Esri[0].tag} element is found")
-        elif len(Esri) > 1:
-            #print(f"Removing {len(Esri)-1} 'Esri' elements")
-            for i in range(1, len(Esri)):
-                target_root.remove(Esri[i])
-                i+=1
-                del i
-        else:
-            pass
+##        # ######################################################################
+##        #               ###--->>> Esri section Start <<<---###
+##        # ######################################################################
+##
+##        Esri = target_tree.xpath(f"./Esri")
+##        if len(Esri) == 0:
+##            xml = '''<Esri><CreaDate>20250201</CreaDate><CreaTime>12234100</CreaTime><ArcGISFormat>1.0</ArcGISFormat><ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle><SyncOnce>FALSE</SyncOnce><DataProperties><itemProps><itemName Sync="TRUE">SpeciesRangeTemplate</itemName><imsContentType Sync="TRUE">002</imsContentType><nativeExtBox><westBL Sync="TRUE">-82.000000</westBL><eastBL Sync="TRUE">-72.000000</eastBL><southBL Sync="TRUE">11.000000</southBL><northBL Sync="TRUE">24.000000</northBL><exTypeCode Sync="TRUE">1</exTypeCode></nativeExtBox></itemProps><coordRef><type Sync="TRUE">Geographic</type><geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn><csUnits Sync="TRUE">Angular Unit: Degree (0.017453)</csUnits><peXml Sync="TRUE">&lt;GeographicCoordinateSystem xsi:type='typens:GeographicCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.4.0'&gt;&lt;WKT&gt;GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433],AUTHORITY[&amp;quot;EPSG&amp;quot;,4326]]&lt;/WKT&gt;&lt;XOrigin&gt;-400&lt;/XOrigin&gt;&lt;YOrigin&gt;-400&lt;/YOrigin&gt;&lt;XYScale&gt;999999999.99999988&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;8.983152841195215e-09&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;LeftLongitude&gt;-180&lt;/LeftLongitude&gt;&lt;WKID&gt;4326&lt;/WKID&gt;&lt;LatestWKID&gt;4326&lt;/LatestWKID&gt;&lt;/GeographicCoordinateSystem&gt;</peXml></coordRef></DataProperties><SyncDate>20250202</SyncDate><SyncTime>14404400</SyncTime><ModDate>20250202</ModDate><ModTime>14404400</ModTime><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ISO19139</ArcGISProfile></Esri>'''
+##            position = root_dict["Esri"]
+##            esri_root = etree.XML(xml)
+##            #print("Inserting Esri at position: {position}")
+##            idCitation.insert(position, esri_root)
+##            target_root.insert(position, element)
+##            del position, esri_root
+##            del xml
+##        elif len(Esri) == 1:
+##            pass
+##            #print(f"{len(Esri)} {Esri[0].tag} element is found")
+##        elif len(Esri) > 1:
+##            #print(f"Removing {len(Esri)-1} 'Esri' elements")
+##            for i in range(1, len(Esri)):
+##                target_root.remove(Esri[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
 
         esri_dict ={"CreaDate" : 0,  "CreaTime" : 1, "ArcGISFormat" : 2,
-                    "ArcGISStyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
+                    "ArcGISstyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
                     "itemProps" : 0, "itemName" : 0, "imsContentType" : 1,
                     "nativeExtBox" : 2, "westBL" : 0, "eastBL" : 1, "southBL" : 2,
                     "northBL" : 3, "exTypeCode" : 4, "coordRef" : 1, "type" : 0,
@@ -135,30 +153,30 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                     "scaleRange" : 10, "minScale" : 11, "maxScale" : 12,
                     "ArcGISProfile" : 13,}
 
-        # Check for ArcGISStyle
+        # Check for ArcGISstyle
         Esri = target_tree.xpath(f"./Esri")[0]
-        ArcGISStyle = Esri.xpath(f"./ArcGISStyle")
-        if len(ArcGISStyle) == 0:
-            position = esri_dict["ArcGISStyle"]
-            #print(f"Inserting ArcGISStyle at position {position}")
-            ArcGIS_Style = etree.SubElement(Esri, "ArcGISStyle")
+        ArcGISstyle = Esri.xpath(f"./ArcGISstyle")
+        if len(ArcGISstyle) == 0:
+            position = esri_dict["ArcGISstyle"]
+            #print(f"Inserting ArcGISstyle at position {position}")
+            ArcGIS_Style = etree.SubElement(Esri, "ArcGISstyle")
             ArcGIS_Style.text = "ISO 19139 Metadata Implementation Specification"
             Esri.insert(position, ArcGIS_Style)
             del position, ArcGIS_Style
-        elif len(ArcGISStyle) == 1:
-            position = esri_dict["ArcGISStyle"]
-            #print(f"{len(ArcGISStyle)} {ArcGISStyle[0].tag} element is found with value: {position}")
-            ArcGISStyle[0].text = "ISO 19139 Metadata Implementation Specification"
+        elif len(ArcGISstyle) == 1:
+            position = esri_dict["ArcGISstyle"]
+            #print(f"{len(ArcGISstyle)} {ArcGISstyle[0].tag} element is found with value: {position}")
+            ArcGISstyle[0].text = "ISO 19139 Metadata Implementation Specification"
             del position
-        elif len(ArcGISStyle) > 1:
-            #print(f"Removing {len(ArcGISStyle)-1} 'ArcGISStyle' elements")
-            for i in range(1, len(ArcGISStyle)):
-                Esri.remove(ArcGISStyle[i])
+        elif len(ArcGISstyle) > 1:
+            #print(f"Removing {len(ArcGISstyle)-1} 'ArcGISstyle' elements")
+            for i in range(1, len(ArcGISstyle)):
+                Esri.remove(ArcGISstyle[i])
                 i+=1
                 del i
         else:
             pass
-        del Esri, ArcGISStyle
+        del Esri, ArcGISstyle
 
         # ###--->>> Deletes an unwanted element
         Esri = target_tree.xpath(f"./Esri")[0]
@@ -204,7 +222,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 del i
         else:
             pass
-        #print(etree.tostring(Esri, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(Esri, encoding="utf-8", pretty_print=True).decode())
         del scaleRange, Esri
 
         # Check for ArcGISProfile
@@ -243,32 +261,21 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         # idCitation sub-section
 
-        dataIdInfo = target_tree.xpath(f"./dataIdInfo")
-        if len(dataIdInfo) == 0:
-            #print("Inserting dataIdInfo at {root_dict['envirDesc']}")
-            position = root_dict["dataIdInfo"]
-            element = etree.SubElement(target_root, "dataIdInfo")
-            target_root.insert(position, element)
-            del position, element
-        elif len(dataIdInfo) == 1:
-            pass
-            #print(f"{len(dataIdInfo)} {dataIdInfo[0].tag} element is found")
-        elif len(dataIdInfo) > 1:
-            print(f"{len(dataIdInfo)} {dataIdInfo[0].tag} elements are found")
-        else:
-            pass
-        del dataIdInfo
-
-        dataIdInfo_dict = { "idCitation" : 0, "searchKeys" :  1, "idPurp"     : 2,
-                            "idAbs"      : 3, "idCredit"   :  4, "resConst"   : 5,
-                            "envirDesc"  : 6, "dataLang"   :  7, "spatRpType" : 8,
-                            "dataExt"    : 9, "tpCat"      : 10,}
-
-        dataIdInfo = target_tree.xpath(f"./dataIdInfo")[0]
-        for child in dataIdInfo.xpath("."):
-            child[:] = sorted(child, key=lambda x: dataIdInfo_dict[x.tag])
-            del child
-        del dataIdInfo
+##        dataIdInfo = target_tree.xpath(f"./dataIdInfo")
+##        if len(dataIdInfo) == 0:
+##            #print("Inserting dataIdInfo at {root_dict['envirDesc']}")
+##            position = root_dict["dataIdInfo"]
+##            element = etree.SubElement(target_root, "dataIdInfo")
+##            target_root.insert(position, element)
+##            del position, element
+##        elif len(dataIdInfo) == 1:
+##            pass
+##            #print(f"{len(dataIdInfo)} {dataIdInfo[0].tag} element is found")
+##        elif len(dataIdInfo) > 1:
+##            print(f"{len(dataIdInfo)} {dataIdInfo[0].tag} elements are found")
+##        else:
+##            pass
+##        del dataIdInfo
 
         dataIdInfo = target_tree.xpath(f"./dataIdInfo")[0]
         envirDesc = dataIdInfo.xpath(f"./envirDesc")
@@ -281,7 +288,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         elif len(envirDesc) == 1:
             #print(f"Updating envirDesc if needed at index: {dataIdInfo.index(dataIdInfo.xpath(f'./envirDesc')[0])}")
             envirDesc[0].set("Sync", "TRUE")
-            dataIdInfo.insert(dataIdInfo_dict['envirDesc'], envirDesc[0])
+            #dataIdInfo.insert(dataIdInfo_dict['envirDesc'], envirDesc[0])
         elif len(envirDesc) > 1:
             pass
         else:
@@ -305,6 +312,11 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                            "fgdcGeoform" : 1, "date" : 4, "createDate" : 0,
                            "pubDate"    : 1, "revisedDate" : 2, "citRespParty"  : 6,
                            }
+
+        dataIdInfo_dict = { "idCitation" : 0, "searchKeys" :  1, "idPurp"     : 2,
+                            "idAbs"      : 3, "idCredit"   :  4, "resConst"   : 5,
+                            "envirDesc"  : 6, "dataLang"   :  7, "spatRpType" : 8,
+                            "dataExt"    : 9, "tpCat"      : 10,}
 
         resTitle = idCitation.xpath(f"./resTitle")
         if len(resTitle) == 0:
@@ -333,7 +345,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del resTitle
 
         # ######################################################################
@@ -366,7 +378,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             print(f"May need to delete: {len(resAltTitle)} resAltTitle")
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del resAltTitle
 
         # ######################################################################
@@ -396,7 +408,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del collTitle
 
         # ######################################################################
@@ -421,7 +433,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             print(f"May need to delete: {len(fgdcGeoform)} fgdcGeoform")
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del fgdcGeoform, presForm
 
         # ######################################################################
@@ -434,12 +446,34 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             position = idCitation_dict['date']
             #print(f"Inserting date at position: {position}")
             element = etree.SubElement(idCitation, "date")
+            createDate = etree.SubElement(element, "createDate")
+            createDate.text = "2025-01-01T00:00:00"
             pubDate = etree.SubElement(element, "pubDate")
             pubDate.text = "2025-01-01T00:00:00"
+            revisedDate = etree.SubElement(element, "revisedDate")
+            revisedDate.text = "2025-01-01T00:00:00"
             idCitation.insert(position, element)
-            del element, pubDate, position
+            del element, createDate, pubDate, revisedDate, position
         elif len(date) == 1:
             #print(f"Updating date if needed at position: {idCitation.index(date[0])}")
+            createDate = date[0].xpath(f"./createDate")
+            if len(createDate) == 0:
+                #print(f"\tInserting createDate at position: {idCitation.index(idCitation.xpath(f'./date')[0])}")
+                createDate = etree.SubElement(date[0], "createDate")
+                createDate.text = "2025-01-01T00:00:00"
+                date.append(createDate)
+            elif len(createDate) == 1:
+                #print(f"Updating createDate if needed  at position: {date[0].index(date[0].xpath(f'./createDate')[0])}")
+                createDate[0].text = "2025-01-01T00:00:00"
+            elif len(createDate) > 1:
+                #print(f"Removing {len(createDate)-1} createDate elements")
+                for i in range(1, len(createDate)):
+                    date[0].remove(createDate[i])
+                    i+=1
+                    del i
+            else:
+                pass
+            del createDate
             pubDate = date[0].xpath(f"./pubDate")
             if len(pubDate) == 0:
                 #print(f"\tInserting pubDate at position: {idCitation.index(idCitation.xpath(f'./date')[0])}")
@@ -457,14 +491,34 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                     del i
             else:
                 pass
-            idCitation.insert(4, date[0])
             del pubDate
+            revisedDate = date[0].xpath(f"./revisedDate")
+            if len(revisedDate) == 0:
+                #print(f"\tInserting revisedDate at position: {idCitation.index(idCitation.xpath(f'./date')[0])}")
+                revisedDate = etree.SubElement(date[0], "revisedDate")
+                revisedDate.text = "2025-01-01T00:00:00"
+                date.append(revisedDate)
+            elif len(revisedDate) == 1:
+                #print(f"Updating revisedDate if needed  at position: {date[0].index(date[0].xpath(f'./revisedDate')[0])}")
+                revisedDate[0].text = "2025-01-01T00:00:00"
+            elif len(revisedDate) > 1:
+                #print(f"Removing {len(revisedDate)-1} revisedDate elements")
+                for i in range(1, len(revisedDate)):
+                    date[0].remove(revisedDate[i])
+                    i+=1
+                    del i
+            else:
+                pass
+            del revisedDate
+
+            idCitation.insert(4, date[0])
+
         elif len(date) > 1:
             # May not get here
             print(f"May needed to be deleted {len(date)} date")
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del date
 
         # ######################################################################
@@ -581,7 +635,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         del citRespParty_root, citRespParty_email
         del idCitation_dict
 
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
         del xml, citRespParty
         del idCitation
 
@@ -631,10 +685,17 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         else:
             pass
         #print(etree.tostring(Esri, encoding="utf-8").decode())
-        #print(etree.tostring(dataIdInfo, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(dataIdInfo, encoding="utf-8", pretty_print=True).decode())
         del tpCat, tpCat_dict
 
         del dataIdInfo
+
+        dataIdInfo = target_tree.xpath(f"./dataIdInfo")[0]
+        for child in dataIdInfo.xpath("."):
+            child[:] = sorted(child, key=lambda x: dataIdInfo_dict[x.tag])
+            del child
+        del dataIdInfo
+
         del dataIdInfo_dict
 
         # ######################################################################
@@ -645,29 +706,29 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         #               ###--->>> metadata detail section Start <<<---###
         # ######################################################################
 
-        mdChar = target_tree.xpath(f"./mdChar")
-        if len(mdChar) == 0:
-            #print(f"Inserting 'mdChar' at position: {root_dict['mdChar']}")
-            xml = '<mdChar><CharSetCd value="004" Sync="TRUE"></CharSetCd></mdChar>'
-            root = etree.XML(xml)
-            position = root_dict['mdChar']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdChar) == 1:
-            #print(f"Updating '{mdChar[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdChar')[0])}")
-            position = root_dict['mdChar']
-            target_root.insert(position, mdChar[0])
-        elif len(mdChar) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdChar)-1} mdChar elements")
-            for i in range(1, len(mdChar)):
-                target_root.remove(mdChar[i])
-                i+=1
-                del i
-        else:
-            pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
-        del mdChar
+##        mdChar = target_tree.xpath(f"./mdChar")
+##        if len(mdChar) == 0:
+##            #print(f"Inserting 'mdChar' at position: {root_dict['mdChar']}")
+##            xml = '<mdChar><CharSetCd value="004" Sync="TRUE"></CharSetCd></mdChar>'
+##            root = etree.XML(xml)
+##            position = root_dict['mdChar']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdChar) == 1:
+##            #print(f"Updating '{mdChar[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdChar')[0])}")
+##            position = root_dict['mdChar']
+##            target_root.insert(position, mdChar[0])
+##        elif len(mdChar) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdChar)-1} mdChar elements")
+##            for i in range(1, len(mdChar)):
+##                target_root.remove(mdChar[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+##        del mdChar
 
         # ######################################################################
         #               ###--->>> mdContact section Start <<<---###
@@ -722,17 +783,19 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
  #            del position
 
         if len(mdContact) == 0:
+            pass
             #print(f"Inserting 'mdContact' at position: {root_dict['mdContact']}")
-            xml = '<mdContact Sync="TRUE"></mdContact>'
-            root = etree.XML(xml)
-            position = root_dict['mdContact']
-            target_root.insert(position, root)
-            del position, root, xml
+            #xml = '<mdContact Sync="TRUE"></mdContact>'
+            #root = etree.XML(xml)
+            #position = root_dict['mdContact']
+            #target_root.insert(position, mdContact_root)
+            #del position, root, xml
         elif len(mdContact) == 1:
+            pass
             #print(f"Updating '{mdContact[0].tag}' if needed at position: {root_dict['mdContact']}")
-            position = root_dict['mdContact']
-            target_root.insert(position, mdContact[0])
-            del position
+            #position = root_dict['mdContact']
+            #target_root.replace(mdContact[0], mdContact_root)
+            #del position
         elif len(mdContact) > 1:
             # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
             print(f"Removing {len(mdContact)-1} mdContact elements")
@@ -742,7 +805,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 del i
         else:
             pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
 
 ##   #
 ##   #        elif len(citRespParty) == 1:
@@ -792,7 +855,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##   #        else:
 ##   #            pass
 ##   #        del new_cit_resp_party_email, new_cit_resp_party_root
-##   #        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
+##   #        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
 ##   #        del xml, citRespParty
 
         del contact_dict, mdContact_root, mdContact_email
@@ -801,30 +864,30 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         #               ###--->>> mdContact section End <<<---###
         # #######################################################################
 
-        mdDateSt = target_tree.xpath(f"./mdDateSt")
-        if len(mdDateSt) == 0:
-            #print(f"Inserting 'mdDateSt' at position: {root_dict['mdDateSt']}")
-            xml = '<mdDateSt Sync="TRUE">20250129</mdDateSt>'
-            root = etree.XML(xml)
-            position = root_dict['mdDateSt']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdDateSt) == 1:
-            #print(f"Updating '{mdDateSt[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdDateSt')[0])}")
-            position = root_dict['mdDateSt']
-            target_root.insert(position, mdDateSt[0])
-            del position
-        elif len(mdDateSt) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdDateSt)-1} mdDateSt elements")
-            for i in range(1, len(mdDateSt)):
-                target_root.remove(mdDateSt[i])
-                i+=1
-                del i
-        else:
-            pass
-        #print(etree.tostring(idCitation, pretty_print=True, encoding="utf-8").decode())
-        del mdDateSt
+##        mdDateSt = target_tree.xpath(f"./mdDateSt")
+##        if len(mdDateSt) == 0:
+##            #print(f"Inserting 'mdDateSt' at position: {root_dict['mdDateSt']}")
+##            xml = '<mdDateSt Sync="TRUE">20250129</mdDateSt>'
+##            root = etree.XML(xml)
+##            position = root_dict['mdDateSt']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdDateSt) == 1:
+##            #print(f"Updating '{mdDateSt[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdDateSt')[0])}")
+##            position = root_dict['mdDateSt']
+##            target_root.insert(position, mdDateSt[0])
+##            del position
+##        elif len(mdDateSt) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdDateSt)-1} mdDateSt elements")
+##            for i in range(1, len(mdDateSt)):
+##                target_root.remove(mdDateSt[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+##        del mdDateSt
 
         mdFileID = target_tree.xpath(f"./mdFileID")
         if len(mdFileID) == 0:
@@ -850,29 +913,29 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             pass
         del mdFileID
 
-        mdLang = target_tree.xpath(f"./mdLang")
-        if len(mdLang) == 0:
-            #print(f"Inserting 'mdLang' at position: {root_dict['mdLang']}")
-            xml = '<mdLang><languageCode value="eng" Sync="TRUE"></languageCode><countryCode value="USA" Sync="TRUE"></countryCode></mdLang>'
-            root = etree.XML(xml)
-            position = root_dict['mdLang']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdLang) == 1:
-            #print(f"Updating '{mdLang[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdLang[0].tag}')[0])}")
-            position = root_dict['mdLang']
-            target_root.insert(position, mdLang[0])
-            del position
-        elif len(mdLang) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdLang)-1} mdLang elements")
-            for i in range(1, len(mdLang)):
-                target_root.remove(mdLang[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdLang
+##        mdLang = target_tree.xpath(f"./mdLang")
+##        if len(mdLang) == 0:
+##            #print(f"Inserting 'mdLang' at position: {root_dict['mdLang']}")
+##            xml = '<mdLang><languageCode value="eng" Sync="TRUE"></languageCode><countryCode value="USA" Sync="TRUE"></countryCode></mdLang>'
+##            root = etree.XML(xml)
+##            position = root_dict['mdLang']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdLang) == 1:
+##            #print(f"Updating '{mdLang[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdLang[0].tag}')[0])}")
+##            position = root_dict['mdLang']
+##            target_root.insert(position, mdLang[0])
+##            del position
+##        elif len(mdLang) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdLang)-1} mdLang elements")
+##            for i in range(1, len(mdLang)):
+##                target_root.remove(mdLang[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdLang
 
         mdMaint = target_tree.xpath(f"./mdMaint")
         if len(mdMaint) == 0:
@@ -898,53 +961,53 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             pass
         del mdMaint
 
-        mdHrLv = target_tree.xpath(f"./mdHrLv")
-        if len(mdHrLv) == 0:
-            #print(f"Inserting mdHrLv at position: {root_dict['mdHrLv']}")
-            xml = '<mdHrLv><ScopeCd value="005" Sync="TRUE"></ScopeCd></mdHrLv>'
-            root = etree.XML(xml)
-            position = root_dict['mdHrLv']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdHrLv) == 1:
-            #print(f"Updating '{mdHrLv[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdHrLv[0].tag}')[0])}")
-            position = root_dict['mdHrLv']
-            target_root.insert(position, mdHrLv[0])
-            del position
-        elif len(mdLang) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdHrLv)-1} mdHrLv elements")
-            for i in range(1, len(mdHrLv)):
-                target_root.remove(mdHrLv[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdHrLv
+##        mdHrLv = target_tree.xpath(f"./mdHrLv")
+##        if len(mdHrLv) == 0:
+##            #print(f"Inserting mdHrLv at position: {root_dict['mdHrLv']}")
+##            xml = '<mdHrLv><ScopeCd value="005" Sync="TRUE"></ScopeCd></mdHrLv>'
+##            root = etree.XML(xml)
+##            position = root_dict['mdHrLv']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdHrLv) == 1:
+##            #print(f"Updating '{mdHrLv[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdHrLv[0].tag}')[0])}")
+##            position = root_dict['mdHrLv']
+##            target_root.insert(position, mdHrLv[0])
+##            del position
+##        elif len(mdLang) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdHrLv)-1} mdHrLv elements")
+##            for i in range(1, len(mdHrLv)):
+##                target_root.remove(mdHrLv[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdHrLv
 
-        mdHrLvName  = target_tree.xpath(f"./mdHrLvName")
-        if len(mdHrLvName) == 0:
-            #print(f"Inserting 'mdHrLvName' at position: {root_dict['mdHrLvName']}")
-            xml = '<mdHrLvName Sync="TRUE">dataset</mdHrLvName>'
-            root = etree.XML(xml)
-            position = root_dict['mdHrLvName']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdHrLvName) == 1:
-            #print(f"Updating '{mdHrLvName[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdHrLvName[0].tag}')[0])}")
-            position = root_dict['mdHrLvName']
-            target_root.insert(position, mdHrLvName[0])
-            del position
-        elif len(mdHrLvName) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdHrLvName)-1} mdHrLvName elements")
-            for i in range(1, len(mdHrLvName)):
-                target_root.remove(mdHrLvName[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdHrLvName
+##        mdHrLvName  = target_tree.xpath(f"./mdHrLvName")
+##        if len(mdHrLvName) == 0:
+##            #print(f"Inserting 'mdHrLvName' at position: {root_dict['mdHrLvName']}")
+##            xml = '<mdHrLvName Sync="TRUE">dataset</mdHrLvName>'
+##            root = etree.XML(xml)
+##            position = root_dict['mdHrLvName']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdHrLvName) == 1:
+##            #print(f"Updating '{mdHrLvName[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdHrLvName[0].tag}')[0])}")
+##            position = root_dict['mdHrLvName']
+##            target_root.insert(position, mdHrLvName[0])
+##            del position
+##        elif len(mdHrLvName) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdHrLvName)-1} mdHrLvName elements")
+##            for i in range(1, len(mdHrLvName)):
+##                target_root.remove(mdHrLvName[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdHrLvName
 
          # ###--->>> These elements are in vrey few xlm files
          #mdStanName  = target_tree.xpath(f"./mdStanName")
@@ -995,87 +1058,87 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
          #    pass
          #del mdStanVer
 
-        refSysInfo  = target_tree.xpath(f"./refSysInfo")
-        if len(refSysInfo) == 0:
-            #print(f"Inserting 'refSysInfo' at position: {root_dict['refSysInfo']}")
-            xml = '<refSysInfo Sync="TRUE"></refSysInfo>'
-            root = etree.XML(xml)
-            position = root_dict['refSysInfo']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(refSysInfo) == 1:
-            #print(f"Updating '{refSysInfo[0].tag}' if needed at position: {root_dict['refSysInfo']}")
-            position = root_dict['refSysInfo']
-            target_root.insert(position, refSysInfo[0])
-            del position
-        elif len(refSysInfo) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(refSysInfo)-1} refSysInfo elements")
-            for i in range(1, len(refSysInfo)):
-                target_root.remove(refSysInfo[i])
-                i+=1
-                del i
-        else:
-            pass
-        del refSysInfo
+##        refSysInfo  = target_tree.xpath(f"./refSysInfo")
+##        if len(refSysInfo) == 0:
+##            #print(f"Inserting 'refSysInfo' at position: {root_dict['refSysInfo']}")
+##            xml = '<refSysInfo Sync="TRUE"></refSysInfo>'
+##            root = etree.XML(xml)
+##            position = root_dict['refSysInfo']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(refSysInfo) == 1:
+##            #print(f"Updating '{refSysInfo[0].tag}' if needed at position: {root_dict['refSysInfo']}")
+##            position = root_dict['refSysInfo']
+##            target_root.insert(position, refSysInfo[0])
+##            del position
+##        elif len(refSysInfo) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(refSysInfo)-1} refSysInfo elements")
+##            for i in range(1, len(refSysInfo)):
+##                target_root.remove(refSysInfo[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del refSysInfo
 
-        spatRepInfo = target_tree.xpath(f"./spatRepInfo")
-        if len(spatRepInfo) == 0:
-            #print(f"Inserting 'spatRepInfo' at position: {root_dict['spatRepInfo']}")
-            xml = '''<spatRepInfo><VectSpatRep><geometObjs Name="SpeciesRangeTemplate" Sync="TRUE">
-                     <geoObjTyp><GeoObjTypCd value="002" Sync="TRUE"></GeoObjTypCd></geoObjTyp>
-                     <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
-                     <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
-                     </VectSpatRep></spatRepInfo>'''
-            root = etree.XML(xml)
-            position = root_dict['spatRepInfo']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(spatRepInfo) == 1:
-            #print(f"Updating '{spatRepInfo[0].tag}' if needed at position: {root_dict['spatRepInfo']}")
-            #xml = '''<spatRepInfo><VectSpatRep><geometObjs Name="SpeciesRangeTemplate" Sync="TRUE">
-            #         <geoObjTyp><GeoObjTypCd value="002" Sync="TRUE"></GeoObjTypCd></geoObjTyp>
-            #         <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
-            #         <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
-            #         </VectSpatRep></spatRepInfo>'''
-            #root = etree.XML(xml)
-            position = root_dict['spatRepInfo']
-            target_root.insert(position, spatRepInfo[0])
-            del position #, root, xml
-        elif len(spatRepInfo) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(spatRepInfo)-1} spatRepInfo elements")
-            for i in range(1, len(spatRepInfo)):
-                target_root.remove(spatRepInfo[i])
-                i+=1
-                del i
-        else:
-            pass
-        del spatRepInfo
-
-        spdoinfo = target_tree.xpath(f"./spdoinfo")
-        if len(spdoinfo) == 0:
-            #print(f"Inserting 'spdoinfo' at position: {root_dict['spdoinfo']}")
-            xml = '''<spdoinfo Sync="TRUE"></spdoinfo>'''
-            root = etree.XML(xml)
-            position = root_dict['spdoinfo']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(spdoinfo) == 1:
-            #print(f"Updating '{spdoinfo[0].tag}' if needed at position: {root_dict['spdoinfo']}")
-            position = root_dict['spdoinfo']
-            target_root.insert(position, spdoinfo[0])
-            del position
-        elif len(spdoinfo) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(spdoinfo)-1} spdoinfo elements")
-            for i in range(1, len(spdoinfo)):
-                target_root.remove(spdoinfo[i])
-                i+=1
-                del i
-        else:
-            pass
-        del spdoinfo
+##        spatRepInfo = target_tree.xpath(f"./spatRepInfo")
+##        if len(spatRepInfo) == 0:
+##            #print(f"Inserting 'spatRepInfo' at position: {root_dict['spatRepInfo']}")
+##            xml = '''<spatRepInfo><VectSpatRep><geometObjs Name="SpeciesRangeTemplate" Sync="TRUE">
+##                     <geoObjTyp><GeoObjTypCd value="002" Sync="TRUE"></GeoObjTypCd></geoObjTyp>
+##                     <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
+##                     <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
+##                     </VectSpatRep></spatRepInfo>'''
+##            root = etree.XML(xml)
+##            position = root_dict['spatRepInfo']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(spatRepInfo) == 1:
+##            #print(f"Updating '{spatRepInfo[0].tag}' if needed at position: {root_dict['spatRepInfo']}")
+##            #xml = '''<spatRepInfo><VectSpatRep><geometObjs Name="SpeciesRangeTemplate" Sync="TRUE">
+##            #         <geoObjTyp><GeoObjTypCd value="002" Sync="TRUE"></GeoObjTypCd></geoObjTyp>
+##            #         <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
+##            #         <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
+##            #         </VectSpatRep></spatRepInfo>'''
+##            #root = etree.XML(xml)
+##            position = root_dict['spatRepInfo']
+##            target_root.insert(position, spatRepInfo[0])
+##            del position #, root, xml
+##        elif len(spatRepInfo) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(spatRepInfo)-1} spatRepInfo elements")
+##            for i in range(1, len(spatRepInfo)):
+##                target_root.remove(spatRepInfo[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del spatRepInfo
+##
+##        spdoinfo = target_tree.xpath(f"./spdoinfo")
+##        if len(spdoinfo) == 0:
+##            #print(f"Inserting 'spdoinfo' at position: {root_dict['spdoinfo']}")
+##            xml = '''<spdoinfo Sync="TRUE"></spdoinfo>'''
+##            root = etree.XML(xml)
+##            position = root_dict['spdoinfo']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(spdoinfo) == 1:
+##            #print(f"Updating '{spdoinfo[0].tag}' if needed at position: {root_dict['spdoinfo']}")
+##            position = root_dict['spdoinfo']
+##            target_root.insert(position, spdoinfo[0])
+##            del position
+##        elif len(spdoinfo) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(spdoinfo)-1} spdoinfo elements")
+##            for i in range(1, len(spdoinfo)):
+##                target_root.remove(spdoinfo[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del spdoinfo
 
         # #######################################################################
         #               ###--->>> metadata detail section End <<<---###
@@ -1084,239 +1147,22 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         # #######################################################################
         #               ###--->>> dqInfo section Start <<<---###
         # #######################################################################
-        dqInfo = target_tree.xpath(f"./dqInfo")
-        if len(dqInfo) == 0:
-            #print(f"Inserting 'dqInfo' at position: {root_dict['dqInfo']}")
-            xml = '''<dqInfo>
-                        <dqScope xmlns="">
-                            <scpLvl>
-                                <ScopeCd value="005"></ScopeCd>
-                            </scpLvl>
-                            <scpLvlDesc xmlns="">
-                                <datasetSet>Feature Class</datasetSet>
-                            </scpLvlDesc>
-                        </dqScope>
-                        <report type="DQConcConsis" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                        </report>
-                        <report type="DQCompOm" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                        </report>
-                        <dataLineage>
-                            <statement></statement>
-                            <dataSource type="">
-                                <srcDesc></srcDesc>
-                                <srcCitatn>
-                                    <resTitle></resTitle>
-                                    <date>
-                                        <createDate></createDate>
-                                    </date>
-                                </srcCitatn>
-                            </dataSource>
-                            <prcStep>
-                                <stepDesc></stepDesc>
-                                <stepProc>
-                                    <editorSource>extermal</editorSource>
-                                    <editorDigest></editorDigest>
-                                    <rpIndName></rpIndName>
-                                    <rpOrgName></rpOrgName>
-                                    <rpPosName></rpPosName>
-                                    <rpCntInfo>
-                                        <cntAddress addressType="both">
-                                            <delPoint></delPoint>
-                                            <city></city>
-                                            <adminArea></adminArea>
-                                            <postCode></postCode>
-                                            <eMailAdd></eMailAdd>
-                                            <country></country>
-                                        </cntAddress>
-                                        <cntPhone>
-                                            <voiceNum tddtty=""></voiceNum>
-                                            <faxNum></faxNum>
-                                        </cntPhone>
-                                        <cntHours></cntHours>
-                                        <cntOnlineRes>
-                                            <linkage></linkage>
-                                            <protocol>REST Service</protocol>
-                                            <orName></orName>
-                                            <orDesc></orDesc>
-                                            <orFunct>
-                                                <OnFunctCd value="002"></OnFunctCd>
-                                            </orFunct>
-                                        </cntOnlineRes>
-                                    </rpCntInfo>
-                                    <editorSave>True</editorSave>
-                                    <displayName></displayName>
-                                    <role>
-                                        <RoleCd value="009"></RoleCd>
-                                    </role>
-                                </stepProc>
-                                <stepDateTm></stepDateTm>
-                            </prcStep>
-                        </dataLineage>
-                    </dqInfo>'''
-            root = etree.XML(xml)
-            position = root_dict['dqInfo']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(dqInfo) == 1:
-            #print(f"Updating '{dqInfo[0].tag}' if needed at position: {root_dict['dqInfo']}")
-            position = root_dict['dqInfo']
-            target_root.insert(position, dqInfo[0])
-            del position
-        elif len(dqInfo) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            #print(f"Removing {len(dqInfo)-1} dqInfo elements")
-            for i in range(1, len(dqInfo)):
-                target_root.remove(dqInfo[i])
-                i+=1
-                del i
-        else:
-            pass
-        del dqInfo
-
-        dqInfo_dict = { "dqScope" : 0, "scpLvl" : 0, "ScopeCd" : 0,
-                        "scpLvlDesc" : 1, "datasetSet" : 0, "report" : 1,
-                        "measDesc" : 0, "report" : 2, "measDesc" : 0,
-                        "dataLineage" : 3, "statement" : 0, "dataSource" : 1,
-                        "srcDesc" : 0, "srcCitatn" : 1, "resTitle" : 0,
-                        "date" : 1, "createDate" : 0, "prcStep" : 2,
-                        "stepDesc" : 0, "stepProc" : 1, "stepDateTm" : 2,
-                      }
-
-        dqInfo  = target_tree.xpath(f"./dqInfo")
-        dqScope = dqInfo[0].xpath(f"./dqScope")
-        if len(dqScope) == 0:
-            #print(f"Inserting 'dqScope' at position: {dqInfo_dict['dqScope']}")
-            xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'''
-            root = etree.XML(xml)
-            position = dqInfo_dict['dqScope']
-            dqInfo[0].insert(position, root)
-            del position, root, xml
-        elif len(dqScope) == 1:
-            #print(f"Updating '{dqScope[0].tag}' if needed at position: {dqInfo_dict['dqScope']}")
-            #xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'''
-            #root = etree.XML(xml)
-            #position = dqInfo_dict["dqScope"]
-            #dqInfo[0].insert(position, root)
-            #del position, root, xml
-            position = dqInfo_dict["dqScope"]
-            dqInfo[0].insert(position, dqScope[0])
-            del position
-        elif len(dqScope) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            #print(f"Removing {len(dqScope)-1} dqScope elements")
-            for i in range(1, len(dqScope)):
-                dqInfo[0].remove(dqScope[i])
-                i+=1
-                del i
-        else:
-            pass
-        #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
-        del dqScope, dqInfo
-
-        dqInfo  = target_tree.xpath(f"./dqInfo")
-        report = dqInfo[0].xpath(f"./report")
-        if len(report) == 0:
-            #print(f"Inserting 'report' at position: {dqInfo_dict['report']}")
-            xml = '''<report type="DQConcConsis" dimension="horizontal">
+        xml = '''<dqInfo>
+                    <dqScope xmlns="">
+                        <scpLvl>
+                            <ScopeCd value="005"></ScopeCd>
+                        </scpLvl>
+                        <scpLvlDesc xmlns="">
+                            <datasetSet Sync="TRUE">Feature Class</datasetSet>
+                        </scpLvlDesc>
+                    </dqScope>
+                    <report type="DQConcConsis" dimension="horizontal">
                         <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                     </report>'''
-            root = etree.XML(xml)
-            position = dqInfo_dict['report']
-            dqInfo[0].insert(position, root)
-            del position, root, xml
-
-            #print(f"Inserting 'report' at position: {dqInfo_dict['report']+1}")
-            xml = '''<report type="DQCompOm" dimension="horizontal">
+                    </report>
+                    <report type="DQCompOm" dimension="horizontal">
                         <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                     </report>'''
-            root = etree.XML(xml)
-            position = dqInfo_dict['report']
-            dqInfo[0].insert(position+1, root)
-            del position, root, xml
-
-        elif len(report) == 1:
-            #print(f"Updating '{report[0].tag}' if needed at position: {dqInfo_dict['report']}")
-            _report = dqInfo[0].xpath(f"./report[@type='DQConcConsis']")
-            if len(_report) == 1:
-                xml = '''<report type="DQConcConsis" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                         </report>'''
-                root = etree.XML(xml)
-                dqInfo[0].replace(_report[0], root)
-                del root, xml
-
-                xml = '''<report type="DQCompOm" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                         </report>'''
-                root = etree.XML(xml)
-                position = dqInfo_dict["report"]+1
-                dqInfo[0].insert(position, root)
-                del position, root, xml
-
-            elif len(_report) > 1:
-                dqInfo[0].remove(_report[-1])
-            del _report
-
-            _report = dqInfo[0].xpath(f"./report[@type='DQCompOm']")
-            if len(_report) == 1:
-                xml = '''<report type="DQCompOm" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                         </report>'''
-                root = etree.XML(xml)
-                dqInfo[0].replace(_report[0], root)
-                del root, xml
-
-                xml = '''<report type="DQConcConsis" dimension="horizontal">
-                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-                         </report>'''
-                root = etree.XML(xml)
-                position = dqInfo_dict["report"]
-                dqInfo[0].insert(position, root)
-                del position, root, xml
-
-            elif len(_report) > 1:
-                dqInfo[0].remove(_report[-1])
-            del _report
-
-            #root = etree.XML(xml)
-            #position = dqInfo_dict["report"]
-            #dqInfo[0].insert(position, root)
-            #del position, root, xml
-            #position = dqInfo_dict["report"]
-            #dqInfo[0].insert(position, report[0])
-            #del position
-
-        elif len(report) > 1:
-            _report = dqInfo[0].xpath(f"./report[@type='DQConcConsis']")
-            if len(_report) > 1:
-                dqInfo[0].remove(_report[-1])
-            del _report
-
-            _report = dqInfo[0].xpath(f"./report[@type='DQCompOm']")
-            if len(_report) > 1:
-                dqInfo[0].remove(_report[-1])
-            del _report
-
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            #print(f"Removing {len(report)-1} report elements")
-            #for i in range(1, len(report)):
-            #    dqInfo[0].remove(report[i])
-            #    i+=1
-            #    del i
-        else:
-            pass
-        #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
-        del report, dqInfo
-
-        dqInfo  = target_tree.xpath(f"./dqInfo")
-        dataLineage = dqInfo[0].xpath(f"./dataLineage")
-        if len(dataLineage) == 0:
-            print(f"Inserting 'dataLineage' at position: {dqInfo_dict['dataLineage']}")
-            xml = '''<dataLineage>
+                    </report>
+                    <dataLineage>
                         <statement></statement>
                         <dataSource type="">
                             <srcDesc></srcDesc>
@@ -1328,116 +1174,391 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                             </srcCitatn>
                         </dataSource>
                         <prcStep>
-                            <stepDesc></stepDesc>
+                            <stepDesc>Metadata Update</stepDesc>
                             <stepProc>
                                 <editorSource>extermal</editorSource>
-                                <editorDigest></editorDigest>
-                                <rpIndName></rpIndName>
-                                <rpOrgName></rpOrgName>
-                                <rpPosName></rpPosName>
+                                <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                <rpIndName>Nikki Wildart</rpIndName>
+                                <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                <rpPosName>Biologist</rpPosName>
                                 <rpCntInfo>
                                     <cntAddress addressType="both">
-                                        <delPoint></delPoint>
-                                        <city></city>
-                                        <adminArea></adminArea>
-                                        <postCode></postCode>
-                                        <eMailAdd></eMailAdd>
-                                        <country></country>
+                                        <delPoint>1315 East West Highway</delPoint>
+                                        <city>Silver Spring</city>
+                                        <adminArea>MD</adminArea>
+                                        <postCode>20910-3282</postCode>
+                                        <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                                        <country>US</country>
                                     </cntAddress>
                                     <cntPhone>
-                                        <voiceNum tddtty=""></voiceNum>
-                                        <faxNum></faxNum>
+                                        <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                                        <faxNum>(301) 427-8443</faxNum>
                                     </cntPhone>
-                                    <cntHours></cntHours>
+                                    <cntHours>0700 - 1800 EST/EDT</cntHours>
                                     <cntOnlineRes>
-                                        <linkage></linkage>
+                                        <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
                                         <protocol>REST Service</protocol>
-                                        <orName></orName>
-                                        <orDesc></orDesc>
+                                        <orName>Fisheries OPR</orName>
+                                        <orDesc>NOAA Fisheries Office of Science and Technology</orDesc>
                                         <orFunct>
                                             <OnFunctCd value="002"></OnFunctCd>
                                         </orFunct>
                                     </cntOnlineRes>
                                 </rpCntInfo>
                                 <editorSave>True</editorSave>
-                                <displayName></displayName>
+                                <displayName>Nikki Wildart</displayName>
                                 <role>
                                     <RoleCd value="009"></RoleCd>
                                 </role>
                             </stepProc>
                             <stepDateTm></stepDateTm>
                         </prcStep>
-                    </dataLineage>'''
-            root = etree.XML(xml)
-            position = dqInfo_dict['dataLineage']
-            dqInfo[0].insert(position, root)
-            del position, root, xml
-        elif len(dataLineage) == 1:
-            position = dqInfo_dict["dataLineage"]
-            dqInfo[0].insert(position, dataLineage[0])
+                    </dataLineage>
+                </dqInfo>'''
+        # Create an XML string
+        dqInfo_root = etree.XML(xml)
+        del xml
+
+        dqInfo = target_tree.xpath(f"./dqInfo")
+        if len(dqInfo) == 0:
+            #print(f"Inserting 'dqInfo' at position: {root_dict['dqInfo']}")
+            position = root_dict['dqInfo']
+            #target_root.insert(position, dqInfo_root)
             del position
-        elif len(dataLineage) > 1:
+        elif len(dqInfo) == 1:
+            pass
+            #print(f"Updating '{dqInfo[0].tag}' if needed at position: {root_dict['dqInfo']}")
+            #position = root_dict['dqInfo']
+            #target_root.replace(dqInfo[0], dqInfo_root)
+            #del position
+        elif len(dqInfo) > 1:
             # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            #print(f"Removing {len(dataLineage)-1} dataLineage elements")
-            for i in range(1, len(dataLineage)):
-                dqInfo[0].remove(dataLineage[i])
+            #print(f"Removing {len(dqInfo)-1} dqInfo elements")
+            for i in range(1, len(dqInfo)):
+                target_root.remove(dqInfo[i])
                 i+=1
                 del i
         else:
             pass
-        #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
-        del dataLineage, dqInfo
+        del dqInfo_root
+        del dqInfo
 
-        contact_dict = {"editorSource" : 0, "editorDigest" : 1,"rpIndName" : 2,
-                        "rpOrgName"    : 3, "rpPosName"    : 4, "rpCntInfo" : 5,
-                        "cntAddress"   : 0, "delPoint" : 0, "city" : 1,
-                        "adminArea"    : 2, "postCode" : 3, "eMailAdd" : 4,
-                        "country"      : 5, "cntPhone" : 1, "voiceNum" : 0,
-                        "faxNum"       : 1, "cntHours" : 2, "cntOnlineRes" : 3,
-                        "linkage"      : 0, "protocol" : 1, "orName" : 2,
-                        "orDesc"       : 3, "orFunct"  : 4, "OnFunctCd" : 0,
-                        "editorSave"   : 6, "displayName"  : 7, "role" : 8,
-                        "RoleCd"     : 0,
-                        }
-
-        del contact_dict
+##        dqInfo  = target_tree.xpath(f"./dqInfo")
+##        dqScope = dqInfo[0].xpath(f"./dqScope")
+##        if len(dqScope) == 0:
+##            #print(f"Inserting 'dqScope' at position: {dqInfo_dict['dqScope']}")
+##            xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet Sync="TRUE">Feature Class</datasetSet></scpLvlDesc></dqScope>'''
+##            root = etree.XML(xml)
+##            position = dqInfo_dict['dqScope']
+##            dqInfo[0].insert(position, root)
+##            del position, root, xml
+##        elif len(dqScope) == 1:
+##            #print(f"Updating '{dqScope[0].tag}' if needed at position: {dqInfo_dict['dqScope']}")
+##            #xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'''
+##            #root = etree.XML(xml)
+##            #position = dqInfo_dict["dqScope"]
+##            #dqInfo[0].insert(position, root)
+##            #del position, root, xml
+##            position = dqInfo_dict["dqScope"]
+##            dqInfo[0].insert(position, dqScope[0])
+##            del position
+##        elif len(dqScope) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            #print(f"Removing {len(dqScope)-1} dqScope elements")
+##            for i in range(1, len(dqScope)):
+##                dqInfo[0].remove(dqScope[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #etree.indent(dqInfo[0], space="  ")
+##        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+##        del dqScope, dqInfo
+##
+##        dqInfo  = target_tree.xpath(f"./dqInfo")
+##        report = dqInfo[0].xpath(f"./report")
+##        if len(report) == 0:
+##            #print(f"Inserting 'report' at position: {dqInfo_dict['report']}")
+##            xml = '''<report type="DQConcConsis" dimension="horizontal">
+##                        <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                     </report>'''
+##            root = etree.XML(xml)
+##            position = dqInfo_dict['report']
+##            dqInfo[0].insert(position, root)
+##            del position, root, xml
+##
+##            #print(f"Inserting 'report' at position: {dqInfo_dict['report']+1}")
+##            xml = '''<report type="DQCompOm" dimension="horizontal">
+##                        <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                     </report>'''
+##            root = etree.XML(xml)
+##            position = dqInfo_dict['report']
+##            dqInfo[0].insert(position+1, root)
+##            del position, root, xml
+##
+##        elif len(report) == 1:
+##            #print(f"Updating '{report[0].tag}' if needed at position: {dqInfo_dict['report']}")
+##            _report = dqInfo[0].xpath(f"./report[@type='DQConcConsis']")
+##            if len(_report) == 1:
+##                xml = '''<report type="DQConcConsis" dimension="horizontal">
+##                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                         </report>'''
+##                root = etree.XML(xml)
+##                dqInfo[0].replace(_report[0], root)
+##                del root, xml
+##
+##                xml = '''<report type="DQCompOm" dimension="horizontal">
+##                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                         </report>'''
+##                root = etree.XML(xml)
+##                position = dqInfo_dict["report"]+1
+##                dqInfo[0].insert(position, root)
+##                del position, root, xml
+##
+##            elif len(_report) > 1:
+##                dqInfo[0].remove(_report[-1])
+##            del _report
+##
+##            _report = dqInfo[0].xpath(f"./report[@type='DQCompOm']")
+##            if len(_report) == 1:
+##                xml = '''<report type="DQCompOm" dimension="horizontal">
+##                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                         </report>'''
+##                root = etree.XML(xml)
+##                dqInfo[0].replace(_report[0], root)
+##                del root, xml
+##
+##                xml = '''<report type="DQConcConsis" dimension="horizontal">
+##                            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+##                         </report>'''
+##                root = etree.XML(xml)
+##                position = dqInfo_dict["report"]
+##                dqInfo[0].insert(position, root)
+##                del position, root, xml
+##
+##            elif len(_report) > 1:
+##                dqInfo[0].remove(_report[-1])
+##            del _report
+##
+##            #root = etree.XML(xml)
+##            #position = dqInfo_dict["report"]
+##            #dqInfo[0].insert(position, root)
+##            #del position, root, xml
+##            #position = dqInfo_dict["report"]
+##            #dqInfo[0].insert(position, report[0])
+##            #del position
+##
+##        elif len(report) > 1:
+##            _report = dqInfo[0].xpath(f"./report[@type='DQConcConsis']")
+##            if len(_report) > 1:
+##                dqInfo[0].remove(_report[-1])
+##            del _report
+##
+##            _report = dqInfo[0].xpath(f"./report[@type='DQCompOm']")
+##            if len(_report) > 1:
+##                dqInfo[0].remove(_report[-1])
+##            del _report
+##
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            #print(f"Removing {len(report)-1} report elements")
+##            #for i in range(1, len(report)):
+##            #    dqInfo[0].remove(report[i])
+##            #    i+=1
+##            #    del i
+##        else:
+##            pass
+##        #etree.indent(dqInfo[0], space="  ")
+##        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+##        del report, dqInfo
+##
+##        dqInfo  = target_tree.xpath(f"./dqInfo")
+##        dataLineage = dqInfo[0].xpath(f"./dataLineage")
+##        if len(dataLineage) == 0:
+##            print(f"Inserting 'dataLineage' at position: {dqInfo_dict['dataLineage']}")
+##            xml = '''<dataLineage>
+##                        <statement></statement>
+##                        <dataSource type="">
+##                            <srcDesc></srcDesc>
+##                            <srcCitatn>
+##                                <resTitle></resTitle>
+##                                <date>
+##                                    <createDate></createDate>
+##                                </date>
+##                            </srcCitatn>
+##                        </dataSource>
+##                        <prcStep>
+##                            <stepDesc></stepDesc>
+##                            <stepProc>
+##                                <editorSource>extermal</editorSource>
+##                                <editorDigest></editorDigest>
+##                                <rpIndName></rpIndName>
+##                                <rpOrgName></rpOrgName>
+##                                <rpPosName></rpPosName>
+##                                <rpCntInfo>
+##                                    <cntAddress addressType="both">
+##                                        <delPoint></delPoint>
+##                                        <city></city>
+##                                        <adminArea></adminArea>
+##                                        <postCode></postCode>
+##                                        <eMailAdd></eMailAdd>
+##                                        <country></country>
+##                                    </cntAddress>
+##                                    <cntPhone>
+##                                        <voiceNum tddtty=""></voiceNum>
+##                                        <faxNum></faxNum>
+##                                    </cntPhone>
+##                                    <cntHours></cntHours>
+##                                    <cntOnlineRes>
+##                                        <linkage></linkage>
+##                                        <protocol>REST Service</protocol>
+##                                        <orName></orName>
+##                                        <orDesc></orDesc>
+##                                        <orFunct>
+##                                            <OnFunctCd value="002"></OnFunctCd>
+##                                        </orFunct>
+##                                    </cntOnlineRes>
+##                                </rpCntInfo>
+##                                <editorSave>True</editorSave>
+##                                <displayName></displayName>
+##                                <role>
+##                                    <RoleCd value="009"></RoleCd>
+##                                </role>
+##                            </stepProc>
+##                            <stepDateTm></stepDateTm>
+##                        </prcStep>
+##                    </dataLineage>'''
+##            root = etree.XML(xml)
+##            position = dqInfo_dict['dataLineage']
+##            dqInfo[0].insert(position, root)
+##            del position, root, xml
+##        elif len(dataLineage) == 1:
+##            position = dqInfo_dict["dataLineage"]
+##            dqInfo[0].insert(position, dataLineage[0])
+##            del position
+##        elif len(dataLineage) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            #print(f"Removing {len(dataLineage)-1} dataLineage elements")
+##            for i in range(1, len(dataLineage)):
+##                dqInfo[0].remove(dataLineage[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #etree.indent(dqInfo[0], space="  ")
+##        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+##        del dataLineage, dqInfo
+##
+##        del contact_dict
         del dqInfo_dict
 
         # #######################################################################
         #               ###--->>> dqInfo section End <<<---###
         # #######################################################################
 
-##        # #######################################################################
-##        #               ###--->>> distInfo section Start <<<---###
-##        # #######################################################################
-##        distInfo    = target_tree.xpath(f"./distInfo")
-##        if len(distInfo) == 0:
-##            print(f"Inserting 'distInfo' at position: {root_dict['distInfo']}")
-##            xml = '<distInfo Sync="TRUE"></distInfo>'
-##            root = etree.XML(xml)
-##            position = root_dict['distInfo']
-##            target_root.insert(position, root)
-##            del position, root, xml
-##        elif len(distInfo) == 1:
-##            print(f"Updating '{distInfo[0].tag}' if needed at position: {root_dict['distInfo']}")
-##            position = root_dict['distInfo']
-##            target_root.insert(position, distInfo[0])
-##            del position
-##        elif len(distInfo) > 1:
-##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-##            print(f"Removing {len(distInfo)-1} distInfo elements")
-##            for i in range(1, len(distInfo)):
-##                target_root.remove(distInfo[i])
-##                i+=1
-##                del i
-##        else:
-##            pass
-##        del distInfo
-##        # #######################################################################
-##        #               ###--->>> distInfo section End <<<---###
-##        # #######################################################################
-##
+        # #######################################################################
+        #               ###--->>> distInfo section Start <<<---###
+        # #######################################################################
+        xml = '''<distInfo>
+                    <distFormat>
+                        <formatName Sync="TRUE">File Geodatabase Feature Class</formatName>
+                        <formatVer>NMFS DisMAP 2024</formatVer>
+                        <fileDecmTech>ZIP</fileDecmTech>
+                    </distFormat>
+                    <distributor>
+                        <distorCont>
+                            <editorSource>extermal</editorSource>
+                            <editorDigest></editorDigest>
+                            <rpIndName></rpIndName>
+                            <rpOrgName></rpOrgName>
+                            <rpPosName></rpPosName>
+                            <rpCntInfo>
+                                <cntAddress addressType="both">
+                                    <delPoint></delPoint>
+                                    <city></city>
+                                    <adminArea></adminArea>
+                                    <postCode></postCode>
+                                    <eMailAdd></eMailAdd>
+                                    <country>US</country>
+                                </cntAddress>
+                                <cntPhone>
+                                    <voiceNum tddtty=""></voiceNum>
+                                    <faxNum></faxNum>
+                                </cntPhone>
+                                <cntHours></cntHours>
+                                <cntOnlineRes>
+                                    <linkage>https://www.fisheries.noaa.gov</linkage>
+                                    <protocol>REST Service</protocol>
+                                    <orName>Office of Science and Technology</orName>
+                                    <orDesc>NOAA Fisheries Office of Science and Technology</orDesc>
+                                    <orFunct>
+                                        <OnFunctCd value="002"></OnFunctCd>
+                                    </orFunct>
+                                </cntOnlineRes>
+                            </rpCntInfo>
+                            <editorSave>True</editorSave>
+                            <displayName></displayName>
+                            <role>
+                                <RoleCd value="005"></RoleCd>
+                            </role>
+                        </distorCont>
+                    </distributor>
+                     <distorTran xmlns="">
+                        <onLineSrc xmlns="">
+                           <linkage>https://www.fisheries.noaa.gov/science-and-data</linkage>
+                           <protocol>REST Service</protocol>
+                           <orName>NMFS ESA Range Geodatabase 2024</orName>
+                           <orDesc>File Geodatabase Download</orDesc>
+                           <orFunct>
+                              <OnFunctCd value="001"/>
+                           </orFunct>
+                        </onLineSrc>
+                        <unitsODist>MB</unitsODist>
+                        <transSize>0</transSize>
+                     </distorTran>
+                     <distorTran xmlns="">
+                        <onLineSrc xmlns="">
+                           <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
+                           <protocol>ArcGIS REST Services</protocol>
+                           <orName></orName>
+                           <orDesc></orDesc>
+                           <orFunct>
+                              <OnFunctCd value="002"/>
+                           </orFunct>
+                        </onLineSrc>
+                     </distorTran>
+                </distInfo>'''
+        # Create an XML string
+        distInfo_root = etree.XML(xml)
+        del xml
+
+        distInfo = target_tree.xpath(f"./distInfo")
+        if len(distInfo) == 0:
+            #print(f"Inserting 'distInfo' at position: {root_dict['distInfo']}")
+            position = root_dict['distInfo']
+            #target_root.insert(position, distInfo_root)
+            del position
+        elif len(distInfo) == 1:
+            pass
+            #print(f"Updating '{distInfo[0].tag}' if needed at position: {root_dict['distInfo']}")
+            #position = root_dict['distInfo']
+            #target_root.replace(distInfo[0], distInfo_root)
+            #del position
+        elif len(distInfo) > 1:
+            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+            #print(f"Removing {len(distInfo)-1} distInfo elements")
+            for i in range(1, len(distInfo)):
+                target_root.remove(distInfo[i])
+                i+=1
+                del i
+        else:
+            pass
+        del distInfo_root
+        del distInfo
+
+        # #######################################################################
+        #               ###--->>> distInfo section End <<<---###
+        # #######################################################################
+
 ##        # #######################################################################
 ##        #               ###--->>> eainfo section Start <<<---###
 ##        # #######################################################################
@@ -1467,37 +1588,37 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        # ######################################################################
 ##        #               ###--->>> eainfo section End <<<---###
 ##        # ######################################################################
-##
-##        # ######################################################################
-##        #               ###--->>> Binary section Start <<<---###
-##        # ######################################################################
-##        Binary      = target_tree.xpath(f"./Binary")
-##        if len(Binary) == 0:
-##            print(f"Inserting 'Binary' at position: {root_dict['Binary']}")
-##            xml = '<Binary Sync="TRUE"><Thumbnail><Data EsriPropertyType="PictureX"></Data></Thumbnail></Binary>'
-##            root = etree.XML(xml)
-##            position = root_dict['Binary']
-##            target_root.insert(position, root)
-##            del position, root, xml
-##        elif len(Binary) == 1:
-##            print(f"Updating '{Binary[0].tag}' if needed at position: {root_dict['Binary']}")
-##            position = root_dict['Binary']
-##            target_root.insert(position, Binary[0])
-##            del position
-##        elif len(Binary) > 1:
-##            # if it is multiples, is that ok or not. Binary has multiples, topic does, contacts
-##            print(f"Removing {len(Binary)-1} Binary elements")
-##            for i in range(1, len(Binary)):
-##                target_root.remove(Binary[i])
-##                i+=1
-##                del i
-##        else:
-##            pass
-##        del Binary
-##        # ######################################################################
-##        #               ###--->>> Binary section End <<<---###
-##        # ######################################################################
-##
+
+        # ######################################################################
+        #               ###--->>> Binary section Start <<<---###
+        # ######################################################################
+        Binary      = target_tree.xpath(f"./Binary")
+        if len(Binary) == 0:
+            print(f"Inserting 'Binary' at position: {root_dict['Binary']}")
+            xml = '<Binary Sync="TRUE"><Thumbnail><Data EsriPropertyType="PictureX"></Data></Thumbnail></Binary>'
+            root = etree.XML(xml)
+            position = root_dict['Binary']
+            target_root.insert(position, root)
+            del position, root, xml
+        elif len(Binary) == 1:
+            print(f"Updating '{Binary[0].tag}' if needed at position: {root_dict['Binary']}")
+            position = root_dict['Binary']
+            #target_root.insert(position, Binary[0])
+            del position
+        elif len(Binary) > 1:
+            # if it is multiples, is that ok or not. Binary has multiples, topic does, contacts
+            print(f"Removing {len(Binary)-1} Binary elements")
+            for i in range(1, len(Binary)):
+                target_root.remove(Binary[i])
+                i+=1
+                del i
+        else:
+            pass
+        del Binary
+        # ######################################################################
+        #               ###--->>> Binary section End <<<---###
+        # ######################################################################
+
 ##        #etree.indent(target_root, space='    ')
 ##        #etree.dump(target_root)
 ##
@@ -1626,7 +1747,7 @@ def insert_xml_elements(fc_metadata_xml_file=""):
                     <CreaDate></CreaDate>
                     <CreaTime></CreaTime>
                     <ArcGISFormat>1.0</ArcGISFormat>
-                    <ArcGISStyle>ISO 19139 Metadata Implementation Specification</ArcGISStyle>
+                    <ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle>
                     <SyncOnce>FALSE</SyncOnce>
                     <DataProperties>
                         <itemProps>
@@ -2222,17 +2343,40 @@ def create_feature_class(project_gdb="", metadata_workspace=""):
 ##            dataset_md.reload()
 ##        del new_md
 
+        new_md = md.Metadata()
+        new_md.saveAsXML(species_range_fc_metadata_xml.replace(".xml", " new_md.xml"), "REMOVE_ALL_SENSITIVE_INFO")
+        pretty_format_xml_file(species_range_fc_metadata_xml.replace(".xml", " new_md.xml"))
+        del new_md
+
+        new_md = md.Metadata()
+        new_md.title = "My Title"
+        new_md.tags = "My Tags"
+        new_md.summary = "My Summary"
+        new_md.description = "My Description"
+        new_md.credits = "My Credits"
+        new_md.accessConstraints = "My Use Limits"
+        new_md.saveAsXML(species_range_fc_metadata_xml.replace(".xml", " with basic metadata.xml"), "REMOVE_ALL_SENSITIVE_INFO")
+        pretty_format_xml_file(species_range_fc_metadata_xml.replace(".xml", " with basic metadata.xml"))
+        del new_md
+
         dataset_md = md.Metadata(species_range_fc)
-        dataset_md.synchronize('ALWAYS')
+        dataset_md.saveAsXML(species_range_fc_metadata_xml.replace(".xml", " fc before sync.xml"), "REMOVE_ALL_SENSITIVE_INFO")
+        pretty_format_xml_file(species_range_fc_metadata_xml.replace(".xml", " fc before sync.xml"))
+        dataset_md.synchronize('OVERWRITE')
         dataset_md.save()
+        dataset_md.reload()
+        dataset_md.saveAsXML(species_range_fc_metadata_xml.replace(".xml", " fc after sync.xml"), "REMOVE_ALL_SENSITIVE_INFO")
+        pretty_format_xml_file(species_range_fc_metadata_xml.replace(".xml", " fc after sync.xml"))
+
         dataset_md.title = f"{os.path.basename(species_range_fc)}"
         dataset_md.tags = f"{os.path.basename(species_range_fc)}; ESA; range; NMFS"
-        #dataset_md.summary = "This feature class depicts the entire range of the [common name (species name) DPS or ESU]. All boundaries should be considered approximate and, as such, caution is warranted when using it for any other purpose (e.g., analyses)."
-        #dataset_md.description = 'This range includes [all; marine; freshwater; adult; immature/juvenile; larval] life stages of the species [add any caveats, e.g., why something is not included]. The range was based on the following [tracking, tagging, bycatch, and sighting] data: [Provide data and citations used to create range, including name/version/date of shoreline data.] Disclaimer: The spatial data provided here display an approximate distribution of the listed entity based on the best available information at the time of creation; they should not be conflated with the definitive range of the listed entity under the ESA. As such, the distribution of the listed entity may not be exclusively limited to the range identified herein, and we have not verified the listed entity’s occurrence in every area comprising the range. Please notify us if you have recent information that is not reflected in our data (see Citation contacts). Use of these data do not replace the ESA section 7 consultation process; however, these data may be a first step in determining whether a proposed federal action overlaps with listed species’ ranges or critical habitat.'
+        dataset_md.summary = "This feature class depicts the entire range of the [common name (species name) DPS or ESU]. All boundaries should be considered approximate and, as such, caution is warranted when using it for any other purpose (e.g., analyses)."
+        dataset_md.description = 'This range includes [all; marine; freshwater; adult; immature/juvenile; larval] life stages of the species [add any caveats, e.g., why something is not included]. The range was based on the following [tracking, tagging, bycatch, and sighting] data: [Provide data and citations used to create range, including name/version/date of shoreline data.] Disclaimer: The spatial data provided here display an approximate distribution of the listed entity based on the best available information at the time of creation; they should not be conflated with the definitive range of the listed entity under the ESA. As such, the distribution of the listed entity may not be exclusively limited to the range identified herein, and we have not verified the listed entity’s occurrence in every area comprising the range. Please notify us if you have recent information that is not reflected in our data (see Citation contacts). Use of these data do not replace the ESA section 7 consultation process; however, these data may be a first step in determining whether a proposed federal action overlaps with listed species’ ranges or critical habitat.'
         dataset_md.credits = 'NOAA Fisheries Service. 2024. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR).'
-        #dataset_md.accessConstraints = '*** Attribution *** Whenever NMFS material is reproduced and re-disseminated, we request that users attribute the material appropriately. Pursuant to 17 U.S. C. 403, parties who produce copyrighted works consisting predominantly of material created by the Federal Government are encouraged to provide notice with such work(s) identifying the U.S. Government material incorporated and stating that such material is not subject to copyright protection. Please cite the species range datasets as indicated in the metadata for each species, or if not indicated, as follows with the appropriate information substituted for all text in {CURLY BRACKETS}:\n\nNOAA Fisheries Service. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR) [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}\n\n***No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of this data.\n\n*** Proper Usage *** The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public. Before using information obtained from this server, special attention should be given to the date and time of the data and products being displayed. This information shall not be modified in content and then presented as official government material. This dataset was created to generally represent our best professional judgment of the ranges of listed species based on the best available information at the time of publication, including: geographic factors, time of year, and the biology of each species. The dataset should not be used to infer information regarding the existence or details of other marine features or resources, including, but not limited to, navigable waters, coastlines, bathymetry, submerged features, or man-made structures. Users assume responsibility for determining the appropriate use of this dataset.\n\n*** Temporal Considerations *** Species’ ranges are subject to change or modification. Generally, we become aware of these changes during the 5-year review of the species’ status, as required under the ESA. If changes to the range are deemed necessary, we will make such changes in the database, which will be archived and replaced by an updated version as soon as feasible. It is the user’s responsibility to ensure the most recent species’ range data are being used.\n\n*** Shorelines/Base Layers *** The accuracy of this dataset is dependent upon the accuracy and resolution of the datasets (e.g. shoreline, hydrography, bathymetry, shared administrative boundaries) used in the creation process. Source datasets used are specified in the metadata. These data sources were selected for their suitability to a broad audience, and may not be suitable for specific uses requiring higher-resolution information. Coastlines and water body boundaries change. Unless otherwise noted, where the National Hydrography Dataset or NOAA Medium Resolution Shoreline is used, assume the boundary reaches the most current river, estuary, or coastal shoreline delineation available.*** Data Limitations *** Our data may lack the spatial resolution to capture the entire range of a species, especially outside of a major waterway (e.g., in a very small tributary, or shallow area near a marsh). For section 7 consultations, we recommend that Federal action agencies request technical assistance to verify presence/absence of listed species within their action area.'
+        dataset_md.accessConstraints = '*** Attribution *** Whenever NMFS material is reproduced and re-disseminated, we request that users attribute the material appropriately. Pursuant to 17 U.S. C. 403, parties who produce copyrighted works consisting predominantly of material created by the Federal Government are encouraged to provide notice with such work(s) identifying the U.S. Government material incorporated and stating that such material is not subject to copyright protection. Please cite the species range datasets as indicated in the metadata for each species, or if not indicated, as follows with the appropriate information substituted for all text in {CURLY BRACKETS}:\n\nNOAA Fisheries Service. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR) [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}\n\n***No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of this data.\n\n*** Proper Usage *** The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public. Before using information obtained from this server, special attention should be given to the date and time of the data and products being displayed. This information shall not be modified in content and then presented as official government material. This dataset was created to generally represent our best professional judgment of the ranges of listed species based on the best available information at the time of publication, including: geographic factors, time of year, and the biology of each species. The dataset should not be used to infer information regarding the existence or details of other marine features or resources, including, but not limited to, navigable waters, coastlines, bathymetry, submerged features, or man-made structures. Users assume responsibility for determining the appropriate use of this dataset.\n\n*** Temporal Considerations *** Species’ ranges are subject to change or modification. Generally, we become aware of these changes during the 5-year review of the species’ status, as required under the ESA. If changes to the range are deemed necessary, we will make such changes in the database, which will be archived and replaced by an updated version as soon as feasible. It is the user’s responsibility to ensure the most recent species’ range data are being used.\n\n*** Shorelines/Base Layers *** The accuracy of this dataset is dependent upon the accuracy and resolution of the datasets (e.g. shoreline, hydrography, bathymetry, shared administrative boundaries) used in the creation process. Source datasets used are specified in the metadata. These data sources were selected for their suitability to a broad audience, and may not be suitable for specific uses requiring higher-resolution information. Coastlines and water body boundaries change. Unless otherwise noted, where the National Hydrography Dataset or NOAA Medium Resolution Shoreline is used, assume the boundary reaches the most current river, estuary, or coastal shoreline delineation available.*** Data Limitations *** Our data may lack the spatial resolution to capture the entire range of a species, especially outside of a major waterway (e.g., in a very small tributary, or shallow area near a marsh). For section 7 consultations, we recommend that Federal action agencies request technical assistance to verify presence/absence of listed species within their action area.'
         dataset_md.save()
-        dataset_md.synchronize('ALWAYS')
+        dataset_md.reload()
+        dataset_md.synchronize('OVERWRITE')
         dataset_md.save()
         dataset_md.reload()
 
@@ -2247,513 +2391,9 @@ def create_feature_class(project_gdb="", metadata_workspace=""):
 ##        dataset_md.save()
 ##        dataset_md.reload()
 
-        xml = '''<metadata xml:lang="en">
-    <eainfo>
-        <detailed xmlns="" Name="AbaloneBlack_20210712" Sync="TRUE">
-            <enttyp>
-                <enttypl Sync="TRUE">Attribute Table Fields</enttypl>
-                <enttypt Sync="TRUE">Feature Class</enttypt>
-                <enttypc Sync="TRUE">1</enttypc>
-                <enttypd>A collection of geographic features with the same geometry type.</enttypd>
-                <enttypds>Esri</enttypds>
-            </enttyp>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">OBJECTID</attrlabl>
-                <attalias Sync="TRUE">OBJECTID</attalias>
-                <attrtype Sync="TRUE">OID</attrtype>
-                <attwidth Sync="TRUE">4</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Internal feature number.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">Shape</attrlabl>
-                <attalias Sync="TRUE">Shape</attalias>
-                <attrtype Sync="TRUE">Geometry</attrtype>
-                <attwidth Sync="TRUE">0</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Feature geometry.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Coordinates defining the features.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">Shape_Length</attrlabl>
-                <attalias Sync="TRUE">Shape_Length</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Length of feature in internal units.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">Shape_Area</attrlabl>
-                <attalias Sync="TRUE">Shape_Area</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Area of feature in internal units squared.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">ID</attrlabl>
-                <attalias Sync="TRUE">ID</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">10</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">9 digit unique identifier for each feature in the geodatabase. Used to relate or join supplemental attribute tables.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">9 digit unique identifier for each feature in the geodatabase. Used to relate or join supplemental attribute tables.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">SCIENAME</attrlabl>
-                <attalias Sync="TRUE">Scientific Name</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Binomial or trinomial scientific name. Value formatted as written in the Code of Federal Regulations.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Binomial or trinomial scientific name. Value formatted as written in the Code of Federal Regulations.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">COMNAME</attrlabl>
-                <attalias Sync="TRUE">Common Name</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Legal common name of species. Value formatted as written in the Code of Federal Regulations.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Legal common name of species. Value formatted as written in the Code of Federal Regulations.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LISTENTITY</attrlabl>
-                <attalias Sync="TRUE">Listed Entity</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">100</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Full text of the ESA listed entity: Species, Subspecies, Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). Value formatted as written in the Code of Federal Regulations. *Note: for entire species listings, this value will be the same as COMNAME value.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Full text of the ESA listed entity: Species, Subspecies, Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). Value formatted as written in the Code of Federal Regulations. *Note: for entire species listings, this value will be the same as COMNAME value.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">DPSESU</attrlabl>
-                <attalias Sync="TRUE">Distinct Population Segment or Evolutionarily Significant Unit</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">100</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). Value formatted as written in the Code of Federal Regulations.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Distinct Population Segment or Evolutionarily Significant Unit</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LISTSTATUS</attrlabl>
-                <attalias Sync="TRUE">Listed Status</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Current Endangered Species Act listing status.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Endangered</edomv>
-                        <edomvd Sync="TRUE">Species that are in danger of extinction throughout all or a significant portion of their range.</edomvd>
-                        <edomvds Sync="TRUE">Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Threatened</edomv>
-                        <edomvd Sync="TRUE">Species that are likely to become endangered in the foreseeable future.</edomvd>
-                        <edomvds Sync="TRUE">Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Proposed Endangered</edomv>
-                        <edomvd Sync="TRUE">Species that are proposed to be listed as endangered (i.e., in danger of extinction throughout all or a significant portion of their range).</edomvd>
-                        <edomvds Sync="TRUE">Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Proposed Threatened</edomv>
-                        <edomvd Sync="TRUE">Species that are proposed to be listed as threatened (i.e., likely to become endangered in the foreseeable future).</edomvd>
-                        <edomvds Sync="TRUE">Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Delisted</edomv>
-                        <edomvd Sync="TRUE">Species that were removed from the Endangered Species Act list.</edomvd>
-                        <edomvds Sync="TRUE">Endangered Species Act of 1973</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">TAXON</attrlabl>
-                <attalias Sync="TRUE">Taxon</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Taxonomic unit.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">baleen whale</edomv>
-                        <edomvd Sync="TRUE">Any of a suborder (Mysticeti) of large whales that have baleen plates in the upper jaw which are used to filter chiefly small crustaceans out of large quantities of seawater.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">toothed whale</edomv>
-                        <edomvd Sync="TRUE">Any of a suborder (Odontoceti) of cetaceans bearing usually numerous simple conical teeth.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">fish</edomv>
-                        <edomvd Sync="TRUE">Any of numerous cold-blooded strictly aquatic craniate vertebrates that include the bony fishes and the cartilaginous and jawless fishes and that have typically an elongated somewhat spindle-shaped body terminating in a broad caudal fin, limbs in the form of fins when present at all, and a 2-chambered heart by which blood is sent through thoracic gills to be oxygenated.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">pinniped</edomv>
-                        <edomvd Sync="TRUE">Any of an order or suborder (Pinnipedia) of aquatic carnivorous mammals with all four limbs modified into flippers.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">marine reptile</edomv>
-                        <edomvd Sync="TRUE">Any of a class (Reptilia) of cold-blooded, air-breathing, usually egg-laying vertebrates that have adapted for an aquatic or semiaquatic life in a marine environment and have a body typically covered with scales or bony plates and a bony skeleton with a single occipital condyle, a distinct quadrate bone usually immovably articulated with the skull, and ribs attached to the sternum.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">invertebrate</edomv>
-                        <edomvd Sync="TRUE">Any animal that lacks a spinal column.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">plant</edomv>
-                        <edomvd Sync="TRUE">Any of a kingdom (Plantae) of multicellular eukaryotic mostly photosynthetic organisms typically lacking locomotive movement or obvious nervous or sensory organs and possessing cellulose cell walls.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LEADOFFICE</attrlabl>
-                <attalias Sync="TRUE">Lead Office</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">NMFS Office responsible for the species’ range within feature.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Office of Protected Resources</edomv>
-                        <edomvd Sync="TRUE">Headquarters office responsible for nationwide conservation, protection, and recovery of endangered and threatened marine species listed under the Endangered Species Act.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Alaska Region</edomv>
-                        <edomvd Sync="TRUE">Includes Alaska and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">West Coast Region</edomv>
-                        <edomvd Sync="TRUE">Includes Idaho, Washington, Oregon, California and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Greater Atlantic Region</edomv>
-                        <edomvd Sync="TRUE">Includes Minnesota, Wisconsin, Michigan, Illinois, Indiana, Ohio, Kentucky, West Virginia, Pennsylvania, New York, Vermont, New Hampshire, Maine, Massachusetts, Rhode Island, Connecticut, New Jersey, Delaware, Maryland, Virginia, North Carolina (north of Cape Hatteras) and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Southeast Region</edomv>
-                        <edomvd Sync="TRUE">Includes North Carolina (south of Cape Hatteras), South Carolina, Georgia, Florida, Alabama, Mississippi, Louisiana, Texas, Arkansas, Iowa, Kansas, Kentucky, Missouri, Nebraska, New Mexico, Oklahoma, Tennessee, the Commonwealth of Puerto Rico, the U.S. Virgin Islands and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Pacific Islands Region</edomv>
-                        <edomvd Sync="TRUE">Includes Hawai'i, American Samoa, Guam, the Commonwealth of the Northern Mariana Islands, Kingman Reef, Howland Island, Baker Island, Jarvis Island, Wake Island, Johnston Atoll, Palmyra Atoll and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds Sync="TRUE">National Marine Fisheries Service</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">FEDREG</attrlabl>
-                <attalias Sync="TRUE">Federal Register Rule</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Federal Register Rule.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Federal Register Rule.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">FEDREGURL</attrlabl>
-                <attalias Sync="TRUE">Federal Register Rule URL</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">500</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Federal Register Rule URL</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Federal Register Rule URL</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">PUBDATE</attrlabl>
-                <attalias Sync="TRUE">Publication Date</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">25</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Federal Register Notice publication date for the ESA-listed entity. MM/DD/YYYY format</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Publication Date</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">EFFECTDATE</attrlabl>
-                <attalias Sync="TRUE">Effective Date</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">25</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Effective date for an ESA-listed entity. Null for proposed listings. MM/DD/YYYY format</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Effective Date</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">CREATEDATE</attrlabl>
-                <attalias Sync="TRUE">Create Date</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">25</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Date spatial feature was created or geometry was last edited. MM/DD/YYYY format</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Create Date</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">NOTES</attrlabl>
-                <attalias Sync="TRUE">Notes</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">500</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Additional information about the feature that is not contained in other fields.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Notes</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">INPORTURL</attrlabl>
-                <attalias Sync="TRUE">InPort URL</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">250</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Feature class metadata URL. InPort is the National Marine Fisheries Service's official metadata catalog found at: https://inport.nmfs.noaa.gov/inport/</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">InPort URL</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">REFERENCE</attrlabl>
-                <attalias Sync="TRUE">Reference</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">1000</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">In-text citations or full bibliographic citations of references used for feature.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Reference</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">NMFSPAGE</attrlabl>
-                <attalias Sync="TRUE">Species Webpage</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">250</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">NMFS Species Webpage found here: https://www.fisheries.noaa.gov/find-species</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Species Webpage</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">PUBLIC</attrlabl>
-                <attalias Sync="TRUE">Available on NMFS Public National ESA Species Range Mapper</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">5</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">All available spatial range data for species proposed and designated by NOAA Fisheries under the Endangered Species Act. Range is defined as those areas used throughout all or part of the species’ life cycle, even if they are not used regularly (e.g., seasonal habitats, migratory corridors), but not solely by vagrant individuals.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service; 50 CFR 424.02</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Available on NMFS Public National ESA Species Range Mapper</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LIFESTAGE</attrlabl>
-                <attalias Sync="TRUE">Lifestage</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Stage in form and functional activity of ESA-listed entity depicted in feature. This is an optional attribute field.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service; Marriam-Webster dictionary</attrdefs>
-                <attrdomv>
-                    <edom>
-                        <edomv Sync="TRUE">All life stages</edomv>
-                        <edomvd Sync="TRUE">Entire life cycle (series of stages in form and functional activity)</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom>
-                        <edomv Sync="TRUE">Adult</edomv>
-                        <edomvd Sync="TRUE">Fully developed and mature.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom>
-                        <edomv Sync="TRUE">Subadult</edomv>
-                        <edomvd Sync="TRUE">An individual that has passed through the juvenile period but not yet attained typical adult characteristics.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom>
-                        <edomv Sync="TRUE">Juvenile</edomv>
-                        <edomvd Sync="TRUE">A young individual resembling an adult of its kind except in size and reproductive activity: such as (a) : a fledged bird not yet in adult plumage; (b): a 2-year-old racehorse.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom>
-                        <edomv Sync="TRUE">Larva</edomv>
-                        <edomvd Sync="TRUE">The early form of an animal (such as a frog or sea urchin) that at birth or hatching is fundamentally unlike its parent and must metamorphose before assuming the adult characters.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom>
-                        <edomv Sync="TRUE">Egg</edomv>
-                        <edomvd Sync="TRUE">An animal reproductive body consisting of an ovum together with its nutritive and protective envelopes and having the capacity to develop into a new individual capable of independent existence.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">BEHAVIOR</attrlabl>
-                <attalias Sync="TRUE">Behavior</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Response of an individual, group, or species of the ESA-listed entity depicted in feature to its environment. This is an optional attribute field.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">All behaviors</edomv>
-                        <edomvd Sync="TRUE">Entirity of species responses to the environment</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Migrating</edomv>
-                        <edomvd Sync="TRUE">To pass usually periodically from one region or climate to another for feeding or breeding.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Reproducing</edomv>
-                        <edomvd Sync="TRUE">To bring forth offspring.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Mating</edomv>
-                        <edomvd Sync="TRUE">To join together as a member of a breeding pair of animals</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Rearing</edomv>
-                        <edomvd Sync="TRUE">To bring to maturity or self-sufficiency</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Foraging</edomv>
-                        <edomvd Sync="TRUE">To wander in search of forage or food.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Hauling out</edomv>
-                        <edomvd Sync="TRUE">To move ashore to a topographically limited part of a coast.</edomvd>
-                        <edomvds Sync="TRUE">Nesterenko, V. A. and I.O. Katin. 2009. Haulout: Scope of the term and procedure for identification. Russian Journal of Ecology, 40(1), 48-54. doi:https://doi.org/10.1134/S1067413609010081.</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Resting</edomv>
-                        <edomvd Sync="TRUE">To refrain from labor or exertion.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Basking</edomv>
-                        <edomvd Sync="TRUE">To lie or relax in a pleasant warmth or atmosphere.</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv Sync="TRUE">Spawning</edomv>
-                        <edomvd Sync="TRUE">To deposit or fertilize eggs (used of an aquatic animal).</edomvd>
-                        <edomvds Sync="TRUE">Merriam-Webster dictionary</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">FEATNAME</attrlabl>
-                <attalias Sync="TRUE">Feature Name</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">250</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Descriptive name for feature.</attrdef>
-                <attrdefs Sync="TRUE">National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Feature Name</udom>
-                </attrdomv>
-            </attr>
-        </detailed>
-    </eainfo>
-</metadata>'''
-
         #print(type(xml))
 
-        eainfo_xml_file = rf"{project_folder}\eainfo.xml"
+##        eainfo_xml_file = rf"{project_folder}\eainfo.xml"
 ##
 ##        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
 ##        eainfo_tree = etree.parse(eainfo_xml_file, parser=parser)
@@ -2770,50 +2410,12 @@ def create_feature_class(project_gdb="", metadata_workspace=""):
         #dataset_md.synchronize("ALWAYS")
         #dataset_md.save()
         #dataset_md.reload()
-##        dataset_md_xml = dataset_md.xml
-##        # Parse the XML
-##        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
-##        tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
-##        root = tree.getroot()
-##        del parser
-##
-##        del eainfo_xml_file
-##        del xml
-##        #del eainfo_tree
-##
-##        #print(etree.tostring(root, pretty_print=True).decode())
-##
-##        dataset_md.xml = dataset_md_xml
-##        dataset_md.save()
-##        dataset_md.synchronize('ALWAYS')
-##        dataset_md.save()
-##        dataset_md.reload()
-##        del dataset_md_xml
-##
-##        del root, tree
-
-         #   dataset_md = md.Metadata(fc)
-         #   dataset_md.synchronize('ALWAYS')
-         #   dataset_md.save()
-         #   dataset_md.reload()
-         #   dataset_md_xml = dataset_md.xml
-         #   # Parse the XML
-         #   parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
-         #   tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
-         #   root = tree.getroot()
-         #   del parser
-         #   dataset_md.xml = dataset_md_xml
-         #   dataset_md.save()
-         #   dataset_md.reload()
-
-
 
         #print("Save Metadata as an XML file")
-        #print(species_range_fc_metadata_xml)
         dataset_md.saveAsXML(species_range_fc_metadata_xml, "REMOVE_ALL_SENSITIVE_INFO")
         del dataset_md
 
-        #pretty_format_xml_file(species_range_fc_metadata_xml)
+        pretty_format_xml_file(species_range_fc_metadata_xml)
 
         print(f"\n{'--End' * 10}--")
 
@@ -2937,7 +2539,7 @@ def main(project_gdb="", metadata_workspace=""):
         project_folder = os.path.dirname(project_gdb)
 
         # Create feature class
-        CreateFeatureClass = True
+        CreateFeatureClass = False
         if CreateFeatureClass:
             create_feature_class(project_gdb=project_gdb, metadata_workspace=metadata_workspace)
         del CreateFeatureClass
@@ -2950,6 +2552,14 @@ def main(project_gdb="", metadata_workspace=""):
             insert_xml_elements(fc_metadata_xml_file=fc_metadata_xml_file)
             del fc_metadata_xml_file
         del InsertXmlElements
+
+        UpdateXmlElements = True
+        if UpdateXmlElements:
+            species_range_fc     = rf"{project_gdb}\SpeciesRangeTemplate"
+            fc_metadata_xml_file = rf"{project_folder}\{metadata_workspace}\SpeciesRangeTemplate.xml"
+            update_xml_elements(species_range_fc=species_range_fc, fc_metadata_xml_file=fc_metadata_xml_file)
+            del fc_metadata_xml_file, species_range_fc
+        del UpdateXmlElements
 
         FunWithXml = False
         if FunWithXml:
@@ -2976,7 +2586,7 @@ def main(project_gdb="", metadata_workspace=""):
         elapse_time =  end_time - start_time
 
         print(f"\n{'-' * 80}")
-        print(f"Python script: {os.path.basename(__file__)} completed {strftime('%a %b %d %I:%M %p', localtime())}")
+        print(f"Python script: {os.path.basename(__file__)}\nCompleted: {strftime('%a %b %d %I:%M %p', localtime())}")
         print(u"Elapsed Time {0} (H:M:S)".format(strftime("%H:%M:%S", gmtime(elapse_time))))
         print(f"{'-' * 80}")
         del elapse_time, end_time, start_time

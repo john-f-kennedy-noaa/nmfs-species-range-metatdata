@@ -19,56 +19,78 @@ from io import StringIO
 import arcpy  # third-parties second
 
 def parse_xml_file_format_and_save(xml_file=""):
-    root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                 "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                 "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                 "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                 "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                 "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                 "spatRepInfo" : 18, "Binary"     : 19,}
+    try:
+        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
 
-    from lxml import etree
-    parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
-    tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
-    del parser
-    root = tree.getroot()
-    for child in root.xpath("."):
-        child[:] = sorted(child, key=lambda x: root_dict[x.tag])
-        del child
-    del root
-    etree.indent(tree, space='   ')
-    tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
-    del tree
-    del xml_file, etree
-    return True
+        from lxml import etree
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
+        tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+        root = tree.getroot()
+        for child in root.xpath("."):
+            child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+            del child
+        del root
+        etree.indent(tree, space='   ')
+        tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+        del tree
+        del xml_file, etree
+        del root_dict
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 def print_xml_file(xml_file=""):
-    root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                 "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                 "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                 "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                 "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                 "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                 "spatRepInfo" : 18, "Binary"     : 19,}
+    try:
+        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
 
-    from lxml import etree
-    parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
-    tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
-    del parser
-    root = tree.getroot()
-    for child in root.xpath("."):
-        child[:] = sorted(child, key=lambda x: root_dict[x.tag])
-        del child
-    del root
-    etree.indent(tree, space='   ')
-    print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
-    del tree
-    del xml_file, etree
-    return True
-
+        from lxml import etree
+        parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
+        tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+        root = tree.getroot()
+        for child in root.xpath("."):
+            child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+            del child
+        del root
+        etree.indent(tree, space='   ')
+        print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        del tree
+        del xml_file, etree
+        del root_dict
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 def main():
     try:
+
+        from lxml import etree
+
         xml = '''<metadata><mdContact>
             <editorSource>extermal</editorSource>
             <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
@@ -203,17 +225,29 @@ def main():
         #print_xml_file(xml_file=species_range_fc_metadata_xml)
         #del dataset_md
 
-        _xml = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python\July 1 2024\conf_metadata.xml"
-        parse_xml_file_format_and_save(_xml)
-        print_xml_file(xml_file=_xml)
+        _xml = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python\April 1 2023\Template Metadata\sample_locations_template.xml"
+        #pretty_format_xml_file(_xml)
+        del _xml
+
+        _xml = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python\July 1 2024\conf_metadata.xml"
+        #parse_xml_file_format_and_save(_xml)
+        #print_xml_file(xml_file=_xml)
 
         #parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)  # lxml.etree only!
         root = etree.fromstring(xml)
         #print("After Copy")
         etree.indent(root, space="  ")
         #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
-        #del root
+        del root
 
+        _xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
+        tree = etree.parse(_xml, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+        root = tree.getroot()
+        etree.indent(root, space="  ")
+        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        del root, _xml
 
 ##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
 ##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
@@ -315,7 +349,7 @@ def main():
 ##                        </detailed>
 ##                    </eainfo>
 ##                 </metadata>'''
-##        eainfo_xml = r'C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\eainfo.xml'
+##        eainfo_xml = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\eainfo.xml"
 ##        try:
 ##            dataset_md.importMetadata(eainfo_xml, "ARCGIS_METADATA")
 ##            dataset_md.save()
@@ -377,8 +411,89 @@ def main():
     ##        eainfo_root = eainfo_tree.getroot()
     ##
     ##        #print(etree.tostring(eainfo_root, pretty_print=True).decode())
+
+        from io import BytesIO, StringIO
+
+        xml_file = b'''<metadata><mdContact>
+            <editorSource>extermal</editorSource>
+            <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+            <rpIndName>Nikki Wildart</rpIndName>
+            <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+            <rpPosName>Biologist</rpPosName>
+            <rpCntInfo>
+                <cntAddress addressType="both">
+                    <delPoint>1315 East West Highway</delPoint>
+                    <city>Silver Spring</city>
+                    <adminArea>MD</adminArea>
+                    <postCode>20910-3282</postCode>
+                    <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                    <country>US</country>
+                </cntAddress>
+                <cntPhone>
+                    <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                    <faxNum>(301) 427-8443</faxNum>
+                </cntPhone>
+                <cntHours>0700 - 1800 EST/EDT</cntHours>
+                <cntOnlineRes>
+                    <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                    <protocol>REST Service</protocol>
+                    <orName>Fisheries OPR</orName>
+                    <orDesc>NOAA Fisheries Office of Science and Technology</orDesc>
+                    <orFunct>
+                        <OnFunctCd value="002"></OnFunctCd>
+                    </orFunct>
+                </cntOnlineRes>
+            </rpCntInfo>
+            <editorSave>True</editorSave>
+            <displayName>Nikki Wildart</displayName>
+            <role>
+                <RoleCd value="002"></RoleCd>
+            </role>
+        </mdContact></metadata>'''
+        #import xml.etree.cElementTree as etree
+
+        #print(StringIO(xml))
+        #print(BytesIO(xml))
+
+        import io
+        #print(io.StringIO(xml))
+
+        #parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)  # lxml.etree only!
+        #root = etree.fromstring(xml)
+        #print(f"{root.getroot()}")
+        #etree.indent(root, space="  ")
+        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #del root
+
+        _xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
+        tree = etree.parse(_xml, parser=parser) # To parse from a string, use the fromstring() function instead.
+        del parser
+        root = tree.getroot()
+        etree.indent(root, space="  ")
+        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #del root, _xml
+
+        #for event, elem in etree.iterparse(_xml, events=('start', 'end')):
+        for event, elem in etree.iterwalk(root, events=('start', 'end')):
+            if event == 'start':
+               print(f"Tag: {elem.tag}") # use only tag name and attributes here
+               print(f"Parent: {elem.getparent()}")
+            elif event == 'end':
+               # elem children elements, elem.text, elem.tail are available
+               if elem.text is not None and elem.tail is not None:
+                  print(repr(elem.tail))
+
+
     except:
         traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
 
 if __name__ == '__main__':
         # Append the location of this scrip to the System Path

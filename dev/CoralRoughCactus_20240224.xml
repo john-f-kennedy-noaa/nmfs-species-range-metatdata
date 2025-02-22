@@ -1,701 +1,702 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <metadata xml:lang="en">
-    <Esri>
-        <CreaDate>20240201</CreaDate>
-        <CreaTime>14320600</CreaTime>
-        <ArcGISFormat>1.0</ArcGISFormat>
-        <ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle>
-        <SyncOnce>FALSE</SyncOnce>
-        <DataProperties>
-            <itemProps>
-                <itemName Sync="TRUE">CoralRoughCactus_Range_20240224</itemName>
-                <imsContentType Sync="TRUE" export="False">002</imsContentType>
-                <itemLocation>
-                    <linkage Sync="TRUE">file://\\HQPRL4952695\C$\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb</linkage>
-                    <protocol Sync="TRUE">Local Area Network</protocol>
-                </itemLocation>
-                <itemSize Sync="TRUE">0.000</itemSize>
-            </itemProps>
-            <coordRef>
-                <type Sync="TRUE">Geographic</type>
-                <geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn>
-                <csUnits Sync="TRUE">Angular Unit: Degree (0.017453)</csUnits>
-                <peXml Sync="TRUE">&lt;GeographicCoordinateSystem xsi:type='typens:GeographicCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.1.0'&gt;&lt;WKT&gt;GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433],AUTHORITY[&amp;quot;EPSG&amp;quot;,4326]]&lt;/WKT&gt;&lt;XOrigin&gt;-400&lt;/XOrigin&gt;&lt;YOrigin&gt;-400&lt;/YOrigin&gt;&lt;XYScale&gt;1111948722.2222221&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;8.983152841195215e-09&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;LeftLongitude&gt;-180&lt;/LeftLongitude&gt;&lt;WKID&gt;4326&lt;/WKID&gt;&lt;LatestWKID&gt;4326&lt;/LatestWKID&gt;&lt;/GeographicCoordinateSystem&gt;</peXml>
-            </coordRef>
-            <lineage>
-                <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Conversion Tools.tbx\ExportFeatures" Date="20240201" Time="142828">ExportFeatures CoralRoughCactus_Range_20240125 C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224.shp # NOT_USE_ALIAS "ID "ID" true true false 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,ID,-1,-1;SCIENAME "Scientific Name" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,SCIENAME,0,100;COMNAME "Common Name" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,COMNAME,0,100;LISTENTITY "Listed Entity" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LISTENTITY,0,100;LISTSTATUS "Listing Status" true true false 20 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LISTSTATUS,0,20;TAXON "Taxon" true true false 50 Text 0 0,First,#,CoralRoughCactus_Range_20240125,TAXON,0,50;LEADOFFICE "Lead Office" true true false 50 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LEADOFFICE,0,50;FRN "Federal Register Notice" true true false 20 Text 0 0,First,#,CoralRoughCactus_Range_20240125,FRN,0,20;PUBDATE "Publication Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,PUBDATE,0,10;EFFECTDATE "Effective Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,EFFECTDATE,0,10;CREATEDATE "Create Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,CREATEDATE,0,10;NOTES "Notes" true true false 255 Text 0 0,First,#,CoralRoughCactus_Range_20240125,NOTES,0,255;INPORTURL "InPort URL" true true false 255 Text 0 0,First,#,CoralRoughCactus_Range_20240125,INPORTURL,0,255;REFERENCE "Reference " true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,REFERENCE,0,500;NMFSPAGE "Species Webpage" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,NMFSPAGE,0,500;PUBLIC "Public Mapper" true true false 3 Text 0 0,First,#,CoralRoughCactus_Range_20240125,PUBLIC,0,3;LIFESTAGE "Lifestage" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LIFESTAGE,0,500;BEHAVIOR "Behavior" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,BEHAVIOR,0,500;FEATNAME "Feature Name" true true true 200 Text 0 0,First,#,CoralRoughCactus_Range_20240125,FEATNAME,0,200;Shape_Length "Shape_Length" false true true 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,Shape_Length,-1,-1;Shape_Area "Shape_Area" false true true 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,Shape_Area,-1,-1" #</Process>
-                <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\Copy" Date="20240201" Time="143206">Copy C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224.shp C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224.shp Shapefile #</Process>
-                <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\CopyFeatures" Date="20241209" Time="155128">CopyFeatures C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224.shp C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_Range_20240224 # # # #</Process>
-                <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\Rename" Date="20241209" Time="155255">Rename C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_Range_20240224 C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_20240224 FeatureClass</Process>
-            </lineage>
-            <copyHistory>
-                <copy source="C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224" dest="\\HQPRL4431755\C$\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224" date="20240201" time="14320600"></copy>
-            </copyHistory>
-        </DataProperties>
-        <SyncDate>20241209</SyncDate>
-        <SyncTime>15512800</SyncTime>
-        <ModDate>20241209</ModDate>
-        <ModTime>15512800</ModTime>
-        <scaleRange>
-            <minScale>150000000</minScale>
-            <maxScale>5000</maxScale>
-        </scaleRange>
-        <ArcGISProfile>ISO19139</ArcGISProfile>
-    </Esri>
-    <dataIdInfo>
-        <envirDesc Sync="TRUE">Microsoft Windows 10 Version 10.0 (Build 19045) ; Esri ArcGIS 13.1.0.41833</envirDesc>
-        <dataLang>
-            <languageCode value="eng" Sync="TRUE"></languageCode>
-            <countryCode value="USA" Sync="TRUE"></countryCode>
-        </dataLang>
-        <idCitation xmlns="">
-            <resTitle Sync="FALSE">[insert file name here]</resTitle>
-            <presForm xmlns="">
-                <PresFormCd value="005" Sync="TRUE"></PresFormCd>
-                <fgdcGeoform>vector digital data</fgdcGeoform>
-            </presForm>
-            <citRespParty xmlns="">
-                <rpIndName>Jonathan Molineaux</rpIndName>
-                <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-                <rpPosName>Fisheries Biologist</rpPosName>
-                <role>
-                    <RoleCd value="001"></RoleCd>
-                </role>
-                <displayName>Jonathan Molineaux</displayName>
-                <rpCntInfo xmlns="">
-                    <cntAddress addressType="">
-                        <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
-                    </cntAddress>
-                </rpCntInfo>
-            </citRespParty>
-            <date>
-                <createDate>2021-01-01T00:00:00</createDate>
-                <pubDate>2022-09-30T00:00:00</pubDate>
-            </date>
-            <citRespParty xmlns="">
-                <rpIndName>Jennifer Schultz</rpIndName>
-                <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-                <rpPosName>Fisheries Biologist</rpPosName>
-                <displayName>Jennifer Schultz</displayName>
-                <role>
-                    <RoleCd value="001"></RoleCd>
-                </role>
-                <rpCntInfo xmlns="">
-                    <cntAddress addressType="">
-                        <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
-                    </cntAddress>
-                </rpCntInfo>
-            </citRespParty>
-        </idCitation>
-        <spatRpType>
-            <SpatRepTypCd value="001" Sync="TRUE"></SpatRepTypCd>
-        </spatRpType>
-        <idPurp>This feature class depicts the entire range of the [common name (species name) DPS or ESU]. All boundaries should be considered approximate and, as such, caution is warranted when using it for any other purpose (e.g., analyses).</idPurp>
-        <dataChar>
-            <CharSetCd value="004"></CharSetCd>
-        </dataChar>
-        <resMaint xmlns="">
-            <maintFreq>
-                <MaintFreqCd value="009"></MaintFreqCd>
-            </maintFreq>
-        </resMaint>
-        <idPoC xmlns="">
+   <Esri>
+      <CreaDate>20240201</CreaDate>
+      <CreaTime>14320600</CreaTime>
+      <ArcGISFormat>1.0</ArcGISFormat>
+      <ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle>
+      <SyncOnce>FALSE</SyncOnce>
+      <DataProperties>
+         <itemProps>
+            <itemName Sync="TRUE">CoralRoughCactus_Range_20240224</itemName>
+            <imsContentType Sync="TRUE" export="False">002</imsContentType>
+            <itemLocation>
+               <linkage Sync="TRUE">file://\\HQPRL4952695\C$\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb</linkage>
+               <protocol Sync="TRUE">Local Area Network</protocol>
+            </itemLocation>
+            <itemSize Sync="TRUE">0.000</itemSize>
+         </itemProps>
+         <coordRef>
+            <type Sync="TRUE">Geographic</type>
+            <geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn>
+            <csUnits Sync="TRUE">Angular Unit: Degree (0.017453)</csUnits>
+            <peXml Sync="TRUE">&lt;GeographicCoordinateSystem xsi:type='typens:GeographicCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.1.0'&gt;&lt;WKT&gt;GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433],AUTHORITY[&amp;quot;EPSG&amp;quot;,4326]]&lt;/WKT&gt;&lt;XOrigin&gt;-400&lt;/XOrigin&gt;&lt;YOrigin&gt;-400&lt;/YOrigin&gt;&lt;XYScale&gt;1111948722.2222221&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;8.983152841195215e-09&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;LeftLongitude&gt;-180&lt;/LeftLongitude&gt;&lt;WKID&gt;4326&lt;/WKID&gt;&lt;LatestWKID&gt;4326&lt;/LatestWKID&gt;&lt;/GeographicCoordinateSystem&gt;</peXml>
+         </coordRef>
+         <lineage>
+            <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Conversion Tools.tbx\ExportFeatures" Date="20240201" Time="142828">ExportFeatures CoralRoughCactus_Range_20240125 C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224.shp # NOT_USE_ALIAS "ID "ID" true true false 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,ID,-1,-1;SCIENAME "Scientific Name" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,SCIENAME,0,100;COMNAME "Common Name" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,COMNAME,0,100;LISTENTITY "Listed Entity" true true false 100 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LISTENTITY,0,100;LISTSTATUS "Listing Status" true true false 20 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LISTSTATUS,0,20;TAXON "Taxon" true true false 50 Text 0 0,First,#,CoralRoughCactus_Range_20240125,TAXON,0,50;LEADOFFICE "Lead Office" true true false 50 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LEADOFFICE,0,50;FRN "Federal Register Notice" true true false 20 Text 0 0,First,#,CoralRoughCactus_Range_20240125,FRN,0,20;PUBDATE "Publication Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,PUBDATE,0,10;EFFECTDATE "Effective Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,EFFECTDATE,0,10;CREATEDATE "Create Date" true true false 10 Text 0 0,First,#,CoralRoughCactus_Range_20240125,CREATEDATE,0,10;NOTES "Notes" true true false 255 Text 0 0,First,#,CoralRoughCactus_Range_20240125,NOTES,0,255;INPORTURL "InPort URL" true true false 255 Text 0 0,First,#,CoralRoughCactus_Range_20240125,INPORTURL,0,255;REFERENCE "Reference " true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,REFERENCE,0,500;NMFSPAGE "Species Webpage" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,NMFSPAGE,0,500;PUBLIC "Public Mapper" true true false 3 Text 0 0,First,#,CoralRoughCactus_Range_20240125,PUBLIC,0,3;LIFESTAGE "Lifestage" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,LIFESTAGE,0,500;BEHAVIOR "Behavior" true true false 500 Text 0 0,First,#,CoralRoughCactus_Range_20240125,BEHAVIOR,0,500;FEATNAME "Feature Name" true true true 200 Text 0 0,First,#,CoralRoughCactus_Range_20240125,FEATNAME,0,200;Shape_Length "Shape_Length" false true true 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,Shape_Length,-1,-1;Shape_Area "Shape_Area" false true true 8 Double 0 0,First,#,CoralRoughCactus_Range_20240125,Shape_Area,-1,-1" #</Process>
+            <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\Copy" Date="20240201" Time="143206">Copy C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224.shp C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224.shp Shapefile #</Process>
+            <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\CopyFeatures" Date="20241209" Time="155128">CopyFeatures C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224.shp C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_Range_20240224 # # # #</Process>
+            <Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Data Management Tools.tbx\Rename" Date="20241209" Time="155255">Rename C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_Range_20240224 C:\Users\Nikki.Wildart\Documents\SpeciesRangeMap\NationalMapper\NMFS_ESA_Range.gdb\CoralRoughCactus_20240224 FeatureClass</Process>
+         </lineage>
+         <copyHistory>
+            <copy source="C:\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_Range_20240224" dest="\\HQPRL4431755\C$\Users\nikki.Wildart\Documents\SpeciesRangeMap\Shapefiles\CoralRoughCactus_20240201\CoralRoughCactus_Range_20240224" date="20240201" time="14320600"/>
+         </copyHistory>
+      </DataProperties>
+      <SyncDate>20241209</SyncDate>
+      <SyncTime>15512800</SyncTime>
+      <ModDate>20241209</ModDate>
+      <ModTime>15512800</ModTime>
+      <scaleRange>
+         <minScale>150000000</minScale>
+         <maxScale>5000</maxScale>
+      </scaleRange>
+      <ArcGISProfile>ISO19139</ArcGISProfile>
+   </Esri>
+   <dataIdInfo>
+      <envirDesc Sync="TRUE">Microsoft Windows 10 Version 10.0 (Build 19045) ; Esri ArcGIS 13.1.0.41833</envirDesc>
+      <dataLang>
+         <languageCode value="eng" Sync="TRUE"/>
+         <countryCode value="USA" Sync="TRUE"/>
+      </dataLang>
+      <idCitation xmlns="">
+         <resTitle Sync="FALSE">[insert file name here]</resTitle>
+         <presForm xmlns="">
+            <PresFormCd value="005" Sync="TRUE"/>
+            <fgdcGeoform>vector digital data</fgdcGeoform>
+         </presForm>
+         <citRespParty xmlns="">
             <rpIndName>Jonathan Molineaux</rpIndName>
             <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
             <rpPosName>Fisheries Biologist</rpPosName>
             <role>
-                <RoleCd value="001"></RoleCd>
+               <RoleCd value="001"/>
             </role>
+            <displayName>Jonathan Molineaux</displayName>
             <rpCntInfo xmlns="">
-                <cntAddress addressType="">
-                    <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
-                </cntAddress>
+               <cntAddress addressType="">
+                  <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+               </cntAddress>
             </rpCntInfo>
-        </idPoC>
-        <idPoC xmlns="">
+         </citRespParty>
+         <date>
+            <createDate>2021-01-01T00:00:00</createDate>
+            <pubDate>2022-09-30T00:00:00</pubDate>
+         </date>
+         <citRespParty xmlns="">
             <rpIndName>Jennifer Schultz</rpIndName>
             <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
             <rpPosName>Fisheries Biologist</rpPosName>
+            <displayName>Jennifer Schultz</displayName>
             <role>
-                <RoleCd value="001"></RoleCd>
+               <RoleCd value="001"/>
             </role>
-        </idPoC>
-        <searchKeys>
-            <keyword>[insert ESA-listed entity name here]; ESA; range; NMFS</keyword>
-        </searchKeys>
-        <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;DIV STYLE="font-size:12pt"&gt;&lt;P&gt;&lt;SPAN&gt;This range includes [all; marine; freshwater; adult; immature/juvenile; larval] life stages of the species [add any caveats, e.g., why something is not included]. The range was based on the following [tracking, tagging, bycatch, and sighting] data: [Provide data and citations used to create range, including name/version/date of shoreline data.] Disclaimer: the spatial data provided here display an approximate distribution; they should not be conflated with the definitive range of the listed entity under the ESA. The spatial data provided here display an approximate distribution of the listed entity based on the best available information at the time of creation; they do not constitute should not be conflated with the definitive range of the listed entity under the ESA. As such, the distribution of the listed entity may not be exclusively limited to the range identified herein, and we have not verified the listed entity’s occurrence in every area comprising the range. Please notify us if you have recent information that is not reflected in our data (see Citation contacts). Use of these data do not replace the ESA section 7 consultation process; however, these data may be a first step in determining whether a proposed federal action overlaps with listed species’ ranges or critical habitat.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
-        <idCredit>NOAA Fisheries Service. 2024. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR).</idCredit>
-        <dataExt xmlns="">
-            <tempEle>
-                <TempExtent>
-                    <exTemp>
-                        <TM_Period xmlns="">
-                            <tmBegin>2021-01-01T00:00:00</tmBegin>
-                            <tmEnd>2022-09-30T23:59:59</tmEnd>
-                        </TM_Period>
-                    </exTemp>
-                </TempExtent>
-            </tempEle>
-            <geoEle xmlns="">
-                <GeoBndBox>
-                    <westBL>-180</westBL>
-                    <eastBL>180</eastBL>
-                    <southBL>-90</southBL>
-                    <northBL>90</northBL>
-                </GeoBndBox>
-            </geoEle>
-        </dataExt>
-        <idStatus>
-            <ProgCd value="001"></ProgCd>
-        </idStatus>
-        <resConst>
-            <Consts xmlns="">
-                <useLimit>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;*** Attribution *** Whenever NMFS material is reproduced and re-disseminated, we request that users attribute the material appropriately. Pursuant to 17 U.S. C. 403, parties who produce copyrighted works consisting predominantly of material created by the Federal Government are encouraged to provide notice with such work(s) identifying the U.S. Government material incorporated and stating that such material is not subject to copyright protection. Please cite the species range datasets as indicated in the metadata for each species, or if not indicated, as follows with the appropriate information substituted for all text in {CURLY BRACKETS}: &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;NOAA Fisheries Service. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR) [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;***No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of this data. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Proper Usage *** The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public. Before using information obtained from this server, special attention should be given to the date and time of the data and products being displayed. This information shall not be modified in content and then presented as official government material. This dataset was created to generally represent our best professional judgment of the ranges of listed species based on the best available information at the time of publication, including: geographic factors, time of year, and the biology of each species. The dataset should not be used to infer information regarding the existence or details of other marine features or resources, including, but not limited to, navigable waters, coastlines, bathymetry, submerged features, or man-made structures. Users assume responsibility for determining the appropriate use of this dataset. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Temporal Considerations *** Species’ ranges are subject to change or modification. Generally, we become aware of these changes during the 5-year review of the species’ status, as required under the ESA. If changes to the range are deemed necessary, we will make such changes in the database, which will be archived and replaced by an updated version as soon as feasible. It is the user’s responsibility to ensure the most recent species’ range data are being used. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Shorelines/Base Layers *** The accuracy of this dataset is dependent upon the accuracy and resolution of the datasets (e.g. shoreline, hydrography, bathymetry, shared administrative boundaries) used in the creation process. Source datasets used are specified in the metadata. These data sources were selected for their suitability to a broad audience, and may not be suitable for specific uses requiring higher-resolution information. Coastlines and water body boundaries change. Unless otherwise noted, where the National Hydrography Dataset or NOAA Medium Resolution Shoreline is used, assume the boundary reaches the most current river, estuary, or coastal shoreline delineation available.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Data Limitations ***&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;Our data may lack the spatial resolution to capture the entire range of a species, especially outside of a major waterway (e.g., in a very small tributary, or shallow area near a marsh). For section 7 consultations, we recommend that Federal action agencies request technical assistance to verify presence/absence of listed species within their action area.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</useLimit>
-            </Consts>
-        </resConst>
-        <tpCat>
-            <TopicCatCd value="002"></TopicCatCd>
-        </tpCat>
-        <tpCat>
-            <TopicCatCd value="007"></TopicCatCd>
-        </tpCat>
-        <tpCat>
-            <TopicCatCd value="014"></TopicCatCd>
-        </tpCat>
-    </dataIdInfo>
-    <mdLang>
-        <languageCode value="eng" Sync="TRUE"></languageCode>
-        <countryCode value="USA" Sync="TRUE"></countryCode>
-    </mdLang>
-    <mdChar>
-        <CharSetCd value="004" Sync="TRUE"></CharSetCd>
-    </mdChar>
-    <distInfo xmlns="">
-        <distFormat xmlns="">
-            <formatName Sync="TRUE">File Geodatabase Feature Class</formatName>
-            <formatVer>NMFS ESA Range Geodatabase 2021</formatVer>
-            <fileDecmTech>ZIP</fileDecmTech>
-        </distFormat>
-        <distributor xmlns="">
-            <distorCont xmlns="">
-                <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-                <rpPosName>Fisheries Biologist</rpPosName>
-                <rpCntInfo xmlns="">
-                    <cntAddress addressType="">
-                        <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
-                    </cntAddress>
-                </rpCntInfo>
-                <displayName>Jonathan Molineaux</displayName>
-                <role>
-                    <RoleCd value="005"></RoleCd>
-                </role>
-                <rpIndName>Jonathan Molineaux</rpIndName>
-            </distorCont>
-        </distributor>
-        <distTranOps xmlns="">
-            <unitsODist>MB</unitsODist>
-            <transSize>0</transSize>
-            <onLineSrc xmlns="">
-                <linkage>https://www.[Enter link to feature service]</linkage>
-                <protocol>https</protocol>
-                <orFunct>
-                    <OnFunctCd value="001"></OnFunctCd>
-                </orFunct>
-            </onLineSrc>
-        </distTranOps>
-    </distInfo>
-    <mdHrLv>
-        <ScopeCd value="005" Sync="TRUE"></ScopeCd>
-    </mdHrLv>
-    <mdHrLvName Sync="TRUE">dataset</mdHrLvName>
-    <refSysInfo>
-        <RefSystem dimension="">
-            <refSysID xmlns="">
-                <identCode code="4326" Sync="TRUE"></identCode>
-                <idCodeSpace Sync="TRUE">EPSG</idCodeSpace>
-                <idVersion Sync="TRUE">6.2(3.0.1)</idVersion>
-            </refSysID>
-        </RefSystem>
-    </refSysInfo>
-    <spatRepInfo>
-        <VectSpatRep>
-            <geometObjs Name="CoralRoughCactus_Range_20240224">
-                <geoObjTyp>
-                    <GeoObjTypCd value="002" Sync="TRUE"></GeoObjTypCd>
-                </geoObjTyp>
-                <geoObjCnt Sync="TRUE">0</geoObjCnt>
-            </geometObjs>
-            <topLvl>
-                <TopoLevCd value="001" Sync="TRUE"></TopoLevCd>
-            </topLvl>
-        </VectSpatRep>
-    </spatRepInfo>
-    <spdoinfo>
-        <ptvctinf>
-            <esriterm Name="CoralRoughCactus_Range_20240224">
-                <efeatyp Sync="TRUE">Simple</efeatyp>
-                <efeageom code="4" Sync="TRUE"></efeageom>
-                <esritopo Sync="TRUE">FALSE</esritopo>
-                <efeacnt Sync="TRUE">0</efeacnt>
-                <spindex Sync="TRUE">TRUE</spindex>
-                <linrefer Sync="TRUE">FALSE</linrefer>
-            </esriterm>
-        </ptvctinf>
-    </spdoinfo>
-    <eainfo>
-        <detailed xmlns="" Name="CoralRoughCactus_Range_20240224">
-            <enttyp>
-                <enttypl Sync="FALSE">Attribute Table Fields</enttypl>
-                <enttypt Sync="TRUE">Feature Class</enttypt>
-                <enttypc Sync="TRUE">0</enttypc>
-                <enttypd>A collection of geographic features with the same geometry type.</enttypd>
-                <enttypds>Esri</enttypds>
-            </enttyp>
-            <attr>
-                <attrlabl Sync="TRUE">OBJECTID</attrlabl>
-                <attalias Sync="TRUE">OBJECTID</attalias>
-                <attrtype Sync="TRUE">OID</attrtype>
-                <attwidth Sync="TRUE">4</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Internal feature number.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">SHAPE</attrlabl>
-                <attalias Sync="TRUE">Shape</attalias>
-                <attrtype Sync="TRUE">Geometry</attrtype>
-                <attwidth Sync="TRUE">0</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Feature geometry.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Coordinates defining the features.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">ID</attrlabl>
-                <attalias Sync="TRUE">ID</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>9 digit unique identifier for each feature in the geodatabase.
+            <rpCntInfo xmlns="">
+               <cntAddress addressType="">
+                  <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
+               </cntAddress>
+            </rpCntInfo>
+         </citRespParty>
+      </idCitation>
+      <spatRpType>
+         <SpatRepTypCd value="001" Sync="TRUE"/>
+      </spatRpType>
+      <idPurp>This feature class depicts the entire range of the [common name (species name) DPS or ESU]. All boundaries should be considered approximate and, as such, caution is warranted when using it for any other purpose (e.g., analyses).</idPurp>
+      <dataChar>
+         <CharSetCd value="004"/>
+      </dataChar>
+      <resMaint xmlns="">
+         <maintFreq>
+            <MaintFreqCd value="009"/>
+         </maintFreq>
+      </resMaint>
+      <idPoC xmlns="">
+         <rpIndName>Jonathan Molineaux</rpIndName>
+         <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+         <rpPosName>Fisheries Biologist</rpPosName>
+         <role>
+            <RoleCd value="001"/>
+         </role>
+         <rpCntInfo xmlns="">
+            <cntAddress addressType="">
+               <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+            </cntAddress>
+         </rpCntInfo>
+      </idPoC>
+      <idPoC xmlns="">
+         <rpIndName>Jennifer Schultz</rpIndName>
+         <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+         <rpPosName>Fisheries Biologist</rpPosName>
+         <role>
+            <RoleCd value="001"/>
+         </role>
+      </idPoC>
+      <searchKeys>
+         <keyword>[insert ESA-listed entity name here]; ESA; range; NMFS</keyword>
+      </searchKeys>
+      <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;DIV STYLE="font-size:12pt"&gt;&lt;P&gt;&lt;SPAN&gt;This range includes [all; marine; freshwater; adult; immature/juvenile; larval] life stages of the species [add any caveats, e.g., why something is not included]. The range was based on the following [tracking, tagging, bycatch, and sighting] data: [Provide data and citations used to create range, including name/version/date of shoreline data.] Disclaimer: the spatial data provided here display an approximate distribution; they should not be conflated with the definitive range of the listed entity under the ESA. The spatial data provided here display an approximate distribution of the listed entity based on the best available information at the time of creation; they do not constitute should not be conflated with the definitive range of the listed entity under the ESA. As such, the distribution of the listed entity may not be exclusively limited to the range identified herein, and we have not verified the listed entity’s occurrence in every area comprising the range. Please notify us if you have recent information that is not reflected in our data (see Citation contacts). Use of these data do not replace the ESA section 7 consultation process; however, these data may be a first step in determining whether a proposed federal action overlaps with listed species’ ranges or critical habitat.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
+      <idCredit>NOAA Fisheries Service. 2024. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR).</idCredit>
+      <dataExt xmlns="">
+         <tempEle>
+            <TempExtent>
+               <exTemp>
+                  <TM_Period xmlns="">
+                     <tmBegin>2021-01-01T00:00:00</tmBegin>
+                     <tmEnd>2022-09-30T23:59:59</tmEnd>
+                  </TM_Period>
+               </exTemp>
+            </TempExtent>
+         </tempEle>
+         <geoEle xmlns="">
+            <GeoBndBox>
+               <westBL>-180</westBL>
+               <eastBL>180</eastBL>
+               <southBL>-90</southBL>
+               <northBL>90</northBL>
+            </GeoBndBox>
+         </geoEle>
+      </dataExt>
+      <idStatus>
+         <ProgCd value="001"/>
+      </idStatus>
+      <resConst>
+         <Consts xmlns="">
+            <useLimit>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;*** Attribution *** Whenever NMFS material is reproduced and re-disseminated, we request that users attribute the material appropriately. Pursuant to 17 U.S. C. 403, parties who produce copyrighted works consisting predominantly of material created by the Federal Government are encouraged to provide notice with such work(s) identifying the U.S. Government material incorporated and stating that such material is not subject to copyright protection. Please cite the species range datasets as indicated in the metadata for each species, or if not indicated, as follows with the appropriate information substituted for all text in {CURLY BRACKETS}: &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;NOAA Fisheries Service. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR) [producer] {GEODATABASE PUBLICATION DATE}. {ADD URL}&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;***No Warranty*** The user assumes the entire risk related to its use of these data. NMFS is providing these data "as is," and NMFS disclaims any and all warranties, whether express or implied, including (without limitation) any implied warranties of merchantability or fitness for a particular purpose. No warranty expressed or implied is made regarding the accuracy or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. It is strongly recommended that careful attention be paid to the contents of the metadata file associated with these data to evaluate dataset limitations, restrictions or intended use. In no event will NMFS be liable to you or to any third party for any direct, indirect, incidental, consequential, special or exemplary damages or lost profit resulting from any use or misuse of this data. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Proper Usage *** The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public. Before using information obtained from this server, special attention should be given to the date and time of the data and products being displayed. This information shall not be modified in content and then presented as official government material. This dataset was created to generally represent our best professional judgment of the ranges of listed species based on the best available information at the time of publication, including: geographic factors, time of year, and the biology of each species. The dataset should not be used to infer information regarding the existence or details of other marine features or resources, including, but not limited to, navigable waters, coastlines, bathymetry, submerged features, or man-made structures. Users assume responsibility for determining the appropriate use of this dataset. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Temporal Considerations *** Species’ ranges are subject to change or modification. Generally, we become aware of these changes during the 5-year review of the species’ status, as required under the ESA. If changes to the range are deemed necessary, we will make such changes in the database, which will be archived and replaced by an updated version as soon as feasible. It is the user’s responsibility to ensure the most recent species’ range data are being used. &lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Shorelines/Base Layers *** The accuracy of this dataset is dependent upon the accuracy and resolution of the datasets (e.g. shoreline, hydrography, bathymetry, shared administrative boundaries) used in the creation process. Source datasets used are specified in the metadata. These data sources were selected for their suitability to a broad audience, and may not be suitable for specific uses requiring higher-resolution information. Coastlines and water body boundaries change. Unless otherwise noted, where the National Hydrography Dataset or NOAA Medium Resolution Shoreline is used, assume the boundary reaches the most current river, estuary, or coastal shoreline delineation available.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;*** Data Limitations ***&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;Our data may lack the spatial resolution to capture the entire range of a species, especially outside of a major waterway (e.g., in a very small tributary, or shallow area near a marsh). For section 7 consultations, we recommend that Federal action agencies request technical assistance to verify presence/absence of listed species within their action area.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</useLimit>
+         </Consts>
+      </resConst>
+      <tpCat>
+         <TopicCatCd value="002"/>
+      </tpCat>
+      <tpCat>
+         <TopicCatCd value="007"/>
+      </tpCat>
+      <tpCat>
+         <TopicCatCd value="014"/>
+      </tpCat>
+   </dataIdInfo>
+   <mdLang>
+      <languageCode value="eng" Sync="TRUE"/>
+      <countryCode value="USA" Sync="TRUE"/>
+   </mdLang>
+   <mdChar>
+      <CharSetCd value="004" Sync="TRUE"/>
+   </mdChar>
+   <distInfo xmlns="">
+      <distFormat xmlns="">
+         <formatName Sync="TRUE">File Geodatabase Feature Class</formatName>
+         <formatVer>NMFS ESA Range Geodatabase 2021</formatVer>
+         <fileDecmTech>ZIP</fileDecmTech>
+      </distFormat>
+      <distributor xmlns="">
+         <distorCont xmlns="">
+            <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+            <rpPosName>Fisheries Biologist</rpPosName>
+            <rpCntInfo xmlns="">
+               <cntAddress addressType="">
+                  <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+               </cntAddress>
+            </rpCntInfo>
+            <displayName>Jonathan Molineaux</displayName>
+            <role>
+               <RoleCd value="005"/>
+            </role>
+            <rpIndName>Jonathan Molineaux</rpIndName>
+         </distorCont>
+      </distributor>
+      <distTranOps xmlns="">
+         <unitsODist>MB</unitsODist>
+         <transSize>0</transSize>
+         <onLineSrc xmlns="">
+            <linkage>https://www.[Enter link to feature service]</linkage>
+            <protocol>https</protocol>
+            <orFunct>
+               <OnFunctCd value="001"/>
+            </orFunct>
+         </onLineSrc>
+      </distTranOps>
+   </distInfo>
+   <mdHrLv>
+      <ScopeCd value="005" Sync="TRUE"/>
+   </mdHrLv>
+   <mdHrLvName Sync="TRUE">dataset</mdHrLvName>
+   <refSysInfo>
+      <RefSystem dimension="">
+         <refSysID xmlns="">
+            <identCode code="4326" Sync="TRUE"/>
+            <idCodeSpace Sync="TRUE">EPSG</idCodeSpace>
+            <idVersion Sync="TRUE">6.2(3.0.1)</idVersion>
+         </refSysID>
+      </RefSystem>
+   </refSysInfo>
+   <spatRepInfo>
+      <VectSpatRep>
+         <geometObjs Name="CoralRoughCactus_Range_20240224">
+            <geoObjTyp>
+               <GeoObjTypCd value="002" Sync="TRUE"/>
+            </geoObjTyp>
+            <geoObjCnt Sync="TRUE">0</geoObjCnt>
+         </geometObjs>
+         <topLvl>
+            <TopoLevCd value="001" Sync="TRUE"/>
+         </topLvl>
+      </VectSpatRep>
+   </spatRepInfo>
+   <spdoinfo>
+      <ptvctinf>
+         <esriterm Name="CoralRoughCactus_Range_20240224">
+            <efeatyp Sync="TRUE">Simple</efeatyp>
+            <efeageom code="4" Sync="TRUE"/>
+            <esritopo Sync="TRUE">FALSE</esritopo>
+            <efeacnt Sync="TRUE">0</efeacnt>
+            <spindex Sync="TRUE">TRUE</spindex>
+            <linrefer Sync="TRUE">FALSE</linrefer>
+         </esriterm>
+      </ptvctinf>
+   </spdoinfo>
+   <eainfo>
+      <detailed xmlns="" Name="CoralRoughCactus_Range_20240224">
+         <enttyp>
+            <enttypl Sync="FALSE">Attribute Table Fields</enttypl>
+            <enttypt Sync="TRUE">Feature Class</enttypt>
+            <enttypc Sync="TRUE">0</enttypc>
+            <enttypd>A collection of geographic features with the same geometry type.</enttypd>
+            <enttypds>Esri</enttypds>
+         </enttyp>
+         <attr>
+            <attrlabl Sync="TRUE">OBJECTID</attrlabl>
+            <attalias Sync="TRUE">OBJECTID</attalias>
+            <attrtype Sync="TRUE">OID</attrtype>
+            <attwidth Sync="TRUE">4</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef Sync="TRUE">Internal feature number.</attrdef>
+            <attrdefs Sync="TRUE">Esri</attrdefs>
+            <attrdomv>
+               <udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">SHAPE</attrlabl>
+            <attalias Sync="TRUE">Shape</attalias>
+            <attrtype Sync="TRUE">Geometry</attrtype>
+            <attwidth Sync="TRUE">0</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef Sync="TRUE">Feature geometry.</attrdef>
+            <attrdefs Sync="TRUE">Esri</attrdefs>
+            <attrdomv>
+               <udom Sync="TRUE">Coordinates defining the features.</udom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">ID</attrlabl>
+            <attalias Sync="TRUE">ID</attalias>
+            <attrtype Sync="TRUE">Double</attrtype>
+            <attwidth Sync="TRUE">8</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>9 digit unique identifier for each feature in the geodatabase.
 Used to relate or join supplemental attribute tables.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">SCIENAME</attrlabl>
-                <attalias Sync="TRUE">SCIENAME</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">100</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Binomial or trinomial scientific name.
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">SCIENAME</attrlabl>
+            <attalias Sync="TRUE">SCIENAME</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">100</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Binomial or trinomial scientific name.
 
 Value formatted as written in the Code of Federal Regulations.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">COMNAME</attrlabl>
-                <attalias Sync="FALSE">Common Name</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">100</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Legal common name of species. 
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">COMNAME</attrlabl>
+            <attalias Sync="FALSE">Common Name</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">100</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Legal common name of species. 
 
 Value formatted as written in the Code of Federal Regulations.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LISTENTITY</attrlabl>
-                <attalias Sync="TRUE">LISTENTITY</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">100</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Full text of the ESA listed entity: Species, Subspecies, Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). 
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">LISTENTITY</attrlabl>
+            <attalias Sync="TRUE">LISTENTITY</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">100</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Full text of the ESA listed entity: Species, Subspecies, Distinct Population Segment (DPS), or Evolutionarily Significant Unit (ESU). 
 
 Value formatted as written in the Code of Federal Regulations.
 *Note: for entire species listings, this value will be the same as COMNAME value.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LISTSTATUS</attrlabl>
-                <attalias Sync="TRUE">LISTSTATUS</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">20</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Current Endangered Species Act listing status.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv>Endangered</edomv>
-                        <edomvd>Species that are in danger of extinction throughout all or a significant portion of their range.</edomvd>
-                        <edomvds>Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Threatened</edomv>
-                        <edomvd>Species that are likely to become endangered in the foreseeable future.</edomvd>
-                        <edomvds>Endangered Species Act of 1973</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Delisted</edomv>
-                        <edomvd>Species that were removed from the Endangered Species Act list.</edomvd>
-                        <edomvds>Endangered Species Act of 1973</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">TAXON</attrlabl>
-                <attalias Sync="TRUE">TAXON</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Taxonomic unit.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv>baleen whale</edomv>
-                        <edomvd>Any of a suborder (Mysticeti) of large whales that have baleen plates in the upper jaw which are used to filter chiefly small crustaceans out of large quantities of seawater.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>toothed whale</edomv>
-                        <edomvd>Any of a suborder (Odontoceti) of cetaceans bearing usually numerous simple conical teeth.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>fish</edomv>
-                        <edomvd>Any of numerous cold-blooded strictly aquatic craniate vertebrates that include the bony fishes and the cartilaginous and jawless fishes and that have typically an elongated somewhat spindle-shaped body terminating in a broad caudal fin, limbs in the form of fins when present at all, and a 2-chambered heart by which blood is sent through thoracic gills to be oxygenated.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>pinniped</edomv>
-                        <edomvd>Any of an order or suborder (Pinnipedia) of aquatic carnivorous mammals with all four limbs modified into flippers.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>marine reptile</edomv>
-                        <edomvd>Any of a class (Reptilia) of cold-blooded, air-breathing, usually egg-laying vertebrates that have adapted for an aquatic or semiaquatic life in a marine environment and have a body typically covered with scales or bony plates and a bony skeleton with a single occipital condyle, a distinct quadrate bone usually immovably articulated with the skull, and ribs attached to the sternum.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>invertebrate</edomv>
-                        <edomvd>Any animal that lacks a spinal column.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>plant</edomv>
-                        <edomvd>Any of a kingdom (Plantae) of multicellular eukaryotic mostly photosynthetic organisms typically lacking locomotive movement or obvious nervous or sensory organs and possessing cellulose cell walls.</edomvd>
-                        <edomvds>Merriam-Webster dictionary</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LEADOFFICE</attrlabl>
-                <attalias Sync="TRUE">LEADOFFICE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">50</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>NMFS Office responsible for the species’ range within feature.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-                <attrdomv>
-                    <edom xmlns="">
-                        <edomv>Office of Protected Resources</edomv>
-                        <edomvd>Headquarters office responsible for nationwide conservation, protection, and recovery of endangered and threatened marine species listed under the Endangered Species Act.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Alaska Region</edomv>
-                        <edomvd>Includes Alaska and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>West Coast Region</edomv>
-                        <edomvd>Includes Idaho, Washington, Oregon, California and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Greater Atlantic Region</edomv>
-                        <edomvd>Includes Minnesota, Wisconsin, Michigan, Illinois, Indiana, Ohio, Kentucky, West Virginia, Pennsylvania, New York, Vermont, New Hampshire, Maine, Massachusetts, Rhode Island, Connecticut, New Jersey, Delaware, Maryland, Virginia, North Carolina (north of Cape Hatteras) and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Southeast Region</edomv>
-                        <edomvd>Includes North Carolina (south of Cape Hatteras), South Carolina, Georgia, Florida, Alabama, Mississippi, Louisiana, Texas, Arkansas, Iowa, Kansas, Kentucky, Missouri, Nebraska, New Mexico, Oklahoma, Tennessee, the Commonwealth of Puerto Rico, the U.S. Virgin Islands and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                    <edom xmlns="">
-                        <edomv>Pacific Islands Region</edomv>
-                        <edomvd>Includes Hawai'i, American Samoa, Guam, the Commonwealth of the Northern Mariana Islands, Kingman Reef, Howland Island, Baker Island, Jarvis Island, Wake Island, Johnston Atoll, Palmyra Atoll and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
-                        <edomvds>National Marine Fisheries Service</edomvds>
-                    </edom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">FRN</attrlabl>
-                <attalias Sync="TRUE">FRN</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">20</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Federal Register Notice citation for the listing of the species.
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">LISTSTATUS</attrlabl>
+            <attalias Sync="TRUE">LISTSTATUS</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">20</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Current Endangered Species Act listing status.</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+            <attrdomv>
+               <edom xmlns="">
+                  <edomv>Endangered</edomv>
+                  <edomvd>Species that are in danger of extinction throughout all or a significant portion of their range.</edomvd>
+                  <edomvds>Endangered Species Act of 1973</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Threatened</edomv>
+                  <edomvd>Species that are likely to become endangered in the foreseeable future.</edomvd>
+                  <edomvds>Endangered Species Act of 1973</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Delisted</edomv>
+                  <edomvd>Species that were removed from the Endangered Species Act list.</edomvd>
+                  <edomvds>Endangered Species Act of 1973</edomvds>
+               </edom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">TAXON</attrlabl>
+            <attalias Sync="TRUE">TAXON</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">50</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Taxonomic unit.</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+            <attrdomv>
+               <edom xmlns="">
+                  <edomv>baleen whale</edomv>
+                  <edomvd>Any of a suborder (Mysticeti) of large whales that have baleen plates in the upper jaw which are used to filter chiefly small crustaceans out of large quantities of seawater.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>toothed whale</edomv>
+                  <edomvd>Any of a suborder (Odontoceti) of cetaceans bearing usually numerous simple conical teeth.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>fish</edomv>
+                  <edomvd>Any of numerous cold-blooded strictly aquatic craniate vertebrates that include the bony fishes and the cartilaginous and jawless fishes and that have typically an elongated somewhat spindle-shaped body terminating in a broad caudal fin, limbs in the form of fins when present at all, and a 2-chambered heart by which blood is sent through thoracic gills to be oxygenated.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>pinniped</edomv>
+                  <edomvd>Any of an order or suborder (Pinnipedia) of aquatic carnivorous mammals with all four limbs modified into flippers.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>marine reptile</edomv>
+                  <edomvd>Any of a class (Reptilia) of cold-blooded, air-breathing, usually egg-laying vertebrates that have adapted for an aquatic or semiaquatic life in a marine environment and have a body typically covered with scales or bony plates and a bony skeleton with a single occipital condyle, a distinct quadrate bone usually immovably articulated with the skull, and ribs attached to the sternum.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>invertebrate</edomv>
+                  <edomvd>Any animal that lacks a spinal column.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>plant</edomv>
+                  <edomvd>Any of a kingdom (Plantae) of multicellular eukaryotic mostly photosynthetic organisms typically lacking locomotive movement or obvious nervous or sensory organs and possessing cellulose cell walls.</edomvd>
+                  <edomvds>Merriam-Webster dictionary</edomvds>
+               </edom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">LEADOFFICE</attrlabl>
+            <attalias Sync="TRUE">LEADOFFICE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">50</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>NMFS Office responsible for the species’ range within feature.</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+            <attrdomv>
+               <edom xmlns="">
+                  <edomv>Office of Protected Resources</edomv>
+                  <edomvd>Headquarters office responsible for nationwide conservation, protection, and recovery of endangered and threatened marine species listed under the Endangered Species Act.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Alaska Region</edomv>
+                  <edomvd>Includes Alaska and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>West Coast Region</edomv>
+                  <edomvd>Includes Idaho, Washington, Oregon, California and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Greater Atlantic Region</edomv>
+                  <edomvd>Includes Minnesota, Wisconsin, Michigan, Illinois, Indiana, Ohio, Kentucky, West Virginia, Pennsylvania, New York, Vermont, New Hampshire, Maine, Massachusetts, Rhode Island, Connecticut, New Jersey, Delaware, Maryland, Virginia, North Carolina (north of Cape Hatteras) and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Southeast Region</edomv>
+                  <edomvd>Includes North Carolina (south of Cape Hatteras), South Carolina, Georgia, Florida, Alabama, Mississippi, Louisiana, Texas, Arkansas, Iowa, Kansas, Kentucky, Missouri, Nebraska, New Mexico, Oklahoma, Tennessee, the Commonwealth of Puerto Rico, the U.S. Virgin Islands and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+               <edom xmlns="">
+                  <edomv>Pacific Islands Region</edomv>
+                  <edomvd>Includes Hawai'i, American Samoa, Guam, the Commonwealth of the Northern Mariana Islands, Kingman Reef, Howland Island, Baker Island, Jarvis Island, Wake Island, Johnston Atoll, Palmyra Atoll and adjacent marine waters extending outwards to the 200 nautical mile boundary of the Exclusive Economic Zone.</edomvd>
+                  <edomvds>National Marine Fisheries Service</edomvds>
+               </edom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">FRN</attrlabl>
+            <attalias Sync="TRUE">FRN</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">20</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Federal Register Notice citation for the listing of the species.
 
 Volume #, FR, Page Number (Example: 79 FR 39855)</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">PUBDATE</attrlabl>
-                <attalias Sync="TRUE">PUBDATE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">10</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Federal Register Notice publication date. 
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">PUBDATE</attrlabl>
+            <attalias Sync="TRUE">PUBDATE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">10</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Federal Register Notice publication date. 
 
 MM/DD/YYYY format</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">EFFECTDATE</attrlabl>
-                <attalias Sync="TRUE">EFFECTDATE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">10</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Effective date for a ESA- species listing. Null for proposed listings.
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">EFFECTDATE</attrlabl>
+            <attalias Sync="TRUE">EFFECTDATE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">10</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Effective date for a ESA- species listing. Null for proposed listings.
 
 MM/DD/YYYY format
 </attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">CREATEDATE</attrlabl>
-                <attalias Sync="TRUE">CREATEDATE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">10</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Date spatial feature was created or geometry was last edited.
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">CREATEDATE</attrlabl>
+            <attalias Sync="TRUE">CREATEDATE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">10</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Date spatial feature was created or geometry was last edited.
 
 MM/DD/YYYY format</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">NOTES</attrlabl>
-                <attalias Sync="TRUE">NOTES</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Additional information about the feature that is not contained in other fields.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">INPORTURL</attrlabl>
-                <attalias Sync="TRUE">INPORTURL</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Feature class metadata URL. 
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">NOTES</attrlabl>
+            <attalias Sync="TRUE">NOTES</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Additional information about the feature that is not contained in other fields.</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">INPORTURL</attrlabl>
+            <attalias Sync="TRUE">INPORTURL</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Feature class metadata URL. 
 
 InPort is the National Marine Fisheries Service's official metadata catalog found at: 
 https://inport.nmfs.noaa.gov/inport/</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">SHAPE_Area</attrlabl>
-                <attalias Sync="TRUE">Shape_Area</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Area of feature in internal units squared.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">PUBLIC</attrlabl>
-                <attalias Sync="TRUE">PUBLIC</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">3</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Denotes if a feature within a species’ feature class is for the public facing ESA National Mapper or not.</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">LIFESTAGE</attrlabl>
-                <attalias Sync="TRUE">LIFESTAGE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>Lifestage of species displayed in feature</attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">BEHAVIOR</attrlabl>
-                <attalias Sync="TRUE">BEHAVIOR</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-                <attrdef>Behavior (i.e., migrating, feeding, mating) of species displayed in feature</attrdef>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">REFERENCE</attrlabl>
-                <attalias Sync="TRUE">REFERENCE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>In-text citations of references used for feature services. </attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-            <attr>
-                <attrlabl Sync="TRUE">FEATNAME</attrlabl>
-                <attalias Sync="TRUE">FEATNAME</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">200</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-            </attr>
-            <attr>
-                <attrlabl Sync="TRUE">Shape_Leng</attrlabl>
-                <attalias Sync="TRUE">Shape_Leng</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-            </attr>
-            <attr>
-                <attrlabl Sync="TRUE">Shape_Length</attrlabl>
-                <attalias Sync="TRUE">Shape_Length</attalias>
-                <attrtype Sync="TRUE">Double</attrtype>
-                <attwidth Sync="TRUE">8</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef Sync="TRUE">Length of feature in internal units.</attrdef>
-                <attrdefs Sync="TRUE">Esri</attrdefs>
-                <attrdomv>
-                    <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
-                </attrdomv>
-            </attr>
-            <attr xmlns="">
-                <attrlabl Sync="TRUE">NMFSPAGE</attrlabl>
-                <attalias Sync="TRUE">NMFSPAGE</attalias>
-                <attrtype Sync="TRUE">String</attrtype>
-                <attwidth Sync="TRUE">254</attwidth>
-                <atprecis Sync="TRUE">0</atprecis>
-                <attscale Sync="TRUE">0</attscale>
-                <attrdef>NMFS Species Webpage found here: https://www.fisheries.noaa.gov/find-species
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">SHAPE_Area</attrlabl>
+            <attalias Sync="TRUE">Shape_Area</attalias>
+            <attrtype Sync="TRUE">Double</attrtype>
+            <attwidth Sync="TRUE">8</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef Sync="TRUE">Area of feature in internal units squared.</attrdef>
+            <attrdefs Sync="TRUE">Esri</attrdefs>
+            <attrdomv>
+               <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">PUBLIC</attrlabl>
+            <attalias Sync="TRUE">PUBLIC</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">3</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Denotes if a feature within a species’ feature class is for the public facing ESA National Mapper or not.</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">LIFESTAGE</attrlabl>
+            <attalias Sync="TRUE">LIFESTAGE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>Lifestage of species displayed in feature</attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">BEHAVIOR</attrlabl>
+            <attalias Sync="TRUE">BEHAVIOR</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+            <attrdef>Behavior (i.e., migrating, feeding, mating) of species displayed in feature</attrdef>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">REFERENCE</attrlabl>
+            <attalias Sync="TRUE">REFERENCE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>In-text citations of references used for feature services. </attrdef>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+         <attr>
+            <attrlabl Sync="TRUE">FEATNAME</attrlabl>
+            <attalias Sync="TRUE">FEATNAME</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">200</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+         </attr>
+         <attr>
+            <attrlabl Sync="TRUE">Shape_Leng</attrlabl>
+            <attalias Sync="TRUE">Shape_Leng</attalias>
+            <attrtype Sync="TRUE">Double</attrtype>
+            <attwidth Sync="TRUE">8</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+         </attr>
+         <attr>
+            <attrlabl Sync="TRUE">Shape_Length</attrlabl>
+            <attalias Sync="TRUE">Shape_Length</attalias>
+            <attrtype Sync="TRUE">Double</attrtype>
+            <attwidth Sync="TRUE">8</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef Sync="TRUE">Length of feature in internal units.</attrdef>
+            <attrdefs Sync="TRUE">Esri</attrdefs>
+            <attrdomv>
+               <udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
+            </attrdomv>
+         </attr>
+         <attr xmlns="">
+            <attrlabl Sync="TRUE">NMFSPAGE</attrlabl>
+            <attalias Sync="TRUE">NMFSPAGE</attalias>
+            <attrtype Sync="TRUE">String</attrtype>
+            <attwidth Sync="TRUE">254</attwidth>
+            <atprecis Sync="TRUE">0</atprecis>
+            <attscale Sync="TRUE">0</attscale>
+            <attrdef>NMFS Species Webpage found here: https://www.fisheries.noaa.gov/find-species
 </attrdef>
-                <attrdefs>National Marine Fisheries Service</attrdefs>
-            </attr>
-        </detailed>
-    </eainfo>
-    <mdDateSt Sync="TRUE">20241209</mdDateSt>
-    <mdMaint xmlns="">
-        <maintFreq>
-            <MaintFreqCd value="009"></MaintFreqCd>
-        </maintFreq>
-    </mdMaint>
-    <dqInfo xmlns="">
-        <dqScope>
-            <scpLvl>
-                <ScopeCd value="005"></ScopeCd>
-            </scpLvl>
-        </dqScope>
-        <dataLineage>
-            <statement>[Enter a thorough lineage statement detailing how range was created. This should provide a description of all sources and data layer inputs including documentation of how they were used. Further this should document any process steps used to create the range]</statement>
-            <dataSource xmlns="" type="">
-                <srcDesc>[Provide a description of the data sources used]</srcDesc>
-                <srcCitatn xmlns="">
-                    <resTitle>See Lineage Statement</resTitle>
-                    <date>
-                        <createDate>2021-02-02T00:00:00</createDate>
-                    </date>
-                </srcCitatn>
-            </dataSource>
-            <prcStep xmlns="">
-                <stepDesc>See Lineage Statement</stepDesc>
-                <stepProc xmlns="">
-                    <rpIndName>Jonathan Molineaux</rpIndName>
-                    <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-                    <rpPosName>Fisheries Biologist</rpPosName>
-                    <role>
-                        <RoleCd value="001"></RoleCd>
-                    </role>
-                    <displayName>Jonathan Molineaux</displayName>
-                    <rpCntInfo xmlns="">
-                        <cntAddress addressType="">
-                            <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
-                        </cntAddress>
-                    </rpCntInfo>
-                    <displayName>Jonathan Molineaux</displayName>
-                </stepProc>
-                <stepDateTm>2021-02-02T00:00:00</stepDateTm>
-                <stepProc xmlns="">
-                    <rpIndName>Jennifer Schultz</rpIndName>
-                    <rpOrgName>NOAA Fisheries Office of Protected Resources</rpOrgName>
-                    <rpPosName>Fisheries Biologist</rpPosName>
-                    <displayName>Jennifer Schultz</displayName>
-                    <role>
-                        <RoleCd value="001"></RoleCd>
-                    </role>
-                    <rpCntInfo xmlns="">
-                        <cntAddress addressType="">
-                            <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
-                        </cntAddress>
-                    </rpCntInfo>
-                    <displayName>Jennifer Schultz</displayName>
-                </stepProc>
-            </prcStep>
-        </dataLineage>
-        <report xmlns="" type="DQCompOm" dimension="">
-            <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
-        </report>
-    </dqInfo>
-    <mdContact xmlns="">
-        <rpIndName>Jonathan Molineaux</rpIndName>
-        <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-        <rpPosName>Fisheries Biologist</rpPosName>
-        <role>
-            <RoleCd value="001"></RoleCd>
-        </role>
-        <displayName>Jonathan Molineaux</displayName>
-        <displayName>Jonathan Molineaux</displayName>
-        <rpCntInfo xmlns="">
-            <cntAddress addressType="">
-                <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
-            </cntAddress>
-        </rpCntInfo>
-    </mdContact>
-    <mdContact xmlns="">
-        <rpIndName>Jennifer Schultz</rpIndName>
-        <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
-        <rpPosName>Fisheries Biologist</rpPosName>
-        <role>
-            <RoleCd value="001"></RoleCd>
-        </role>
-        <displayName>Jennifer Schultz</displayName>
-        <rpCntInfo xmlns="">
-            <cntAddress addressType="">
-                <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
-            </cntAddress>
-        </rpCntInfo>
-    </mdContact>
+            <attrdefs>National Marine Fisheries Service</attrdefs>
+         </attr>
+      </detailed>
+   </eainfo>
+   <mdDateSt Sync="TRUE">20241209</mdDateSt>
+   <mdMaint xmlns="">
+      <maintFreq>
+         <MaintFreqCd value="009"/>
+      </maintFreq>
+   </mdMaint>
+   <dqInfo xmlns="">
+      <dqScope>
+         <scpLvl>
+            <ScopeCd value="005"/>
+         </scpLvl>
+      </dqScope>
+      <dataLineage>
+         <statement>[Enter a thorough lineage statement detailing how range was created. This should provide a description of all sources and data layer inputs including documentation of how they were used. Further this should document any process steps used to create the range]</statement>
+         <dataSource xmlns="" type="">
+            <srcDesc>[Provide a description of the data sources used]</srcDesc>
+            <srcCitatn xmlns="">
+               <resTitle>See Lineage Statement</resTitle>
+               <date>
+                  <createDate>2021-02-02T00:00:00</createDate>
+               </date>
+            </srcCitatn>
+         </dataSource>
+         <prcStep xmlns="">
+            <stepDesc>See Lineage Statement</stepDesc>
+            <stepProc xmlns="">
+               <rpIndName>Jonathan Molineaux</rpIndName>
+               <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+               <rpPosName>Fisheries Biologist</rpPosName>
+               <role>
+                  <RoleCd value="001"/>
+               </role>
+               <displayName>Jonathan Molineaux</displayName>
+               <rpCntInfo xmlns="">
+                  <cntAddress addressType="">
+                     <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+                  </cntAddress>
+               </rpCntInfo>
+               <displayName>Jonathan Molineaux</displayName>
+            </stepProc>
+            <stepDateTm>2021-02-02T00:00:00</stepDateTm>
+            <stepProc xmlns="">
+               <rpIndName>Jennifer Schultz</rpIndName>
+               <rpOrgName>NOAA Fisheries Office of Protected Resources</rpOrgName>
+               <rpPosName>Fisheries Biologist</rpPosName>
+               <displayName>Jennifer Schultz</displayName>
+               <role>
+                  <RoleCd value="001"/>
+               </role>
+               <rpCntInfo xmlns="">
+                  <cntAddress addressType="">
+                     <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
+                  </cntAddress>
+               </rpCntInfo>
+               <displayName>Jennifer Schultz</displayName>
+            </stepProc>
+         </prcStep>
+      </dataLineage>
+      <report xmlns="" type="DQCompOm" dimension="">
+         <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
+      </report>
+   </dqInfo>
+   <mdContact xmlns="">
+      <rpIndName>Jonathan Molineaux</rpIndName>
+      <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+      <rpPosName>Fisheries Biologist</rpPosName>
+      <role>
+         <RoleCd value="001"/>
+      </role>
+      <displayName>Jonathan Molineaux</displayName>
+      <displayName>Jonathan Molineaux</displayName>
+      <rpCntInfo xmlns="">
+         <cntAddress addressType="">
+            <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+         </cntAddress>
+      </rpCntInfo>
+   </mdContact>
+   <mdContact xmlns="">
+      <rpIndName>Jennifer Schultz</rpIndName>
+      <rpOrgName>NMFS Office Of Protected Resources</rpOrgName>
+      <rpPosName>Fisheries Biologist</rpPosName>
+      <role>
+         <RoleCd value="001"/>
+      </role>
+      <displayName>Jennifer Schultz</displayName>
+      <rpCntInfo xmlns="">
+         <cntAddress addressType="">
+            <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
+         </cntAddress>
+      </rpCntInfo>
+   </mdContact>
 </metadata>

@@ -290,60 +290,60 @@ def main():
             </dqInfo>
             '''
 
-    <dqScope> 0
-        <scpLvl> 0
-            <ScopeCd> 0
-
-        <scpLvlDesc> 1
-            <datasetSet> 0
-
-    <report> 1
-        <measDesc> 0
-    <report> 2
-        <measDesc> 0
-
-    <dataLineage> 3
-        <statement>  0
-        <dataSource> 1
-            <srcDesc>   0
-            <srcCitatn> 1
-                <resTitle> 0
-                <date> 1
-                    <createDate> 0
-        <prcStep>    2
-            <stepDesc> 0
-            <stepProc> 1
-                <editorSource> 0
-                <editorDigest> 1
-                <rpIndName>    2
-                <rpOrgName>    3
-                <rpPosName>    4
-                <rpCntInfo>    5
-                    <cntAddress> 0
-                        <delPoint>  0
-                        <city>      1
-                        <adminArea> 2
-                        <postCode>  3
-                        <eMailAdd>  4
-                        <country>   5
-
-                    <cntPhone>     1
-                        <voiceNum>   0
-                        <faxNum>     1
-
-                    <cntHours>     2
-                    <cntOnlineRes> 3
-                        <linkage>  0
-                        <protocol> 1
-                        <orName>   2
-                        <orDesc>   3
-                        <orFunct>  4
-                            <OnFunctCd>
-                <editorSave>    6
-                <displayName>   7
-                <role>          8
-                    <RoleCd>    0
-            <stepDateTm>  2
+##    <dqScope> 0
+##        <scpLvl> 0
+##            <ScopeCd> 0
+##
+##        <scpLvlDesc> 1
+##            <datasetSet> 0
+##
+##    <report> 1
+##        <measDesc> 0
+##    <report> 2
+##        <measDesc> 0
+##
+##    <dataLineage> 3
+##        <statement>  0
+##        <dataSource> 1
+##            <srcDesc>   0
+##            <srcCitatn> 1
+##                <resTitle> 0
+##                <date> 1
+##                    <createDate> 0
+##        <prcStep>    2
+##            <stepDesc> 0
+##            <stepProc> 1
+##                <editorSource> 0
+##                <editorDigest> 1
+##                <rpIndName>    2
+##                <rpOrgName>    3
+##                <rpPosName>    4
+##                <rpCntInfo>    5
+##                    <cntAddress> 0
+##                        <delPoint>  0
+##                        <city>      1
+##                        <adminArea> 2
+##                        <postCode>  3
+##                        <eMailAdd>  4
+##                        <country>   5
+##
+##                    <cntPhone>     1
+##                        <voiceNum>   0
+##                        <faxNum>     1
+##
+##                    <cntHours>     2
+##                    <cntOnlineRes> 3
+##                        <linkage>  0
+##                        <protocol> 1
+##                        <orName>   2
+##                        <orDesc>   3
+##                        <orFunct>  4
+##                            <OnFunctCd>
+##                <editorSave>    6
+##                <displayName>   7
+##                <role>          8
+##                    <RoleCd>    0
+##            <stepDateTm>  2
 
 
 

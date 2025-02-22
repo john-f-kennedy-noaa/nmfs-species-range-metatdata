@@ -59,11 +59,6 @@ def main():
             <ArcGISProfile>ISO19139</ArcGISProfile>
         </Esri>
         <dataIdInfo>
-            <envirDesc Sync="FALSE">Esri ArcGIS 13.4.0.55405</envirDesc>
-            <dataLang>
-                <languageCode value="eng" Sync="TRUE"></languageCode>
-                <countryCode value="USA" Sync="TRUE"></countryCode>
-            </dataLang>
             <idCitation>
                 <resTitle Sync="FALSE">WhaleBlue_20201014</resTitle>
                 <presForm>
@@ -75,26 +70,13 @@ def main():
                     <createDate>2020-10-14T00:00:00</createDate>
                 </date>
             </idCitation>
-            <spatRpType>
-                <SpatRepTypCd value="001" Sync="TRUE"></SpatRepTypCd>
-            </spatRpType>
-            <idPurp>The following map depicts the geographic range for ESA-listed blue whales.</idPurp>
-            <dataChar>
-                <CharSetCd value="004"></CharSetCd>
-            </dataChar>
-            <resMaint>
-                <maintFreq>
-                    <MaintFreqCd value="009"></MaintFreqCd>
-                </maintFreq>
-            </resMaint>
-            <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;This dataset was developed to show those areas potentially used by Endangered Species Act (ESA) and/or Marine Mammal Protection Act (MMPA) listed species under National Marine Fisheries Service (NMFS) jurisdiction. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;The data was created by digitizing range information from public and agency sources.  These sources include OBIS the Ocean Biogeographic System (iobis.org), natural history guidebooks (National Audubon Society. 2002. Guide to Marine Mammals of the World), recovery and conservation plans, listing actions and status reports, and other agency sources.  All resulting range polygons were then reviewed and approved by expert NMFS biologists specializing in the species and were finally approved by NMFS Office of Protected Resources management team.  Range data include information on the range of all life stages.  Offshore distances are approximate for some species as sampling and distribution information in deeper waters are often based on more limited and fragmentary evidence and studies. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;The data DO NOT constitute a legal or regulatory description of range and are only provided for general guidance to members of the public or action agencies considering the development of projects that may affect species protected by either of these two laws.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
             <searchKeys>
-                <keyword>blue whale</keyword>
-                <keyword>species range</keyword>
-                <keyword>NMFS</keyword>
-                <keyword>ESA</keyword>
+                <keyword>blue whale; species range; NMFS; ESA</keyword>
             </searchKeys>
+            <idPurp>The following map depicts the geographic range for ESA-listed blue whales.</idPurp>
+            <idAbs>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;This dataset was developed to show those areas potentially used by Endangered Species Act (ESA) and/or Marine Mammal Protection Act (MMPA) listed species under National Marine Fisheries Service (NMFS) jurisdiction. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;The data was created by digitizing range information from public and agency sources.  These sources include OBIS the Ocean Biogeographic System (iobis.org), natural history guidebooks (National Audubon Society. 2002. Guide to Marine Mammals of the World), recovery and conservation plans, listing actions and status reports, and other agency sources.  All resulting range polygons were then reviewed and approved by expert NMFS biologists specializing in the species and were finally approved by NMFS Office of Protected Resources management team.  Range data include information on the range of all life stages.  Offshore distances are approximate for some species as sampling and distribution information in deeper waters are often based on more limited and fragmentary evidence and studies. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;The data DO NOT constitute a legal or regulatory description of range and are only provided for general guidance to members of the public or action agencies considering the development of projects that may affect species protected by either of these two laws.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</idAbs>
             <idCredit>NMFS Office of Protected Resources</idCredit>
+            <idStatus></idStatus>
             <idPoC>
                 <rpIndName>Jonathan Molineaux</rpIndName>
                 <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
@@ -103,12 +85,20 @@ def main():
                     <RoleCd value="007"></RoleCd>
                 </role>
             </idPoC>
-            <tpCat>
-                <TopicCatCd value="007"></TopicCatCd>
-            </tpCat>
-            <tpCat>
-                <TopicCatCd value="014"></TopicCatCd>
-            </tpCat>
+            <resConst></resConst>
+            <resMaint>
+                <maintFreq>
+                    <MaintFreqCd value="009"></MaintFreqCd>
+                </maintFreq>
+            </resMaint>
+            <envirDesc Sync="FALSE">Esri ArcGIS 13.4.0.55405</envirDesc>
+            <dataLang>
+                <languageCode value="eng" Sync="TRUE"></languageCode>
+                <countryCode value="USA" Sync="TRUE"></countryCode>
+            </dataLang>
+            <dataChar>
+                <CharSetCd value="004"></CharSetCd>
+            </dataChar>
             <dataExt>
                 <geoEle>
                     <GeoBndBox esriExtentType="search">
@@ -120,6 +110,15 @@ def main():
                     </GeoBndBox>
                 </geoEle>
             </dataExt>
+            <spatRpType>
+                <SpatRepTypCd value="001" Sync="TRUE"></SpatRepTypCd>
+            </spatRpType>
+            <tpCat>
+                <TopicCatCd value="007"></TopicCatCd>
+            </tpCat>
+            <tpCat>
+                <TopicCatCd value="014"></TopicCatCd>
+            </tpCat>
         </dataIdInfo>
     </metadata>'''
 

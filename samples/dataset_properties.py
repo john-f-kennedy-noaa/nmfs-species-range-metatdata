@@ -6,6 +6,6 @@ import hermes
 import os
 
 if __name__ == "__main__":
-    fc = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\hermes-master\National Mapper.gdb\AbaloneBlack_20210712"
+    fc = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\hermes-master\National Mapper.gdb\AbaloneBlack_20210712"
     metadata = hermes.Paperwork(dataset=fc)
     print( metadata.datasetProperties )

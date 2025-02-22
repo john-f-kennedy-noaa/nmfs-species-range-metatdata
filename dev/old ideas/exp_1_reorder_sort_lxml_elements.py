@@ -121,7 +121,7 @@ def main():
 ##    #for parent in doc.xpath('//*[./*]'): # Search for parent elements
 ##        parent[:] = sorted(parent,key=lambda x: tag_position_dict[x.tag])
 ##    etree.indent(doc, space="  ")
-##    #print(etree.tostring(doc, pretty_print=True, encoding="utf-8").decode())
+##    #print(etree.tostring(doc, encoding="utf-8", pretty_print=True).decode())
 
 ##    # Parse an XML document
 ##    #tree = etree.fromstring("<root><item1/><item2/><item3/></root>")
@@ -234,7 +234,7 @@ def main():
     etree.indent(root, space="    ")
     print(etree.tostring(root, xml_declaration=True, encoding="utf-8").decode())
 
-    xml_file = r'C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export 2025-01-27\_SeaTurtleGreen_20210129.xml'
+    xml_file = r'{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export 2025-01-27\_SeaTurtleGreen_20210129.xml'
 
     # Parse the XML
     parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
@@ -260,7 +260,7 @@ def main():
 ##
 ##    xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding="utf-8").decode()
 ##
-##    print(etree.tostring(xml_string, pretty_print=True, encoding="utf-8").decode())
+##    print(etree.tostring(xml_string, encoding="utf-8", pretty_print=True).decode())
 ##
 ##    new_xml_string = etree.fromstring(xml_string)
 ##    # create an ElementTree object from the metadata XML string
@@ -270,7 +270,7 @@ def main():
 ##    for child in root.xpath("."):
 ##        child[:] = sorted(child, key=lambda x: tag_position_dict[x.tag])
 ##
-##    #print(etree.tostring(root, pretty_print=True, encoding="utf-8").decode())
+##    #print(etree.tostring(root, encoding="utf-8", pretty_print=True).decode())
 
 
 if __name__ == '__main__':

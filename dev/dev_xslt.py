@@ -26,7 +26,7 @@ def main():
         from arcpy import metadata as md
         from io import StringIO
 
-        project_folder = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\National Mapper"
+        project_folder = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\National Mapper"
 
         arcpy.env.workspace = rf"{project_folder}\National Mapper.gdb"
 
@@ -36,7 +36,7 @@ def main():
         #set local variables
         #dir = arcpy.GetInstallInfo("desktop")["InstallDir"]
         #xslt = rf"{project_folder}\Metadata\Stylesheets\gpTools\generate metadata template.xslt"
-        xslt = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\ArcGIS-XML-to-InPort-XML\ArcGIS2InPort.xsl"
+        xslt = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcGIS-XML-to-InPort-XML\ArcGIS2InPort.xsl"
 
         dataset_md = md.Metadata("AbaloneBlack_20210712")
 
@@ -64,7 +64,7 @@ def main():
         etree.indent(result, space="    ")
 
         # Pretty print
-        xml_string = etree.tostring(result, pretty_print=True, encoding="utf-8").decode()
+        xml_string = etree.tostring(result, encoding="utf-8", pretty_print=True).decode()
 
         # Write the pretty XML to a file
         with open(rf"{project_folder}\xlst_test.xml", "w") as f:

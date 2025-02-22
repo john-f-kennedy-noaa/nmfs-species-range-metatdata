@@ -30,6 +30,6 @@ def recreate_xml(xml_file):
 
 if __name__ == "__main__":
     #xml_file = "example.xml"  # Replace with your XML file path
-    xml_file = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\National Mapper\Export\AbaloneBlack_20210712.xml"
+    xml_file = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\National Mapper\Export\AbaloneBlack_20210712.xml"
     code = recreate_xml(xml_file)
     print(code)

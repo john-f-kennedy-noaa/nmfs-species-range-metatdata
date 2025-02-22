@@ -25,7 +25,7 @@ def main():
         # Parse the XML
         #tree = etree.parse("species_range_boilerplate.xml", parser=parser)
         # Pretty print
-        #xml_string = etree.tostring(tree, pretty_print=True, encoding="utf-8").decode()
+        #xml_string = etree.tostring(tree, encoding="utf-8", pretty_print=True).decode()
         #print(xml_string)
 
         parser = etree.XMLParser(remove_blank_text=True)

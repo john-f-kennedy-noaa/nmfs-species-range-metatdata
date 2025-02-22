@@ -70,7 +70,7 @@ def main():
     from lxml import etree
     from io import StringIO
 
-    arcpy.env.workspace = r"C:\Users\john.f.kennedy\Documents\ArcGIS\Projects\hermes-master\National Mapper.gdb"
+    arcpy.env.workspace = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\hermes-master\National Mapper.gdb"
 
     for fc in arcpy.ListFeatureClasses():
         if fc == "AbaloneBlack_20210712":

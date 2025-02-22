@@ -77,7 +77,7 @@ def contact_search_report(target_tree, search_expression):
         traceback.print_exc()
     else:
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         return True
     finally:
         pass
@@ -1437,7 +1437,7 @@ def contact_search(target_xml, search_element="", search_term=""):
     else:
         # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        #if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        #if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         return True
     finally:
@@ -1489,7 +1489,7 @@ def main(project_folder=""):
     else:
         # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: raise Warning(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         return True
     finally:
         pass
