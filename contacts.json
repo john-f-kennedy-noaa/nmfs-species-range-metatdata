@@ -1,0 +1,67 @@
+{
+    "citRespParty": [
+        {
+            "role": "Custodian",
+            "rpIndName": "Nikki Wildart",
+            "eMailAdd": "nikki.wildart@noaa.gov"
+        }
+    ],
+    "idPoC": [
+        {
+            "role": "Point of Contact",
+            "rpIndName": "Nikki Wildart",
+            "eMailAdd": "nikki.wildart@noaa.gov"
+        }
+    ],
+    "distorCont": [
+        {
+            "role": "Distributor",
+            "rpIndName": "Nikki Wildart",
+            "eMailAdd": "nikki.wildart@noaa.gov"
+        }
+    ],
+    "mdContact": [
+        {
+            "role": "Author",
+            "rpIndName": "Nikki Wildart",
+            "eMailAdd": "nikki.wildart@noaa.gov"
+        }
+    ],
+    "stepProc": [
+        {
+            "role": "Processor",
+            "rpIndName": "Nikki Wildart",
+            "eMailAdd": "nikki.wildart@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Dan Lawson",
+            "eMailAdd": "dan.lawson@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Jeffrey A. Seminoff",
+            "eMailAdd": "jeffrey.seminoff@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Jennifer Schultz",
+            "eMailAdd": "jennifer.schultz@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Jonathan Molineaux",
+            "eMailAdd": "jonathan.molineaux@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Marc Romano",
+            "eMailAdd": "marc.romano@noaa.gov"
+        },
+        {
+            "role": "Processor",
+            "rpIndName": "Susan Wang",
+            "eMailAdd": "susan.wang@noaa.gov"
+        }
+    ]
+}

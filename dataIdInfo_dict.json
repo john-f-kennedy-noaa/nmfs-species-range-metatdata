@@ -1,0 +1,22 @@
+{
+    "idCitation": 0,
+    "searchKeys": 1,
+    "idPurp": 2,
+    "idAbs": 3,
+    "idCredit": 4,
+    "idStatus": 5,
+    "idPoC": 6,
+    "themeKeys": 7,
+    "placeKeys": 8,
+    "tempKeys": 9,
+    "otherKeys": 10,
+    "resConst": 12,
+    "resMaint": 13,
+    "envirDesc": 14,
+    "dataLang": 15,
+    "dataChar": 16,
+    "spatRpType": 17,
+    "dataExt": 18,
+    "": 19,
+    "tpCat": 20
+}
