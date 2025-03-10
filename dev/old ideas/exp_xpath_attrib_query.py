@@ -19,14 +19,14 @@ def main():
 
         target_xml = r'{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\Export\WhaleBlue_20201014.xml'
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         find = etree.XPath("./dqInfo/report[1]") # DQConcConsis, DQCompOm

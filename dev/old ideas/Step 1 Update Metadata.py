@@ -56,14 +56,14 @@ def pretty_print(xml):
         # Imports
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         tree = etree.parse(xml, parser=parser)
 
         etree.indent(tree, space="    ")
 
         # Pretty print
-        xml_string = etree.tostring(tree, encoding="utf-8", pretty_print=True).decode()
+        xml_string = etree.tostring(tree, encoding='UTF-8',  method='xml', pretty_print=True).decode()
 
         xml_string = xml_string.replace(' Sync="TRUE">\n', ' Sync="TRUE">')
         xml_string = xml_string.replace(' value="001">\n', ' value="001">')
@@ -201,7 +201,7 @@ def update_metadata_xml(gdb=""):
             #del metadata_xml_string
 
             # get modified XML
-            updated_xml_string = etree.tostring(old_root, encoding="utf-8")
+            updated_xml_string = etree.tostring(old_root, encoding='UTF-8')
 
             # import result back into metadata
             arcpy.AddMessage("\tSaving updated metadata with the item...")

@@ -76,18 +76,13 @@ def get_element_from_arcgis_metadata(project_gdb="", metadata_element=""):
             parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             tree = etree.parse(StringIO(metadata_xml_string))
             del parser
-            #print(etree.tostring(tree, encoding="utf-8", pretty_print=True).decode())
+            #print(etree.tostring(tree, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
             element = tree.xpath(f".//{metadata_element}")
             for elem in element:
                 etree.indent(elem, space="  ")
-                print(etree.tostring(elem, encoding="utf-8", pretty_print=True).decode())
-                #reports = elem.xpath(f"./report")
-                #for report in reports:
-                #    print(etree.tostring(report, encoding="utf-8", pretty_print=True).decode())
-                #    del report
-                #del reports
-                #del elem
+                print(etree.tostring(elem, encoding='UTF-8',  method='xml', pretty_print=True).decode())
+                del elem
 
             del element
             del tree
@@ -167,16 +162,17 @@ if __name__ == '__main__':
         sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
         today = date.today()
-        date_string = today.strftime("%Y-%m-%d")
+        date_string = date.today().strftime("%Y-%m-%d")
 
         project_folder  = rf"{os.path.dirname(os.path.dirname(__file__))}"
-        #project_name    = "National Mapper"
-        project_name    = "NMFS_ESA_Range"
+        project_name    = "National Mapper"
+        #project_name    = "NMFS_ESA_Range"
         project_gdb     = rf"{project_folder}\{project_name}.gdb"
 
         #metadata_element = "dqInfo"
         #metadata_element = "dqScope"
-        metadata_element = "dataIdInfo"
+        #metadata_element = "dataIdInfo"
+        metadata_element = "distInfo"
 
         main(project_gdb=project_gdb, metadata_element=metadata_element)
 

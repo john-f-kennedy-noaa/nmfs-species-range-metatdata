@@ -77,7 +77,7 @@ def export_metadata(project_gdb=""):
 
             # https://stackoverflow.com/questions/78713666/find-the-index-of-a-child-in-lxml
             # Parse the XML
-            parser = etree.XMLParser(remove_blank_text=True)
+            parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             # Parse the XML
             tree = etree.parse(export_xml_metadata_path,  parser=parser)
             del parser
@@ -92,11 +92,11 @@ def export_metadata(project_gdb=""):
             # ET.indent(tree, space='....')  # clean all indentations - use 4 dots - looks like TOC (Table Of Contents) in book :)
             # ET.indent(tree)   # clean all indentations - use (default) 2 spaces
             #etree.indent(tree, space='    ')
-            #print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+            #print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
             #etree.indent(root, space='    ')
             #etree.dump(root)
             etree.indent(root, space='    ')
-            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode()
+            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode()
             try:
                 with open(export_xml_metadata_path, "w") as f:
                     f.write(xml_string)

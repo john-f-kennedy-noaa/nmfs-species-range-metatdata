@@ -22,7 +22,7 @@ tree = etree.XML(data)
 
 etree.indent(tree, space="    ")
 
-print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
 #for elem in tree.xpath('//group[text()="Iota"]/../preceding-sibling::*'):
 #    elem.attrib['bgstyle'] = 'green'
@@ -39,7 +39,7 @@ print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").d
 #    else:
 #        print(f"Ancestor: '{elem.tag}'")
 
-#print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+#print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
 #for elem in tree.xpath('//group/ancestor::*'):
 #    print(f"Common ancestor: {elem.tag}")

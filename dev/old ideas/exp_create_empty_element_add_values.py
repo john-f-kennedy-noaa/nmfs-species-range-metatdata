@@ -50,10 +50,10 @@ def main():
                 element = root.find(f"./{key}")
                 element.text = user_dict[key]
 
-        #xml_string = etree.tostring(root, encoding="UTF-8", xml_declaration=True)
+        #xml_string = etree.tostring(root, encoding='UTF-8', xml_declaration=True)
         #print(xml_string.decode(), end='')
-        #print(etree.tostring(root, method='html', encoding="UTF-8", xml_declaration=True, pretty_print=True).decode(), end='')
-        print(etree.tostring(root, encoding="UTF-8", xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(root, method='html', encoding='UTF-8', xml_declaration=True, pretty_print=True).decode(), end='')
+        print(etree.tostring(root, encoding='UTF-8', xml_declaration=True, pretty_print=True).decode())
 
 
 

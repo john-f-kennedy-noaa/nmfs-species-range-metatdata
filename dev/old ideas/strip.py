@@ -1,12 +1,12 @@
 from lxml import etree
 
 
-parser = etree.XMLParser(remove_blank_text=True)
+parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
 # Parse the XML
 tree = etree.parse("species_range_boilerplate.xml", parser=parser)
 
 # Pretty print
-xml_string = etree.tostring(tree, encoding="utf-8", pretty_print=True).decode()
+xml_string = etree.tostring(tree, encoding='UTF-8',  method='xml', pretty_print=True).decode()
 
 
 print(xml_string)

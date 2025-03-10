@@ -20,13 +20,14 @@ import arcpy  # third-parties second
 
 def parse_xml_file_format_and_save(xml_file=""):
     try:
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+        # Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+##                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
 
         from lxml import etree
         parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
@@ -38,7 +39,7 @@ def parse_xml_file_format_and_save(xml_file=""):
             del child
         del root
         etree.indent(tree, space='   ')
-        tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+        tree.write(xml_file, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
         del tree
         del xml_file, etree
         del root_dict
@@ -54,16 +55,17 @@ def parse_xml_file_format_and_save(xml_file=""):
 
 def print_xml_file(xml_file=""):
     try:
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+        # Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+##                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
 
         from lxml import etree
-        parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
         del parser
         root = tree.getroot()
@@ -72,7 +74,7 @@ def print_xml_file(xml_file=""):
             del child
         del root
         etree.indent(tree, space='   ')
-        print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        print(etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         del tree
         del xml_file, etree
         del root_dict
@@ -237,7 +239,7 @@ def main():
         root = etree.fromstring(xml)
         #print("After Copy")
         etree.indent(root, space="  ")
-        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         del root
 
         _xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
@@ -246,9 +248,10 @@ def main():
         del parser
         root = tree.getroot()
         etree.indent(root, space="  ")
-        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         del root, _xml
 
+# Moved dictionaries to JSON
 ##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
 ##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
 ##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
@@ -273,7 +276,7 @@ def main():
 ##            print(etree.tostring(root, pretty_print=True).decode())
 ##            del root
 
-##        dataset_md.importMetadata(etree.XML(xml), "ARCGIS_METADATA")
+##        dataset_md.importMetadata(etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True)), "ARCGIS_METADATA")
 ##        dataset_md.save()
 ##        root = etree.fromstring(dataset_md.xml)
 ##        print("Species Range Template after Import Metadata")
@@ -287,7 +290,7 @@ def main():
 ##        root = etree.fromstring(dataset_md.xml)
 ##        print("Species Range Template after synchronize CREATED")
 ##        etree.indent(root, space="  ")
-##        print(etree.tostring(root, pretty_print=True, method='html', encoding="utf-8").decode())
+##        print(etree.tostring(root, pretty_print=True, method='html', encoding='UTF-8').decode())
 ##        del root
 
     ##        # Parse the XML
@@ -304,7 +307,7 @@ def main():
     ##        #print(etree.tostring(eainfo_root, pretty_print=True).decode())
 
         # Pretty print
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
 
 ##        dataset_md.save()
 ##        root = etree.fromstring(dataset_md.xml)
@@ -462,7 +465,7 @@ def main():
         #root = etree.fromstring(xml)
         #print(f"{root.getroot()}")
         #etree.indent(root, space="  ")
-        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         #del root
 
         _xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
@@ -471,7 +474,7 @@ def main():
         del parser
         root = tree.getroot()
         etree.indent(root, space="  ")
-        #print(etree.tostring(root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         #del root, _xml
 
         #for event, elem in etree.iterparse(_xml, events=('start', 'end')):

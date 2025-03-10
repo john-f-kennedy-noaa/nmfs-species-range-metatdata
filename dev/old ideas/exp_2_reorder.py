@@ -22,7 +22,7 @@ def main():
         """)
     canvas.shape = [canvas.shape[1], canvas.shape[0], canvas.shape[2]]
     etree.indent(canvas, space="    ")
-    print(etree.tostring(canvas, pretty_print=True, method='html', encoding="utf-8").decode())
+    print(etree.tostring(canvas, pretty_print=True, method='html', encoding='UTF-8').decode())
 
     xml = objectify.fromstring("""<metadata>
     <Esri>Esri</Esri>
@@ -75,10 +75,10 @@ def main():
                     }
 # https://stackoverflow.com/questions/8385358/lxml-sorting-tag-order
 # lxml etree order children under parent
-##    xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding="utf-8").decode()
+##    xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding='UTF-8').decode()
 ##    #print(xml_string)
 ##
-##    doc = etree.XML(xml_string, etree.XMLParser(remove_blank_text=True))
+##    doc = etree.XML(xml_string, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##
 ##    print(len(doc.xpath('//*[./*]')))
 ##    print(doc.xpath('//*[./*]'))
@@ -88,14 +88,14 @@ def main():
 ##        parent[:] = sorted(parent,key=lambda x: tag_position_dict[x.tag])
 ##    etree.indent(doc, space="  ")
 ##    #print(etree.tostring(doc, pretty_print=True))
-##    print(etree.tostring(doc, pretty_print=True, method='html', encoding="utf-8").decode())
+##    print(etree.tostring(doc, pretty_print=True, method='html', encoding='UTF-8').decode())
 
     #xml
     #etree.indent(xml, space="  ")
-    xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding="utf-8").decode()
+    xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding='UTF-8').decode()
     #print(xml_string)
 
-    doc = etree.XML(xml_string, etree.XMLParser(remove_blank_text=True))
+    doc = etree.XML(xml_string, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 
     for parent in doc.xpath('.'): # Search for parent elements
         #print(type(parent))
@@ -103,7 +103,7 @@ def main():
         parent[:] = sorted(parent,key=lambda x: tag_position_dict[x.tag])
     etree.indent(doc, space="  ")
     #print(etree.tostring(doc, pretty_print=True))
-    print(etree.tostring(doc, encoding="utf-8", pretty_print=True).decode())
+    print(etree.tostring(doc, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
     # Parse an XML document
     #tree = etree.fromstring("<root><item1/><item2/><item3/></root>")
@@ -122,7 +122,7 @@ def main():
     for child in root.xpath("."):
         child[:] = sorted(child, key=lambda x: tag_position_dict[x.tag])
 
-    #print(etree.tostring(root, encoding="utf-8", pretty_print=True).decode())
+    #print(etree.tostring(root, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
     # Get the second item element
     #item2 = tree.xpath("mdChar")[0]
@@ -163,7 +163,7 @@ def main():
 ##         <X03>3</X03>
 ##      </X>'''
 
-    doc = etree.XML(data,etree.XMLParser(remove_blank_text=True))
+    doc = etree.XML(data,etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
     for parent in doc.xpath('//*[./*]'): # Search for parent elements
         parent[:] = sorted(parent,key=lambda x: x.tag)
 
@@ -172,7 +172,7 @@ def main():
 
     etree.indent(doc, space="  ")
     #print(etree.tostring(doc, pretty_print=True))
-    #print(etree.tostring(doc, pretty_print=True, method='html', encoding="utf-8").decode())
+    #print(etree.tostring(doc, pretty_print=True, method='html', encoding='UTF-8').decode())
 
     #print(doc.tag)
     #print(type(doc))

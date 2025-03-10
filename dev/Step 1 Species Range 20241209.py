@@ -83,14 +83,14 @@ def pretty_format_xml_file(xml=""):
         #arcpy.AddMessage(f"###--->>> Converting metadata file: {os.path.basename(xml)} to pretty format")
         if os.path.isfile(xml):
 
-            parser = etree.XMLParser(remove_blank_text=True)
+            parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             # Parse the XML
             tree = etree.parse(xml, parser=parser)
 
             etree.indent(tree, space="    ")
 
             # Pretty print
-            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode()
+            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode()
 
             xml_string = xml_string.replace(' code="0">\n', ' code="0">')
             xml_string = xml_string.replace(' code="4">\n', ' code="4">')
@@ -1335,7 +1335,7 @@ def update_metadata(project_gdb=""):
             del dqInfo_old_child, dqInfo_new_child
 
             # get modified XML
-            updated_xml_string = etree.tostring(old_root, encoding="utf-8")
+            updated_xml_string = etree.tostring(old_root, encoding='UTF-8')
             del old_root
 
             with open(export_xml_metadata_path_updated, 'wb') as f:

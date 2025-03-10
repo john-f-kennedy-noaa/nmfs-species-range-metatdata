@@ -346,8 +346,8 @@ def main(project_folder=""):
             if "changes" in locals().keys():
                 if changes > 0:
                     # get modified XML
-                    #updated_target_xml_string = etree.tostring(target_root, encoding="utf-8")
-                    updated_target_xml_string = etree.tostring(target_tree, encoding="utf-8")
+                    #updated_target_xml_string = etree.tostring(target_root, encoding='UTF-8')
+                    updated_target_xml_string = etree.tostring(target_tree, encoding='UTF-8')
 
                     # import result back into metadata
                     print("Saving updated metadata with the item...", flush=True)

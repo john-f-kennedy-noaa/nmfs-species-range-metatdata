@@ -29,7 +29,7 @@ def main():
 
     _eainfo_root = root.xpath('./eainfo')[0]
 
-    #print(etree.tostring(_eainfo_root, encoding="utf-8", pretty_print=True).decode())
+    #print(etree.tostring(_eainfo_root, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
     eainfo_xml_file = r"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata\eainfo.xml"
     eainfo_root = etree.parse(eainfo_xml_file)

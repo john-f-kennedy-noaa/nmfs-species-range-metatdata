@@ -42,7 +42,7 @@ def main(project_folder=str()):
             print(f"\tProcessing {os.path.basename(xml_file)}")
             try:
                 #pretty_format_xml_file(xml_file)
-                parse_xml_file_format_and_save(xml_file)
+                parse_xml_file_format_and_save(project_folder, xml_file)
             except Warning as w:
                 print(f"{w} captured in the '{inspect.stack()[0][3]}' function")
             except Exception as e:
@@ -74,8 +74,8 @@ def main(project_folder=str()):
 if __name__ == '__main__':
     try:
         #project_folder = rf"{os.path.dirname(os.path.dirname(__file__))}"
-        #project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python"
-        project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata"
+        project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python"
+        #project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata"
         main(project_folder=project_folder)
     except Warning as w:
         print(w)

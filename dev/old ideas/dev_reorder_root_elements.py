@@ -33,14 +33,14 @@ def root_sort(target_xml=""):
     try:
         from lxml import objectify, etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         global tag_position_dict
@@ -48,16 +48,16 @@ def root_sort(target_xml=""):
         # lxml etree order children under parent
         #xml
         #etree.indent(xml, space="  ")
-        #xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding="utf-8").decode()
+        #xml_string = etree.tostring(xml, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(xml_string)
 
-        #doc = etree.XML(xml_string, etree.XMLParser(remove_blank_text=True))
+        #doc = etree.XML(xml_string, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
         #for parent in target_tree.xpath('//*[./*]'): # Search for parent elements
         #    print(parent.tag)
             #parent[:] = sorted(parent,key=lambda x: tag_position_dict[x.tag])
         #etree.indent(target_tree, space="  ")
         #print(etree.tostring(doc, pretty_print=True))
-        #print(etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode())
+        #print(etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
         for parent in target_tree.xpath('//*[./*]'): # Search for parent elements
             if parent.tag in tag_position_dict:
@@ -292,7 +292,7 @@ def root_sort(target_xml=""):
 ##
 ##        print(etree.tostring(canvas, pretty_print=True))
 
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
 ##        with open(target_xml, "w") as f:
@@ -322,14 +322,14 @@ def dqInfo_sort(target_xml=""):
     try:
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         target_elements = target_tree.find("./dqInfo").getchildren()
@@ -408,14 +408,14 @@ def dataLineage_sort(target_xml=""):
     try:
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         target_elements = target_root.find(".//dataLineage").getchildren()

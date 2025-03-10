@@ -31,10 +31,10 @@ def list_all_lements(metadata_xml=""):
 ##        all_elements = list(xml.iter())
 ##        print [element.tag for element in all_elements]
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
 
         if os.path.isfile(metadata_xml):
-            parser = etree.XMLParser(remove_blank_text=True)
+            parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             # Parse the XML File
             tree = etree.parse(metadata_xml, parser=parser)
             etree.indent(tree, space="    ")
@@ -47,7 +47,7 @@ def list_all_lements(metadata_xml=""):
         del parser
 
         # Pretty print
-        #print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+        #print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
         # Or, if you want to have a list of all the descendents
 
@@ -89,11 +89,11 @@ def list_children_of_parent(metadata_xml="", find_element=""):
         #from arcpy import metadata as md
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
 
         if os.path.isfile(metadata_xml):
             print(os.path.basename(metadata_xml), flush=True)
-            parser = etree.XMLParser(remove_blank_text=True)
+            parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             # Parse the XML File
             tree = etree.parse(metadata_xml, parser=parser)
             #etree.indent(tree, space="    ")
@@ -117,7 +117,7 @@ def list_children_of_parent(metadata_xml="", find_element=""):
 ##            target_root = target_tree.getroot()
 
         # Pretty print
-        #print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+        #print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
         if len(root) > 0:
             # If you want to visit all of the descendants
@@ -127,7 +127,7 @@ def list_children_of_parent(metadata_xml="", find_element=""):
                 element_get_path = tree.getpath(element)
                 element_x_path = tree.xpath(element_get_path)
                 print(f"\t\t{element_get_path}", flush=True)
-                xml_string = etree.tostring(element_x_path[0], method='html', encoding="utf-8").decode().replace("\t", "")
+                xml_string = etree.tostring(element_x_path[0], method='html', encoding='UTF-8').decode().replace("\t", "")
                 #print("\t\t\t" + xml_string, flush=True)
                 #print(f"\t\t\t{xml_string}", flush=True)
                 # Get the element at the end of the path using xpath. Return list

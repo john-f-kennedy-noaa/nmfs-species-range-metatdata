@@ -15,7 +15,7 @@ xml = '''<root>
 </foo>
 </root>'''
 
-tree = etree.XML(xml)
+tree = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 
 print("Not Descendant foo")
 foos = tree.xpath('//foo[descendant::bar[@attr="val"] and not(descendant::foo)]')
@@ -34,7 +34,7 @@ for foo in foos:
 
 etree.indent(tree, space="    ")
 
-print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
 #for elem in tree.xpath('//foo[descendant::bar[@attr="val"] and not(descendant::foo)]'):
 #    print(f"Name: {elem.attrib}")

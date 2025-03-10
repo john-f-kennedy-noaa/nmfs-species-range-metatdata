@@ -249,7 +249,7 @@ def main():
 
     #print(etree.tostring(root, method='text'))  # doctest: +ELLIPSIS
 
-    print(etree.tostring(root, method='text', encoding="UTF-8"))
+    print(etree.tostring(root, method='text', encoding='UTF-8'))
 
     print(etree.tostring(root, encoding='unicode', method='text'))
 
@@ -303,7 +303,7 @@ def main():
     print(etree.tostring(root))
 
     print("\nParser objects\n")
-    parser = etree.XMLParser(remove_blank_text=True)  # lxml.etree only!
+    parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)  # lxml.etree only!
     root = etree.XML("<root>  <a/>   <b>  </b>     </root>", parser)
     print(etree.tostring(root))
 

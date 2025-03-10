@@ -456,7 +456,7 @@ def create_feature_class2(gdb=""):
         #tree = etree.parse(StringIO(metadata_xml_string))
 
         #print(etree.tostring(tree, pretty_print=True).decode())
-        #print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+        #print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
         #del tree
         #del metadata_xml_string
@@ -489,7 +489,7 @@ def create_feature_class2(gdb=""):
 ##        #del metadata_xml_string
 ##
 ##        # get modified XML
-##        updated_xml_string = etree.tostring(eainfo_old_root, encoding="utf-8")
+##        updated_xml_string = etree.tostring(eainfo_old_root, encoding='UTF-8')
 ##        del eainfo_old_root
 ##
 ##        # import result back into metadata

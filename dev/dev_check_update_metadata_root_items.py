@@ -76,24 +76,25 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "Binary"     : 16,}
-
-
-        esri_dict ={"CreaDate" : 0,  "CreaTime" : 1, "ArcGISFormat" : 2,
-                    "ArcGISstyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
-                    "itemProps" : 0, "itemName" : 0, "imsContentType" : 1,
-                    "nativeExtBox" : 2, "westBL" : 0, "eastBL" : 1, "southBL" : 2,
-                    "northBL" : 3, "exTypeCode" : 4, "coordRef" : 1, "type" : 0,
-                    "geogcsn" : 2, "csUnits" : 3, "peXml" : 4, "SyncDate" : 6,
-                    "SyncTime" : 7, "ModDate" : 8, "ModTime" : 9,
-                    "scaleRange" : 10, "minScale" : 11, "maxScale" : 12,
-                    "ArcGISProfile" : 13,}
+# Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo"  :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"    :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"     :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "mdStanName"  : 10, "mdStanVer"   : 11,
+##                     "refSysInfo" : 12, "spatRepInfo" : 13, "spdoinfo"    : 14,
+##                     "dqInfo"     : 15, "distInfo"    : 16, "eainfo"      : 17,
+##                     "contInfo"   : 18, "spref"       : 19, "spatRepInfo" : 20,
+##                     "dataSetFn"  : 19, "Binary"      : 100,}
+##
+##        esri_dict ={"CreaDate" : 0,  "CreaTime" : 1, "ArcGISFormat" : 2,
+##                    "ArcGISstyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
+##                    "itemProps" : 0, "itemName" : 0, "imsContentType" : 1,
+##                    "nativeExtBox" : 2, "westBL" : 0, "eastBL" : 1, "southBL" : 2,
+##                    "northBL" : 3, "exTypeCode" : 4, "coordRef" : 1, "type" : 0,
+##                    "geogcsn" : 2, "csUnits" : 3, "peXml" : 4, "SyncDate" : 6,
+##                    "SyncTime" : 7, "ModDate" : 8, "ModTime" : 9,
+##                    "scaleRange" : 10, "minScale" : 11, "maxScale" : 12,
+##                    "ArcGISProfile" : 13,}
 
         # Parse the XML
         parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
@@ -108,7 +109,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             del child
 
         #etree.indent(target_root, space="    ")
-        #print(etree.tostring(target_root, xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(target_root, xml_declaration=True, encoding='UTF-8').decode())
 
         # ######################################################################
         #               ###--->>> Esri section Start <<<---###
@@ -118,7 +119,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        if len(Esri) == 0:
 ##            xml = '''<Esri><CreaDate>20250201</CreaDate><CreaTime>12234100</CreaTime><ArcGISFormat>1.0</ArcGISFormat><ArcGISstyle>ISO 19139 Metadata Implementation Specification</ArcGISstyle><SyncOnce>FALSE</SyncOnce><DataProperties><itemProps><itemName Sync="TRUE">SpeciesRangeTemplate</itemName><imsContentType Sync="TRUE">002</imsContentType><nativeExtBox><westBL Sync="TRUE">-82.000000</westBL><eastBL Sync="TRUE">-72.000000</eastBL><southBL Sync="TRUE">11.000000</southBL><northBL Sync="TRUE">24.000000</northBL><exTypeCode Sync="TRUE">1</exTypeCode></nativeExtBox></itemProps><coordRef><type Sync="TRUE">Geographic</type><geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn><csUnits Sync="TRUE">Angular Unit: Degree (0.017453)</csUnits><peXml Sync="TRUE">&lt;GeographicCoordinateSystem xsi:type='typens:GeographicCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.4.0'&gt;&lt;WKT&gt;GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433],AUTHORITY[&amp;quot;EPSG&amp;quot;,4326]]&lt;/WKT&gt;&lt;XOrigin&gt;-400&lt;/XOrigin&gt;&lt;YOrigin&gt;-400&lt;/YOrigin&gt;&lt;XYScale&gt;999999999.99999988&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;8.983152841195215e-09&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;LeftLongitude&gt;-180&lt;/LeftLongitude&gt;&lt;WKID&gt;4326&lt;/WKID&gt;&lt;LatestWKID&gt;4326&lt;/LatestWKID&gt;&lt;/GeographicCoordinateSystem&gt;</peXml></coordRef></DataProperties><SyncDate>20250202</SyncDate><SyncTime>14404400</SyncTime><ModDate>20250202</ModDate><ModTime>14404400</ModTime><scaleRange><minScale>150000000</minScale><maxScale>5000</maxScale></scaleRange><ArcGISProfile>ISO19139</ArcGISProfile></Esri>'''
 ##            position = root_dict["Esri"]
-##            esri_root = etree.XML(xml)
+##            esri_root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##            #print("Inserting Esri at position: {position}")
 ##            idCitation.insert(position, esri_root)
 ##            target_root.insert(position, element)
@@ -136,103 +137,103 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        else:
 ##            pass
 
-        # Check for ArcGISstyle
-        Esri = target_tree.xpath(f"./Esri")[0]
-        ArcGISstyle = Esri.xpath(f"./ArcGISstyle")
-        if len(ArcGISstyle) == 0:
-            position = esri_dict["ArcGISstyle"]
-            #print(f"Inserting ArcGISstyle at position {position}")
-            ArcGIS_Style = etree.SubElement(Esri, "ArcGISstyle")
-            ArcGIS_Style.text = "ISO 19139 Metadata Implementation Specification"
-            Esri.insert(position, ArcGIS_Style)
-            del position, ArcGIS_Style
-        elif len(ArcGISstyle) == 1:
-            position = esri_dict["ArcGISstyle"]
-            #print(f"{len(ArcGISstyle)} {ArcGISstyle[0].tag} element is found with value: {position}")
-            ArcGISstyle[0].text = "ISO 19139 Metadata Implementation Specification"
-            del position
-        elif len(ArcGISstyle) > 1:
-            #print(f"Removing {len(ArcGISstyle)-1} 'ArcGISstyle' elements")
-            for i in range(1, len(ArcGISstyle)):
-                Esri.remove(ArcGISstyle[i])
-                i+=1
-                del i
-        else:
-            pass
-        del Esri, ArcGISstyle
+##        # Check for ArcGISstyle
+##        Esri = target_tree.xpath(f"./Esri")[0]
+##        ArcGISstyle = Esri.xpath(f"./ArcGISstyle")
+##        if len(ArcGISstyle) == 0:
+##            position = esri_dict["ArcGISstyle"]
+##            #print(f"Inserting ArcGISstyle at position {position}")
+##            ArcGIS_Style = etree.SubElement(Esri, "ArcGISstyle")
+##            ArcGIS_Style.text = "ISO 19139 Metadata Implementation Specification"
+##            Esri.insert(position, ArcGIS_Style)
+##            del position, ArcGIS_Style
+##        elif len(ArcGISstyle) == 1:
+##            position = esri_dict["ArcGISstyle"]
+##            #print(f"{len(ArcGISstyle)} {ArcGISstyle[0].tag} element is found with value: {position}")
+##            ArcGISstyle[0].text = "ISO 19139 Metadata Implementation Specification"
+##            del position
+##        elif len(ArcGISstyle) > 1:
+##            #print(f"Removing {len(ArcGISstyle)-1} 'ArcGISstyle' elements")
+##            for i in range(1, len(ArcGISstyle)):
+##                Esri.remove(ArcGISstyle[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del Esri, ArcGISstyle
 
-        # ###--->>> Deletes an unwanted element
-        Esri = target_tree.xpath(f"./Esri")[0]
-        itemSize = Esri.xpath(f".//itemSize")
-        if len(itemSize) == 0:
-            pass
-        elif len(itemSize) == 1:
-            Esri.remove(itemSize)
-        elif len(itemSize) > 1:
-            #print(f"Removing {len(itemSize)-1} 'itemSize' elements")
-            for i in range(1, len(itemSize)):
-                Esri.remove(itemSize[i])
-                i+=1
-                del i
-        else:
-            pass
-        del itemSize
-        del Esri
-        # ###--->>> Deletes an unwanted element
+##        # ###--->>> Deletes an unwanted element
+##        Esri = target_tree.xpath(f"./Esri")[0]
+##        itemSize = Esri.xpath(f".//itemSize")
+##        if len(itemSize) == 0:
+##            pass
+##        elif len(itemSize) == 1:
+##            Esri.remove(itemSize)
+##        elif len(itemSize) > 1:
+##            #print(f"Removing {len(itemSize)-1} 'itemSize' elements")
+##            for i in range(1, len(itemSize)):
+##                Esri.remove(itemSize[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del itemSize
+##        del Esri
+##        # ###--->>> Deletes an unwanted element
 
-        # Check for scaleRange
-        Esri = target_tree.xpath(f"./Esri")[0]
-        scaleRange = Esri.xpath(f"./scaleRange")
-        if len(scaleRange) == 0:
-            #print("Inserting scaleRange, minScale, maxScale")
-            scale_range = etree.SubElement(Esri, "scaleRange")
-            Esri.insert(esri_dict["scaleRange"], scale_range)
-            minScale    = etree.SubElement(scale_range, "minScale")
-            minScale.text = '150000000'
-            scaleRange.insert(esri_dict["minScale"], minScale)
-            maxScale    = etree.SubElement(scale_range, "maxScale")
-            maxScale.text = '5000'
-            scaleRange.insert(esri_dict["maxScale"], maxScale)
-            # print(etree.tostring(scale_range, pretty_print=True).decode())
-            del scale_range, minScale, maxScale
-        elif len(scaleRange) == 1:
-            pass
-        elif len(scaleRange) > 1:
-            print(f"Removing {len(scaleRange)-1} 'scaleRange' elements")
-            for i in range(1, len(scaleRange)):
-                Esri.remove(scaleRange[i])
-                i+=1
-                del i
-        else:
-            pass
-        #print(etree.tostring(Esri, encoding="utf-8", pretty_print=True).decode())
-        del scaleRange, Esri
+##        # Check for scaleRange
+##        Esri = target_tree.xpath(f"./Esri")[0]
+##        scaleRange = Esri.xpath(f"./scaleRange")
+##        if len(scaleRange) == 0:
+##            #print("Inserting scaleRange, minScale, maxScale")
+##            scale_range = etree.SubElement(Esri, "scaleRange")
+##            Esri.insert(esri_dict["scaleRange"], scale_range)
+##            minScale    = etree.SubElement(scale_range, "minScale")
+##            minScale.text = '150000000'
+##            scaleRange.insert(esri_dict["minScale"], minScale)
+##            maxScale    = etree.SubElement(scale_range, "maxScale")
+##            maxScale.text = '5000'
+##            scaleRange.insert(esri_dict["maxScale"], maxScale)
+##            # print(etree.tostring(scale_range, pretty_print=True).decode())
+##            del scale_range, minScale, maxScale
+##        elif len(scaleRange) == 1:
+##            pass
+##        elif len(scaleRange) > 1:
+##            print(f"Removing {len(scaleRange)-1} 'scaleRange' elements")
+##            for i in range(1, len(scaleRange)):
+##                Esri.remove(scaleRange[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #print(etree.tostring(Esri, encoding='UTF-8',  method='xml', pretty_print=True).decode())
+##        del scaleRange, Esri
 
-        # Check for ArcGISProfile
-        Esri = target_tree.xpath(f"./Esri")[0]
-        ArcGISProfile = Esri.xpath(f"./ArcGISProfile")
-        if len(ArcGISProfile) == 0:
-            #print("Inserting ArcGISProfile")
-            ArcGIS_Profile = etree.SubElement(Esri, "ArcGISProfile")
-            ArcGIS_Profile.text = 'ISO19139'
-            Esri.insert(esri_dict["ArcGISProfile"], ArcGIS_Profile)
-            del ArcGIS_Profile
-        elif len(ArcGISProfile) == 1:
-            ArcGISProfile[0].text = 'ISO19139'
-            #Esri.insert(esri_dict["ArcGISProfile"], ArcGISProfile[0])
-        elif len(ArcGISProfile) > 1:
-            #print(f"Removing {len(ArcGISProfile)-1} 'ArcGISProfile' elements")
-            for i in range(1, len(ArcGISProfile)):
-                Esri.remove(ArcGISProfile[i])
-                i+=1
-                del i
-        else:
-            pass
-        #print(etree.tostring(Esri, encoding="utf-8").decode())
-        del ArcGISProfile
-        del Esri
-
-        del esri_dict
+##        # Check for ArcGISProfile
+##        Esri = target_tree.xpath(f"./Esri")[0]
+##        ArcGISProfile = Esri.xpath(f"./ArcGISProfile")
+##        if len(ArcGISProfile) == 0:
+##            #print("Inserting ArcGISProfile")
+##            ArcGIS_Profile = etree.SubElement(Esri, "ArcGISProfile")
+##            ArcGIS_Profile.text = 'ISO19139'
+##            Esri.insert(esri_dict["ArcGISProfile"], ArcGIS_Profile)
+##            del ArcGIS_Profile
+##        elif len(ArcGISProfile) == 1:
+##            ArcGISProfile[0].text = 'ISO19139'
+##            #Esri.insert(esri_dict["ArcGISProfile"], ArcGISProfile[0])
+##        elif len(ArcGISProfile) > 1:
+##            #print(f"Removing {len(ArcGISProfile)-1} 'ArcGISProfile' elements")
+##            for i in range(1, len(ArcGISProfile)):
+##                Esri.remove(ArcGISProfile[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        #print(etree.tostring(Esri, encoding='UTF-8').decode())
+##        del ArcGISProfile
+##        del Esri
+##
+##        del esri_dict
 
         # ######################################################################
         #               ###--->>> Esri section End <<<---###
@@ -304,7 +305,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         idCitation_dict = {"idCitation" : 0, "resTitle" : 0, "resAltTitle" : 1,
                            "collTitle"  : 2, "presForm" : 3, "PresFormCd"  : 0,
                            "fgdcGeoform" : 1, "date" : 4, "createDate" : 0,
-                           "pubDate"    : 1, "revisedDate" : 2, "citRespParty"  : 6,
+                           "pubDate"    : 1, "reviseDate" : 2, "citRespParty"  : 6,
                            }
 
         resTitle = idCitation.xpath(f"./resTitle")
@@ -334,7 +335,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del resTitle
 
         # ######################################################################
@@ -367,7 +368,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             print(f"May need to delete: {len(resAltTitle)} resAltTitle")
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del resAltTitle
 
         # ######################################################################
@@ -397,7 +398,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del collTitle
 
         # ######################################################################
@@ -422,7 +423,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             print(f"May need to delete: {len(fgdcGeoform)} fgdcGeoform")
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del fgdcGeoform, presForm
 
         # ######################################################################
@@ -465,7 +466,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             print(f"May needed to be deleted {len(date)} date")
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del date
 
         # ######################################################################
@@ -511,7 +512,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 </citRespParty>'''
 
         # Create an XML string
-        citRespParty_root = etree.XML(xml)
+        citRespParty_root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
         citRespParty_email = citRespParty_root.xpath(f".//eMailAdd")[0].text
 
         contact_dict = {"editorSource" : 0, "editorDigest" : 1,"rpIndName" : 2,
@@ -582,7 +583,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         del citRespParty_root, citRespParty_email
         del idCitation_dict
 
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del xml, citRespParty
         del idCitation
 
@@ -600,7 +601,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             #print(f"Inserting tpCat at {position}")
             for key in tpCat_dict:
                 xml = tpCat_dict[key]
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 dataIdInfo.insert(position, root)
                 position+=1
                 del root, xml, key
@@ -623,7 +624,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##            #print(f"Updating tpCat at {position}")
 ##            for key in tpCat_dict:
 ##                xml = tpCat_dict[key]
-##                root = etree.XML(xml)
+##                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##                dataIdInfo.insert(position, root)
 ##                position+=1
 ##                del root, xml, key
@@ -631,8 +632,8 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         else:
             pass
-        #print(etree.tostring(Esri, encoding="utf-8").decode())
-        #print(etree.tostring(dataIdInfo, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(Esri, encoding='UTF-8').decode())
+        #print(etree.tostring(dataIdInfo, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del tpCat, tpCat_dict
 
         del dataIdInfo
@@ -650,7 +651,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(mdChar) == 0:
             #print(f"Inserting 'mdChar' at position: {root_dict['mdChar']}")
             xml = '<mdChar><CharSetCd value="004" Sync="TRUE"></CharSetCd></mdChar>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['mdChar']
             target_root.insert(position, root)
             del position, root, xml
@@ -667,7 +668,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 del i
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del mdChar
 
         # ######################################################################
@@ -712,7 +713,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         </citRespParty>'''
 
         # Create an XML string
-        mdContact_root = etree.XML(xml)
+        mdContact_root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
         mdContact_email = mdContact_root.xpath(f".//eMailAdd")[0].text
         del xml
 
@@ -725,7 +726,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(mdContact) == 0:
             #print(f"Inserting 'mdContact' at position: {root_dict['mdContact']}")
             xml = '<mdContact Sync="TRUE"></mdContact>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['mdContact']
             target_root.insert(position, root)
             del position, root, xml
@@ -743,7 +744,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 del i
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
 ##   #
 ##   #        elif len(citRespParty) == 1:
@@ -793,7 +794,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##   #        else:
 ##   #            pass
 ##   #        del new_cit_resp_party_email, new_cit_resp_party_root
-##   #        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+##   #        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##   #        del xml, citRespParty
 
         del contact_dict, mdContact_root, mdContact_email
@@ -806,7 +807,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(mdDateSt) == 0:
             #print(f"Inserting 'mdDateSt' at position: {root_dict['mdDateSt']}")
             xml = '<mdDateSt Sync="TRUE">20250129</mdDateSt>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['mdDateSt']
             target_root.insert(position, root)
             del position, root, xml
@@ -824,86 +825,86 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 del i
         else:
             pass
-        #print(etree.tostring(idCitation, encoding="utf-8", pretty_print=True).decode())
+        #print(etree.tostring(idCitation, encoding='UTF-8',  method='xml', pretty_print=True).decode())
         del mdDateSt
 
-        mdFileID = target_tree.xpath(f"./mdFileID")
-        if len(mdFileID) == 0:
-            #print(f"Inserting 'mdFileID' at position: {root_dict['mdFileID']}")
-            xml = '<mdFileID>gov.noaa.nmfs.inport:</mdFileID>'
-            root = etree.XML(xml)
-            position = root_dict['mdFileID']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdFileID) == 1:
-            #print(f"Updating '{mdFileID[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdFileID')[0])}")
-            position = root_dict['mdFileID']
-            target_root.insert(position, mdFileID[0])
-            del position
-        elif len(mdFileID) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdFileID)-1} mdFileID elements")
-            for i in range(1, len(mdFileID)):
-                target_root.remove(mdFileID[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdFileID
+##        mdFileID = target_tree.xpath(f"./mdFileID")
+##        if len(mdFileID) == 0:
+##            #print(f"Inserting 'mdFileID' at position: {root_dict['mdFileID']}")
+##            xml = '<mdFileID>gov.noaa.nmfs.inport:</mdFileID>'
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+##            position = root_dict['mdFileID']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdFileID) == 1:
+##            #print(f"Updating '{mdFileID[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./mdFileID')[0])}")
+##            position = root_dict['mdFileID']
+##            target_root.insert(position, mdFileID[0])
+##            del position
+##        elif len(mdFileID) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdFileID)-1} mdFileID elements")
+##            for i in range(1, len(mdFileID)):
+##                target_root.remove(mdFileID[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdFileID
 
-        mdLang = target_tree.xpath(f"./mdLang")
-        if len(mdLang) == 0:
-            #print(f"Inserting 'mdLang' at position: {root_dict['mdLang']}")
-            xml = '<mdLang><languageCode value="eng" Sync="TRUE"></languageCode><countryCode value="USA" Sync="TRUE"></countryCode></mdLang>'
-            root = etree.XML(xml)
-            position = root_dict['mdLang']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdLang) == 1:
-            #print(f"Updating '{mdLang[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdLang[0].tag}')[0])}")
-            position = root_dict['mdLang']
-            target_root.insert(position, mdLang[0])
-            del position
-        elif len(mdLang) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdLang)-1} mdLang elements")
-            for i in range(1, len(mdLang)):
-                target_root.remove(mdLang[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdLang
+##        mdLang = target_tree.xpath(f"./mdLang")
+##        if len(mdLang) == 0:
+##            #print(f"Inserting 'mdLang' at position: {root_dict['mdLang']}")
+##            xml = '<mdLang><languageCode value="eng" Sync="TRUE"></languageCode><countryCode value="USA" Sync="TRUE"></countryCode></mdLang>'
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+##            position = root_dict['mdLang']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdLang) == 1:
+##            #print(f"Updating '{mdLang[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdLang[0].tag}')[0])}")
+##            position = root_dict['mdLang']
+##            target_root.insert(position, mdLang[0])
+##            del position
+##        elif len(mdLang) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdLang)-1} mdLang elements")
+##            for i in range(1, len(mdLang)):
+##                target_root.remove(mdLang[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdLang
 
-        mdMaint = target_tree.xpath(f"./mdMaint")
-        if len(mdMaint) == 0:
-            #print(f"Inserting 'mdMaint' at position: {root_dict['mdMaint']}")
-            xml = '<mdMaint><maintFreq><MaintFreqCd value="009"></MaintFreqCd></maintFreq></mdMaint>'
-            root = etree.XML(xml)
-            position = root_dict['mdMaint']
-            target_root.insert(position, root)
-            del position, root, xml
-        elif len(mdMaint) == 1:
-            #print(f"Updating '{mdMaint[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdMaint[0].tag}')[0])}")
-            position = root_dict['mdMaint']
-            target_root.insert(position, mdMaint[0])
-            del position
-        elif len(mdLang) > 1:
-            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
-            print(f"Removing {len(mdMaint)-1} mdMaint elements")
-            for i in range(1, len(mdMaint)):
-                target_root.remove(mdMaint[i])
-                i+=1
-                del i
-        else:
-            pass
-        del mdMaint
+##        mdMaint = target_tree.xpath(f"./mdMaint")
+##        if len(mdMaint) == 0:
+##            #print(f"Inserting 'mdMaint' at position: {root_dict['mdMaint']}")
+##            xml = '<mdMaint><maintFreq><MaintFreqCd value="009"></MaintFreqCd></maintFreq></mdMaint>'
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+##            position = root_dict['mdMaint']
+##            target_root.insert(position, root)
+##            del position, root, xml
+##        elif len(mdMaint) == 1:
+##            #print(f"Updating '{mdMaint[0].tag}' if needed at position: {target_root.index(target_root.xpath(f'./{mdMaint[0].tag}')[0])}")
+##            position = root_dict['mdMaint']
+##            target_root.insert(position, mdMaint[0])
+##            del position
+##        elif len(mdLang) > 1:
+##            # if it is multiples, is that ok or not. eainfo has multiples, topic does, contacts
+##            print(f"Removing {len(mdMaint)-1} mdMaint elements")
+##            for i in range(1, len(mdMaint)):
+##                target_root.remove(mdMaint[i])
+##                i+=1
+##                del i
+##        else:
+##            pass
+##        del mdMaint
 
         mdHrLv = target_tree.xpath(f"./mdHrLv")
         if len(mdHrLv) == 0:
             #print(f"Inserting mdHrLv at position: {root_dict['mdHrLv']}")
             xml = '<mdHrLv><ScopeCd value="005" Sync="TRUE"></ScopeCd></mdHrLv>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['mdHrLv']
             target_root.insert(position, root)
             del position, root, xml
@@ -927,7 +928,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(mdHrLvName) == 0:
             #print(f"Inserting 'mdHrLvName' at position: {root_dict['mdHrLvName']}")
             xml = '<mdHrLvName Sync="TRUE">dataset</mdHrLvName>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['mdHrLvName']
             target_root.insert(position, root)
             del position, root, xml
@@ -952,7 +953,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
          #if len(mdStanName) == 0:
          #    print(f"Inserting 'mdStanName' at position: {root_dict['mdStanName']}")
          #    xml = '<mdStanName Sync="TRUE"></mdStanName>'
-         #    root = etree.XML(xml)
+         #    root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
          #    position = root_dict['mdStanName']
          #    target_root.insert(position, root)
          #    del position, root, xml
@@ -976,7 +977,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
          #if len(mdStanVer) == 0:
          #    print(f"Inserting 'mdStanVer' at position: {root_dict['mdStanVer']}")
          #    xml = '<mdStanVer Sync="TRUE"></mdStanVer>'
-         #    root = etree.XML(xml)
+         #    root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
          #    position = root_dict['mdStanVer']
          #    target_root.insert(position, root)
          #    del position, root, xml
@@ -1000,7 +1001,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(refSysInfo) == 0:
             #print(f"Inserting 'refSysInfo' at position: {root_dict['refSysInfo']}")
             xml = '<refSysInfo Sync="TRUE"></refSysInfo>'
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['refSysInfo']
             target_root.insert(position, root)
             del position, root, xml
@@ -1028,7 +1029,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                      <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
                      <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
                      </VectSpatRep></spatRepInfo>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['spatRepInfo']
             target_root.insert(position, root)
             del position, root, xml
@@ -1039,7 +1040,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             #         <geoObjCnt Sync="TRUE">2</geoObjCnt></geometObjs><topLvl>
             #         <TopoLevCd value="001" Sync="TRUE"></TopoLevCd></topLvl>
             #         </VectSpatRep></spatRepInfo>'''
-            #root = etree.XML(xml)
+            #root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['spatRepInfo']
             target_root.insert(position, spatRepInfo[0])
             del position #, root, xml
@@ -1058,7 +1059,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(spdoinfo) == 0:
             #print(f"Inserting 'spdoinfo' at position: {root_dict['spdoinfo']}")
             xml = '''<spdoinfo Sync="TRUE"></spdoinfo>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['spdoinfo']
             target_root.insert(position, root)
             del position, root, xml
@@ -1156,7 +1157,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                             </prcStep>
                         </dataLineage>
                     </dqInfo>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = root_dict['dqInfo']
             target_root.insert(position, root)
             del position, root, xml
@@ -1190,14 +1191,14 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         if len(dqScope) == 0:
             #print(f"Inserting 'dqScope' at position: {dqInfo_dict['dqScope']}")
             xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = dqInfo_dict['dqScope']
             dqInfo[0].insert(position, root)
             del position, root, xml
         elif len(dqScope) == 1:
             #print(f"Updating '{dqScope[0].tag}' if needed at position: {dqInfo_dict['dqScope']}")
             #xml = '''<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'''
-            #root = etree.XML(xml)
+            #root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             #position = dqInfo_dict["dqScope"]
             #dqInfo[0].insert(position, root)
             #del position, root, xml
@@ -1214,7 +1215,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         else:
             pass
         #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding='UTF-8').decode())
         del dqScope, dqInfo
 
         dqInfo  = target_tree.xpath(f"./dqInfo")
@@ -1224,7 +1225,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             xml = '''<report type="DQConcConsis" dimension="horizontal">
                         <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                      </report>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = dqInfo_dict['report']
             dqInfo[0].insert(position, root)
             del position, root, xml
@@ -1233,7 +1234,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
             xml = '''<report type="DQCompOm" dimension="horizontal">
                         <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                      </report>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = dqInfo_dict['report']
             dqInfo[0].insert(position+1, root)
             del position, root, xml
@@ -1245,14 +1246,14 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 xml = '''<report type="DQConcConsis" dimension="horizontal">
                             <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                          </report>'''
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 dqInfo[0].replace(_report[0], root)
                 del root, xml
 
                 xml = '''<report type="DQCompOm" dimension="horizontal">
                             <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                          </report>'''
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 position = dqInfo_dict["report"]+1
                 dqInfo[0].insert(position, root)
                 del position, root, xml
@@ -1266,14 +1267,14 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 xml = '''<report type="DQCompOm" dimension="horizontal">
                             <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                          </report>'''
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 dqInfo[0].replace(_report[0], root)
                 del root, xml
 
                 xml = '''<report type="DQConcConsis" dimension="horizontal">
                             <measDesc>Based on a review from species' experts, we determined that all necessary features were included in the species' range file.</measDesc>
                          </report>'''
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 position = dqInfo_dict["report"]
                 dqInfo[0].insert(position, root)
                 del position, root, xml
@@ -1282,7 +1283,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                 dqInfo[0].remove(_report[-1])
             del _report
 
-            #root = etree.XML(xml)
+            #root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             #position = dqInfo_dict["report"]
             #dqInfo[0].insert(position, root)
             #del position, root, xml
@@ -1310,7 +1311,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         else:
             pass
         #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding='UTF-8').decode())
         del report, dqInfo
 
         dqInfo  = target_tree.xpath(f"./dqInfo")
@@ -1369,7 +1370,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                             <stepDateTm></stepDateTm>
                         </prcStep>
                     </dataLineage>'''
-            root = etree.XML(xml)
+            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             position = dqInfo_dict['dataLineage']
             dqInfo[0].insert(position, root)
             del position, root, xml
@@ -1387,7 +1388,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         else:
             pass
         #etree.indent(dqInfo[0], space="  ")
-        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(dqInfo[0], xml_declaration=True, encoding='UTF-8').decode())
         del dataLineage, dqInfo
 
         contact_dict = {"editorSource" : 0, "editorDigest" : 1,"rpIndName" : 2,
@@ -1416,7 +1417,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        if len(distInfo) == 0:
 ##            print(f"Inserting 'distInfo' at position: {root_dict['distInfo']}")
 ##            xml = '<distInfo Sync="TRUE"></distInfo>'
-##            root = etree.XML(xml)
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##            position = root_dict['distInfo']
 ##            target_root.insert(position, root)
 ##            del position, root, xml
@@ -1446,7 +1447,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        if len(eainfo) == 0:
 ##            print(f"Inserting 'eainfo' at position: {root_dict['eainfo']}")
 ##            xml = '<eainfo Sync="TRUE"></eainfo>'
-##            root = etree.XML(xml)
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##            position = root_dict['eainfo']
 ##            target_root.insert(position, root)
 ##            del position, root, xml
@@ -1476,7 +1477,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        if len(Binary) == 0:
 ##            print(f"Inserting 'Binary' at position: {root_dict['Binary']}")
 ##            xml = '<Binary Sync="TRUE"><Thumbnail><Data EsriPropertyType="PictureX"></Data></Thumbnail></Binary>'
-##            root = etree.XML(xml)
+##            root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 ##            position = root_dict['Binary']
 ##            target_root.insert(position, root)
 ##            del position, root, xml
@@ -1503,7 +1504,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 ##        #etree.dump(target_root)
 ##
 ##        #etree.indent(target_root, space="    ")
-##        #print(etree.tostring(target_root, xml_declaration=True, encoding="utf-8").decode())
+##        #print(etree.tostring(target_root, xml_declaration=True, encoding='UTF-8').decode())
 
 
 
@@ -1516,7 +1517,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
 
         etree.indent(target_root, space='')
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8", xml_declaration=True).decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8', xml_declaration=True).decode()
         target_xml_string = etree.tostring(target_tree, xml_declaration=True).decode()
         #print(target_xml_string)
         try:
@@ -1529,7 +1530,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
 
         pretty_format_xml_file(fc_metadata_xml_file)
 
-        # Declare Variables
+        # Declared Variables
         del root_dict
         del target_tree, target_root, target_name
         # Imports
@@ -1560,7 +1561,7 @@ def insert_xml_elements(fc_metadata_xml_file=""):
         def insert_element(tree, element, xml):
             try:
                 _element = tree.xpath(f"./{element}")[0]
-                root = etree.XML(xml)
+                root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                 target_root.replace(_element, root)
                 del root, _element
                 del tree, element, xml
@@ -1572,13 +1573,13 @@ def insert_xml_elements(fc_metadata_xml_file=""):
         #root.attrib[QName("http://www.w3.org/XML/1998/namespace", "lang")] = "en-US"
         root.set("{http://www.w3.org/XML/1998/namespace}lang", "en-US")
         # Serialize the tree to a string
-        xml_string = etree.tostring(root, pretty_print=True, xml_declaration=True, encoding="utf-8").decode()
+        xml_string = etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8').decode()
         #print(xml_string)
         del root
 
 
         #etree.indent(target_root, space='')
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8", xml_declaration=True).decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8', xml_declaration=True).decode()
         #target_xml_string = etree.tostring(target_tree, xml_declaration=True).decode()
         #print(target_xml_string)
         try:
@@ -1598,19 +1599,19 @@ def insert_xml_elements(fc_metadata_xml_file=""):
         del parser
 
         #etree.indent(target_root, space="    ")
-        #print(etree.tostring(target_root, xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(target_root, xml_declaration=True, encoding='UTF-8').decode())
 
         # ######################################################################
         #               ###--->>> Esri section Start <<<---###
         # ######################################################################
 
-
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "Binary"     : 16,}
+# Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "Binary"     : 16,}
 
         for key in root_dict:
             print(f"Inserting: {key}")
@@ -1678,7 +1679,7 @@ def insert_xml_elements(fc_metadata_xml_file=""):
                         <date>
                             <createDate/>
                             <pubDate/>
-                            <revisedDate/>
+                            <reviseDate/>
                         </date>
                         <citRespParty>
                             <editorSource>extermal</editorSource>
@@ -2079,8 +2080,8 @@ def insert_xml_elements(fc_metadata_xml_file=""):
         del insert_element
 
         etree.indent(target_root, space='    ')
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8", xml_declaration=True).decode()
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, xml_declaration=True, encoding="utf-8").decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8', xml_declaration=True).decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, xml_declaration=True, encoding='UTF-8').decode()
         #print(target_xml_string)
         try:
             with open(fc_metadata_xml_file, "w") as f:
@@ -2092,7 +2093,7 @@ def insert_xml_elements(fc_metadata_xml_file=""):
 
         #pretty_format_xml_file(fc_metadata_xml_file)
 
-        # Declare Variables
+        # Declared Variables
         del root_dict
         del target_tree, target_root, target_name
         # Imports
@@ -2156,13 +2157,13 @@ def check_update_metadata_root_items(project_gdb=""):
             tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
             root = tree.getroot()
             del parser
-
-            root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                         "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                         "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                         "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                         "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                         "eainfo"     : 15, "Binary"     : 16, }
+# Moved dictionaries to JSON
+##            root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                         "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                         "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                         "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                         "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                         "eainfo"     : 15, "Binary"     : 16, }
 
             for key in root_dict:
                 element = root.xpath(f"./{key}")
@@ -2206,12 +2207,12 @@ def check_update_metadata_root_items(project_gdb=""):
                                         <RoleCd value="002"></RoleCd>
                                     </role>
                                 </mdContact>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.insert(root_dict[f"{key}"], _root)
                         del _root, xml
                     if key == "mdFileID":
                         xml = '''<mdFileID>gov.noaa.nmfs.inport:</mdFileID>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.insert(root_dict[f"{key}"], _root)
                         del _root, xml
                     if key == "mdLang":
@@ -2219,12 +2220,12 @@ def check_update_metadata_root_items(project_gdb=""):
                                     <languageCode value="eng" Sync="TRUE"></languageCode>
                                     <countryCode value="USA" Sync="TRUE"></countryCode>
                                  </mdLang>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.insert(root_dict[f"{key}"], _root)
                         del _root, xml
                     if key == "Binary":
                         xml = '''<Binary Sync="TRUE"><Thumbnail><Data EsriPropertyType="PictureX"></Data></Thumbnail></Binary>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.insert(root_dict[f"{key}"], _root)
                         del _root, xml
 
@@ -2233,7 +2234,7 @@ def check_update_metadata_root_items(project_gdb=""):
 
                     if key == "mdFileID":
                         xml = '''<mdFileID>gov.noaa.nmfs.inport:</mdFileID>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "mdLang":
@@ -2241,7 +2242,7 @@ def check_update_metadata_root_items(project_gdb=""):
                                     <languageCode value="eng" Sync="TRUE"></languageCode>
                                     <countryCode value="USA" Sync="TRUE"></countryCode>
                                  </mdLang>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "mdMaint":
@@ -2250,19 +2251,19 @@ def check_update_metadata_root_items(project_gdb=""):
                                         <MaintFreqCd value="009"></MaintFreqCd>
                                     </maintFreq>
                                  </mdMaint>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "mdHrLv":
                         xml = '''<mdHrLv>
                                     <ScopeCd value="005" Sync="TRUE"></ScopeCd>
                                  </mdHrLv>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "mdHrLvName":
                         xml = '''<mdHrLvName Sync="TRUE">dataset</mdHrLvName>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "refSysInfo":
@@ -2275,7 +2276,7 @@ def check_update_metadata_root_items(project_gdb=""):
                                         </refSysID>
                                     </RefSystem>
                                  </refSysInfo>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "spatRepInfo":
@@ -2292,7 +2293,7 @@ def check_update_metadata_root_items(project_gdb=""):
                                         </topLvl>
                                     </VectSpatRep>
                                  </spatRepInfo>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
                     if key == "spdoinfo":
@@ -2308,7 +2309,7 @@ def check_update_metadata_root_items(project_gdb=""):
                                         </esriterm>
                                     </ptvctinf>
                                 </spdoinfo>'''
-                        _root = etree.XML(xml)
+                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         root.replace(element[0], _root)
                         del _root, xml
 
@@ -2334,7 +2335,7 @@ def check_update_metadata_root_items(project_gdb=""):
             dataset_md_xml = etree.tostring(tree).decode()
             #print(dataset_md_xml)
             # This allows for sorting
-            doc = etree.XML(dataset_md_xml, etree.XMLParser(remove_blank_text=True))
+            doc = etree.XML(dataset_md_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             for parent in doc.xpath('.'): # Search for parent elements
               parent[:] = sorted(parent,key=lambda x: root_dict[x.tag])
               del parent
@@ -2438,13 +2439,13 @@ def update_eainfo(project_gdb=""):
             tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
             root = tree.getroot()
             del parser
-
-            root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                         "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                         "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                         "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                         "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                         "eainfo"     : 15, "Binary"     : 16, }
+# Moved dictionaries to JSON
+##            root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                         "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                         "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                         "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                         "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                         "eainfo"     : 15, "Binary"     : 16, }
 
             _eainfo_root = root.xpath('./eainfo')[0]
 
@@ -2529,27 +2530,28 @@ def update_dataIdInfo(project_gdb=""):
 
         #print( etree.tostring(eainfo,pretty_print=True).decode() )
 
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "Binary"     : 16, }
-
-        esri_dict ={"CreaDate" : 0,  "CreaTime" : 1, "ArcGISFormat" : 2,
-                    "ArcGISstyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
-                    "itemProps" : 0, "itemName" : 0, "imsContentType" : 1,
-                    "nativeExtBox" : 2, "westBL" : 0, "eastBL" : 1, "southBL" : 2,
-                    "northBL" : 3, "exTypeCode" : 4, "coordRef" : 1, "type" : 0,
-                    "geogcsn" : 2, "csUnits" : 3, "peXml" : 4, "SyncDate" : 6,
-                    "SyncTime" : 7, "ModDate" : 8, "ModTime" : 9,
-                    "scaleRange" : 10, "minScale" : 11, "maxScale" : 12,
-                    "ArcGISProfile" : 13,}
-
-        dataIdInfo_dict = { "idCitation" : 0, "searchKeys" :  1, "idPurp"   : 2,
-                            "idAbs"      : 3, "idCredit"   :  4, "resConst" : 5,
-                            "envirDesc"  : 6, "dataLang"   :  7, "dataChar" : 8,
-                            "spatRpType" : 9, "dataExt"    : 10, "tpCat"    : 11,}
+# Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "Binary"     : 16, }
+# Moved dictionaries to JSON
+##        esri_dict ={"CreaDate" : 0,  "CreaTime" : 1, "ArcGISFormat" : 2,
+##                    "ArcGISstyle" : 3, "SyncOnce" : 4, "DataProperties" : 5,
+##                    "itemProps" : 0, "itemName" : 0, "imsContentType" : 1,
+##                    "nativeExtBox" : 2, "westBL" : 0, "eastBL" : 1, "southBL" : 2,
+##                    "northBL" : 3, "exTypeCode" : 4, "coordRef" : 1, "type" : 0,
+##                    "geogcsn" : 2, "csUnits" : 3, "peXml" : 4, "SyncDate" : 6,
+##                    "SyncTime" : 7, "ModDate" : 8, "ModTime" : 9,
+##                    "scaleRange" : 10, "minScale" : 11, "maxScale" : 12,
+##                    "ArcGISProfile" : 13,}
+# Moved dictionaries to JSON
+##        dataIdInfo_dict = { "idCitation" : 0, "searchKeys" :  1, "idPurp"   : 2,
+##                            "idAbs"      : 3, "idCredit"   :  4, "resConst" : 5,
+##                            "envirDesc"  : 6, "dataLang"   :  7, "dataChar" : 8,
+##                            "spatRpType" : 9, "dataExt"    : 10, "tpCat"    : 11,}
 
         fcs = [fc for fc in arcpy.ListFeatureClasses() if fc == "WhaleNorthPacificRight_20201015"]
         #fcs = [rf"{project_gdb}\{fc}" for fc in arcpy.ListFeatureClasses()]
@@ -2598,7 +2600,7 @@ def update_dataIdInfo(project_gdb=""):
                     idCitation_dict = {"resTitle" : 0, "resAltTitle" : 1,
                                        "collTitle"  : 2, "presForm" : 3, "PresFormCd"  : 0,
                                        "fgdcGeoform" : 1, "date" : 4, "createDate" : 0,
-                                       "pubDate"    : 1, "revisedDate" : 2, "citRespParty"  : 6,
+                                       "pubDate"    : 1, "reviseDate" : 2, "citRespParty"  : 6,
                                        }
                     element = dataIdInfo_root.xpath(f"./{key}")
                     for _key in idCitation_dict:
@@ -2641,7 +2643,7 @@ def update_dataIdInfo(project_gdb=""):
                     print(f"\t\t\t{key}")
                     element = dataIdInfo_root.xpath(f"./{key}")
                     xml = '''<envirDesc Sync="TRUE">Esri ArcGIS 13.4.0.55405</envirDesc>'''
-                    _root = etree.XML(xml)
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                     if len(element) == 0:
                         position = dataIdInfo_dict[f'{key}']
                         print(f"\t\t\tInserting f'{key}' at {position}")
@@ -2659,7 +2661,7 @@ def update_dataIdInfo(project_gdb=""):
                     print(f"\t\t\t{key}")
                     element = dataIdInfo_root.xpath(f"./{key}")
                     xml = '''<dataLang><languageCode value="eng" Sync="TRUE"></languageCode><countryCode value="USA" Sync="TRUE"></countryCode></dataLang>'''
-                    _root = etree.XML(xml)
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                     if len(element) == 0:
                         position = dataIdInfo_dict[f'{key}']
                         print(f"\t\t\tInserting f'{key}' at {position}")
@@ -2677,7 +2679,7 @@ def update_dataIdInfo(project_gdb=""):
                     print(f"\t\t\t{key}")
                     element = dataIdInfo_root.xpath(f"./{key}")
                     xml = '''<dataChar><CharSetCd value="004"></CharSetCd></dataChar>'''
-                    _root = etree.XML(xml)
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                     if len(element) == 0:
                         position = dataIdInfo_dict[f'{key}']
                         print(f"\t\t\tInserting f'{key}' at {position}")
@@ -2695,7 +2697,7 @@ def update_dataIdInfo(project_gdb=""):
                     print(f"\t\t\t{key}")
                     element = dataIdInfo_root.xpath(f"./{key}")
                     xml = '''<spatRpType><SpatRepTypCd value="001" Sync="TRUE"></SpatRepTypCd></spatRpType>'''
-                    _root = etree.XML(xml)
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                     if len(element) == 0:
                         position = dataIdInfo_dict[f'{key}']
                         print(f"\t\t\tInserting f'{key}' at {position}")
@@ -2713,7 +2715,7 @@ def update_dataIdInfo(project_gdb=""):
                     print(f"\t\t\t{key}")
                     element = dataIdInfo_root.xpath(f"./{key}")
                     xml = '''<dataExt></dataExt> '''
-                    _root = etree.XML(xml)
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                     if len(element) == 0:
                         position = dataIdInfo_dict[f'{key}']
                         print(f"\t\t\tInserting f'{key}' at {position}")
@@ -2739,7 +2741,7 @@ def update_dataIdInfo(project_gdb=""):
                         print(f"\t\t\tInserting tpCat at {position}")
                         #for key in tpCat_dict:
                         #    xml = tpCat_dict[key]
-                        #    root = etree.XML(xml)
+                        #    root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                         #    dataIdInfo_root.insert(position, root)
                         #    position+=1
                         #    del root, xml, key
@@ -2763,7 +2765,7 @@ def update_dataIdInfo(project_gdb=""):
                             for insert_item in insert_list:
                                 #print(insert_item)
                                 xml = tpCat_dict[insert_item]
-                                _root = etree.XML(xml)
+                                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
                                 dataIdInfo_root.append(_root)
                                 del _root, xml, insert_item
                         del insert_list
@@ -2863,7 +2865,7 @@ def main(project_gdb=""):
         #tree = etree.parse(dataset_md_xml, parser=parser)
         #root = tree.getroot()
         #del parser
-        #print(etree.tostring(tree, pretty_print=True, xml_declaration=True, encoding="utf-8").decode())
+        #print(etree.tostring(tree, pretty_print=True, xml_declaration=True, encoding='UTF-8').decode())
 
         # Declared Varaiables
         # Imports

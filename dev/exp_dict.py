@@ -20,7 +20,7 @@ def main():
                         "date"          : 5,
                         "createDate"        : 0,
                         "pubDate"           : 1,
-                        "revisedDate"       : 2,
+                        "reviseDate"       : 2,
                         "citRespParty"  : 6,
                         "editorSource"      : 0,
                         "editorDigest"      : 1,
@@ -103,7 +103,7 @@ def main():
                             "date"          : 5,
                                 "createDate"  : 0,
                                 "pubDate"     : 1,
-                                "revisedDate" : 2,
+                                "reviseDate" : 2,
                             "citRespParty"  : 6,
                         }
 
@@ -212,7 +212,7 @@ def main():
     </citRespParty>'''
 
     # Create an XML string
-    citRespParty_root = etree.XML(xml)
+    citRespParty_root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 
     # Parse your XML document
     #tree = etree.fromstring(xml)

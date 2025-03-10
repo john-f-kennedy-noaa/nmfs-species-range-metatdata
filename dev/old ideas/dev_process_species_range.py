@@ -1238,7 +1238,7 @@ def update_metadata(project_gdb=""):
             del dqInfo_old_child, dqInfo_new_child
 
             # get modified XML
-            updated_xml_string = etree.tostring(old_root, encoding="utf-8")
+            updated_xml_string = etree.tostring(old_root, encoding='UTF-8')
             del old_root
 
             with open(export_xml_metadata_path_updated, 'wb') as f:

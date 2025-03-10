@@ -21,14 +21,14 @@ def main():
         target_xml      = r"species_range_boilerplate.xml"
         target_xml_name = os.path.basename(target_xml)
 
-        #parser = etree.XMLParser(remove_blank_text=True)
+        #parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         #tree = etree.parse("species_range_boilerplate.xml", parser=parser)
         # Pretty print
-        #xml_string = etree.tostring(tree, encoding="utf-8", pretty_print=True).decode()
+        #xml_string = etree.tostring(tree, encoding='UTF-8',  method='xml', pretty_print=True).decode()
         #print(xml_string)
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser

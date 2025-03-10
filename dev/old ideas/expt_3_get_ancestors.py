@@ -122,11 +122,11 @@ def main():
         </dataIdInfo>
     </metadata>'''
 
-    tree = etree.XML(xml)
+    tree = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
 
     etree.indent(tree, space="    ")
 
-    ##print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+    ##print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
     ##for elem in tree.xpath('.//rpIndName'):
     ##    print(f"Tag: {elem.tag} Parent: {elem.getparent().tag}")

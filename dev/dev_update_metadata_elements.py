@@ -1092,7 +1092,7 @@ def element_search(target_xml="", search_element=""):
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string,flush=True); del target_xml_string
 
         print(f"\tProcessing: {target_xml_name}")
@@ -1123,7 +1123,7 @@ def element_search(target_xml="", search_element=""):
 
         etree.indent(target_root, space='    ')
         #etree.dump(target_root)
-        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        #target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
         #try:
         #    with open(target_xml, "w") as f:

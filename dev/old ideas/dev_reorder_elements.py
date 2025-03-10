@@ -21,14 +21,14 @@ def root_sort(target_xml=""):
     try:
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         target_elements = target_root.getchildren()
@@ -139,14 +139,14 @@ def dqInfo_sort(target_xml=""):
     try:
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         target_elements = target_tree.find("./dqInfo").getchildren()
@@ -227,14 +227,14 @@ def dataLineage_sort(target_xml=""):
     try:
         from lxml import etree
 
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         # Parse the XML
         target_tree = etree.parse(target_xml, parser=parser)
         target_root = target_tree.getroot()
         del parser
         #etree.indent(tree, space="    ")
         # Pretty print
-        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        target_xml_string = etree.tostring(target_tree, pretty_print=True, method='html', encoding='UTF-8').decode()
         #print(target_xml_string)
 
         target_elements = target_root.find(".//dataLineage").getchildren()

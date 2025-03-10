@@ -51,12 +51,12 @@ def main(project_folder=""):
         # ET.indent(tree)   # clean all indentations - use (default) 2 spaces
 
         #etree.indent(tree, space='    ')
-        #print(etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode())
+        #print(etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode())
 
         #etree.indent(root, space='    ')
         #etree.dump(root)
 
-        xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8").decode()
+        xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8').decode()
 
         try:
             with open(target_xml, "w") as f:

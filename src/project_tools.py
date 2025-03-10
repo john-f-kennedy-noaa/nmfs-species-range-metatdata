@@ -19,15 +19,16 @@ limitations under the License.
 import os, sys
 import traceback, inspect
 
-def parse_xml_file_format_and_save(xml_file="", sort=False):
+def parse_xml_file_format_and_save(project_folder="", xml_file="", sort=False):
     try:
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+        # Moved dictionaries to JSON
+        import json
+        json_path = rf"{project_folder}\root_dict.json"
+        with open(json_path, "r") as json_file:
+            root_dict = json.load(json_file)
+        del json_file
+        del json_path
+        del json
 
         from lxml import etree
 
@@ -43,10 +44,13 @@ def parse_xml_file_format_and_save(xml_file="", sort=False):
             del root
         del sort
         etree.indent(tree, space='   ')
-        tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+        tree.write(xml_file, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
         del tree
-        del xml_file, etree
         del root_dict
+        # Imports
+        del etree
+        # Funcion Parameters
+        del project_folder, xml_file
     except:
         traceback.print_exc()
     else:
@@ -57,18 +61,19 @@ def parse_xml_file_format_and_save(xml_file="", sort=False):
     finally:
         pass
 
-def print_xml_file(xml_file="", sort=False):
+def print_xml_file(project_folder="", xml_file="", sort=False):
     try:
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+        # Moved dictionaries to JSON
+        import json
+        json_path = rf"{project_folder}\root_dict.json"
+        with open(json_path, "r") as json_file:
+            root_dict = json.load(json_file)
+        del json_file
+        del json_path
+        del json
 
         from lxml import etree
-        parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
         tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
         del parser
 
@@ -80,10 +85,13 @@ def print_xml_file(xml_file="", sort=False):
             del root
         del sort
         etree.indent(tree, space='   ')
-        print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        print(etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         del tree
-        del xml_file, etree
         del root_dict
+        # Imports
+        del etree
+        # Funcion Parameters
+        del project_folder, xml_file
     except:
         traceback.print_exc()
     else:
@@ -177,7 +185,7 @@ def pretty_format_xml_file(xml=""):
         #arcpy.AddMessage(f"###--->>> Converting metadata file: {os.path.basename(xml)} to pretty format")
         if os.path.isfile(xml):
 
-            parser = etree.XMLParser(remove_blank_text=True)
+            parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
             # Parse the XML
 
             tree = etree.parse(xml, parser=parser)
@@ -186,7 +194,7 @@ def pretty_format_xml_file(xml=""):
             etree.indent(tree, space="    ")
 
             # Pretty print
-            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding="utf-8", xml_declaration=True).decode()
+            xml_string = etree.tostring(tree, pretty_print=True, method='html', encoding='UTF-8', xml_declaration=True).decode()
 
             xml_string = xml_string.replace(' code="0">\n', ' code="0">')
             xml_string = xml_string.replace(' code="4">\n', ' code="4">')

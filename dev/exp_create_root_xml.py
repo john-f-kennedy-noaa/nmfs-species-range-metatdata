@@ -31,7 +31,7 @@ def main():
                 </detailed>
              </eainfo>'''
 
-    _xml = etree.XML(xml)
+    _xml = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
     # Parse the XML
     parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
     _tree = etree.parse(StringIO(xml), parser=parser)
@@ -43,7 +43,7 @@ def main():
     root.append(_root)
     #root.insert(100, _root)
     # Serialize the tree to a string
-    xml_string = etree.tostring(tree, pretty_print=True, method='xml', xml_declaration=True, encoding="utf-8").decode()
+    xml_string = etree.tostring(tree, pretty_print=True, method='xml', xml_declaration=True, encoding='UTF-8').decode()
     print(xml_string)
 
 if __name__ == '__main__':

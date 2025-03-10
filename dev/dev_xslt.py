@@ -43,7 +43,7 @@ def main():
         metadata_xml_string = dataset_md.xml
 
         # Parse the XML file
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
 
         dataset_tree = etree.parse(StringIO(metadata_xml_string), parser=parser)
         xslt_tree    = etree.parse(xslt, parser=parser)
@@ -64,7 +64,7 @@ def main():
         etree.indent(result, space="    ")
 
         # Pretty print
-        xml_string = etree.tostring(result, encoding="utf-8", pretty_print=True).decode()
+        xml_string = etree.tostring(result, encoding='UTF-8',  method='xml', pretty_print=True).decode()
 
         # Write the pretty XML to a file
         with open(rf"{project_folder}\xlst_test.xml", "w") as f:

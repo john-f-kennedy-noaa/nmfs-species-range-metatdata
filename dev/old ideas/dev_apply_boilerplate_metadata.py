@@ -870,7 +870,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
                         del key
                     del user_dict
                 #print(etree.tostring(contact_parent, pretty_print=True).decode())
-                #print(etree.tostring(contact_root, encoding="UTF-8", xml_declaration=True, pretty_print=True).decode())
+                #print(etree.tostring(contact_root, encoding='UTF-8', xml_declaration=True, pretty_print=True).decode())
                 #print(f"{contact_parent.tag}, {contact_root.tag}")
                 #contact_parent.replace(contact_parent, contact_root)
 ##                ancestors = []
@@ -885,7 +885,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
 ##
 ##                del ancestors_xml
                 #target_root_child = target_root.find(ancestors_path)
-                #print(etree.tostring(target_root_child, encoding="UTF-8", xml_declaration=True, pretty_print=True).decode())
+                #print(etree.tostring(target_root_child, encoding='UTF-8', xml_declaration=True, pretty_print=True).decode())
                 #print(etree.tostring(target_root_child, pretty_print=True).decode())
                 #target_root.replace(target_root_child, contact_root)
                 #del target_root_child
@@ -1214,7 +1214,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
                     del key
                 del user_dict
                 #print(etree.tostring(contact_parent, pretty_print=True).decode())
-                #print(etree.tostring(contact_root, encoding="UTF-8", xml_declaration=True, pretty_print=True).decode())
+                #print(etree.tostring(contact_root, encoding='UTF-8', xml_declaration=True, pretty_print=True).decode())
                 #print(etree.tostring(contact_root, pretty_print=True).decode())
                 #print(f"{contact_parent.tag}, {contact_root.tag}")
                 #target_tree.replace(contact_parent, contact_root)
@@ -1320,7 +1320,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
 ##
 ##                del ancestors_xml
                 #target_root_child = target_root.find(ancestors_path)
-                #print(etree.tostring(target_root_child, encoding="UTF-8", xml_declaration=True, pretty_print=True).decode())
+                #print(etree.tostring(target_root_child, encoding='UTF-8', xml_declaration=True, pretty_print=True).decode())
                 #print(etree.tostring(target_root_child, pretty_print=True).decode())
                 #target_root.replace(target_root_child, contact_root)
                 #del target_root_child
@@ -1422,8 +1422,8 @@ def main(project_folder=list()):
             if "changes" in locals().keys():
                 if changes > 0:
                     # get modified XML
-                    #updated_target_xml_string = etree.tostring(target_root, encoding="utf-8")
-                    updated_target_xml_string = etree.tostring(target_tree, encoding="utf-8")
+                    #updated_target_xml_string = etree.tostring(target_root, encoding='UTF-8')
+                    updated_target_xml_string = etree.tostring(target_tree, encoding='UTF-8')
 
                     # import result back into metadata
                     arcpy.AddMessage("Saving updated metadata with the item...")

@@ -1105,7 +1105,7 @@ def schema_field_report(project_gdb=""):
 ##            del dqInfo_old_child, dqInfo_new_child
 ##
 ##            # get modified XML
-##            updated_xml_string = etree.tostring(old_root, encoding="utf-8")
+##            updated_xml_string = etree.tostring(old_root, encoding='UTF-8')
 ##            del old_root
 ##
 ##            with open(export_xml_metadata_path_updated, 'wb') as f:
@@ -2277,23 +2277,23 @@ def update_existing_contacts(project_gdb=""):
 
         project_folder = os.path.dirname(project_gdb)
         scratch_folder      = rf"{project_folder}\Scratch"
-
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
-
-        RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
-                       "003" : "Owner",             "004" : "User",
-                       "005" : "Distributor",       "006" : "Originator",
-                       "007" : "Point of Contact",  "008" : "Principal Investigator",
-                       "009" : "Processor",         "010" : "Publisher",
-                       "011" : "Author",            "012" : "Collaborator",
-                       "013" : "Editor",            "014" : "Mediator",
-                       "015" : "Rights Holder",}
+# Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+##                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+# Moved dictionaries to JSON
+##        RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
+##                       "003" : "Owner",             "004" : "User",
+##                       "005" : "Distributor",       "006" : "Originator",
+##                       "007" : "Point of Contact",  "008" : "Principal Investigator",
+##                       "009" : "Processor",         "010" : "Publisher",
+##                       "011" : "Author",            "012" : "Collaborator",
+##                       "013" : "Editor",            "014" : "Mediator",
+##                       "015" : "Rights Holder",}
 
         workspaces = [project_gdb]
 
@@ -2304,7 +2304,7 @@ def update_existing_contacts(project_gdb=""):
         del contacts_xml
         contacts_xml_root = contacts_xml_tree.getroot()
         #etree.indent(contacts_xml_root, space="  ")
-        #print(etree.tostring(contacts_xml_root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(contacts_xml_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
 
         for workspace in workspaces:
 
@@ -2339,9 +2339,9 @@ def update_existing_contacts(project_gdb=""):
                 root = tree.getroot()
                 del parser, dataset_md_xml
 
-                # print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+                # print(etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
                 # etree.indent(tree, space='   ')
-                # tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+                # tree.write(xml_file, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
                 print(f"Dataset Name: {dataset_name}")
 
@@ -2355,7 +2355,7 @@ def update_existing_contacts(project_gdb=""):
                         #count+=1
                         old_contact_parent = contact_parent.tag
                         print(f"\tContact Parent: {old_contact_parent}")
-                        #print(etree.tostring(contact_parent, encoding="utf-8",  method='xml', pretty_print=True).decode())
+                        #print(etree.tostring(contact_parent, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
 
                         if isinstance(contact_parent.find(f"./rpCntInfo"), type(None)):
@@ -2458,8 +2458,8 @@ def update_existing_contacts(project_gdb=""):
 
                         contact_root = root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::{old_contact_parent}/rpIndName[text()='{user_name}']/..")
                         #contact_root = copy.deepcopy(root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::{old_contact_parent}/rpIndName[text()='{user_name}']/.."))
-                        #print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
-                        #print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
+                        #print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
+                        #print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
                         new_contact_root = contacts_xml_root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::contact/rpIndName[text()='{user_name}']/ancestor::contact/editorSave[text()='True']/..")
 
@@ -2467,10 +2467,10 @@ def update_existing_contacts(project_gdb=""):
                             new_contact = copy.deepcopy(new_contact_root[0])
                             new_contact.tag = old_contact_parent
                             #new_contact.append(contact_root[0].find(f".//role"))
-                            #print(etree.tostring(new_contact, encoding="utf-8",  method='xml', pretty_print=True).decode())
+                            #print(etree.tostring(new_contact, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
                             contact_root[0].getparent().replace(contact_root[0], new_contact)
-                            #print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
+                            #print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
 
                             del new_contact
 
@@ -2479,7 +2479,7 @@ def update_existing_contacts(project_gdb=""):
                         del old_contact_parent, contact_parent
 
                 dataset_md = md.Metadata(dataset_path)
-                dataset_md.xml = etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode()
+                dataset_md.xml = etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode()
                 dataset_md.save()
                 dataset_md.synchronize("ALWAYS")
                 del dataset_md
@@ -2533,23 +2533,23 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 
         project_folder = os.path.dirname(project_gdb)
         scratch_folder      = rf"{project_folder}\Scratch"
-
-        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
-                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
-                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
-                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
-
-        RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
-                       "003" : "Owner",             "004" : "User",
-                       "005" : "Distributor",       "006" : "Originator",
-                       "007" : "Point of Contact",  "008" : "Principal Investigator",
-                       "009" : "Processor",         "010" : "Publisher",
-                       "011" : "Author",            "012" : "Collaborator",
-                       "013" : "Editor",            "014" : "Mediator",
-                       "015" : "Rights Holder",}
+# Moved dictionaries to JSON
+##        root_dict = {"Esri"       :  0, "dataIdInfo" :  1, "mdChar"      :  2,
+##                     "mdContact"  :  3, "mdDateSt"   :  4, "mdFileID"    :  5,
+##                     "mdLang"     :  6, "mdMaint"    :  7, "mdHrLv"      :  8,
+##                     "mdHrLvName" :  9, "refSysInfo" : 10, "spatRepInfo" : 11,
+##                     "spdoinfo"   : 12, "dqInfo"     : 13, "distInfo"    : 14,
+##                     "eainfo"     : 15, "contInfo"   : 16, "spref"       : 17,
+##                     "spatRepInfo" : 18, "dataSetFn" : 19, "Binary"      : 100,}
+# Moved dictionaries to JSON
+##        RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
+##                       "003" : "Owner",             "004" : "User",
+##                       "005" : "Distributor",       "006" : "Originator",
+##                       "007" : "Point of Contact",  "008" : "Principal Investigator",
+##                       "009" : "Processor",         "010" : "Publisher",
+##                       "011" : "Author",            "012" : "Collaborator",
+##                       "013" : "Editor",            "014" : "Mediator",
+##                       "015" : "Rights Holder",}
 
         workspaces = [project_gdb]
 
@@ -2560,7 +2560,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
         del contacts_xml
         contacts_xml_root = contacts_xml_tree.getroot()
         #etree.indent(contacts_xml_root, space="  ")
-        #print(etree.tostring(contacts_xml_root, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(etree.tostring(contacts_xml_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
 
         for workspace in workspaces:
 
@@ -2595,9 +2595,9 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
                 root = tree.getroot()
                 del parser, dataset_md_xml
 
-                # print(etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode())
+                # print(etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
                 # etree.indent(tree, space='   ')
-                # tree.write(xml_file, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True)
+                # tree.write(xml_file, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
                 print(f"Dataset Name: {dataset_name}")
 
@@ -2612,7 +2612,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
                             new_contact = copy.deepcopy(new_contact_root[0])
                             new_contact.tag = assigned_contact
                             #contact_root[0].getparent().replace(contact_root[0], new_contact)
-                            print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
+                            print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
                             del new_contact
                         del new_contact_root
 
@@ -2681,7 +2681,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 
 
 ##                            print(f"\t\tProcessing: {assigned_contact}")
-##                            #print(etree.tostring(contact_parent, encoding="utf-8",  method='xml', pretty_print=True).decode())
+##                            #print(etree.tostring(contact_parent, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##                            rpIndNames = contact_parent.xpath(f".//rpIndName")
 ##                            if len(rpIndNames) == 0:
 ##                                print(f"\t\t\trpIndName is missing")
@@ -2720,7 +2720,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 ##                        #count+=1
 ##                        old_contact_parent = contact_parent.tag
 ##                        print(f"\tContact Parent: {old_contact_parent}")
-##                        #print(etree.tostring(contact_parent, encoding="utf-8",  method='xml', pretty_print=True).decode())
+##                        #print(etree.tostring(contact_parent, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##
 ##
 ##                        if isinstance(contact_parent.find(f"./rpCntInfo"), type(None)):
@@ -2847,7 +2847,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 ##
 ##                        contact_root = root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::{old_contact_parent}/rpIndName[text()='{user_name}']/..")
 ##                        #contact_root = copy.deepcopy(root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::{old_contact_parent}/rpIndName[text()='{user_name}']/.."))
-##                        #print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
+##                        #print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##
 ##                        new_contact_root = contacts_xml_root.xpath(f".//eMailAdd[text()='{email_address}']/ancestor::contact/rpIndName[text()='{user_name}']/ancestor::contact/editorSave[text()='True']/..")
 ##
@@ -2855,10 +2855,10 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 ##                            new_contact = copy.deepcopy(new_contact_root[0])
 ##                            new_contact.tag = old_contact_parent
 ##                            #new_contact.append(contact_root[0].find(f".//role"))
-##                            #print(etree.tostring(new_contact, encoding="utf-8",  method='xml', pretty_print=True).decode())
+##                            #print(etree.tostring(new_contact, encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##
 ##                            contact_root[0].getparent().replace(contact_root[0], new_contact)
-##                            #print(etree.tostring(contact_root[0], encoding="utf-8",  method='xml', pretty_print=True).decode())
+##                            #print(etree.tostring(contact_root[0], encoding='UTF-8',  method='xml', pretty_print=True).decode())
 ##
 ##                            del new_contact
 ##
@@ -2867,7 +2867,7 @@ def change_existing_contacts(project_gdb="", assigned_contacts=""):
 ##                        del old_contact_parent, contact_parent
 ##
 ##                dataset_md = md.Metadata(dataset_path)
-##                dataset_md.xml = etree.tostring(tree, encoding="utf-8",  method='xml', xml_declaration=True, pretty_print=True).decode()
+##                dataset_md.xml = etree.tostring(tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode()
 ##                dataset_md.save()
 ##                dataset_md.synchronize("ALWAYS")
 ##                del dataset_md
