@@ -168,7 +168,7 @@ def ideas_1(project_folder):
         del new_item_profile
         del item_profile, missing_item_atts
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -333,7 +333,7 @@ def download_agol_metadata(project_folder=""):
 
         #del new_item_profile
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -366,7 +366,7 @@ def main(project_folder=""):
 
         download_agol_metadata(project_folder)
 
-        # Variables
+        # Declared Variables
         # Imports
         # Function parameters
         del project_folder

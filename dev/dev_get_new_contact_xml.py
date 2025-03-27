@@ -71,7 +71,7 @@ def get_new_contact(contact="", contact_type=""):
         else:
             pass
 
-        # Variables
+        # Declared Variables
         del email_address, user_name, role_code
         del new_contact, new_contact_root
         del contacts_xml_tree, contacts_xml_root
@@ -190,7 +190,7 @@ def main():
 ##        else:
 ##            pass
 ##
-##        # Variables
+##        # Declared Variables
 ##        del email_address, user_name
 ##        del new_contact, new_contact_root
 ##        del contacts_xml_tree, contacts_xml_root

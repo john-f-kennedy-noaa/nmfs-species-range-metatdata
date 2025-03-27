@@ -2908,7 +2908,7 @@ if __name__ == '__main__':
 
         main(project_gdb=project_gdb)
 
-        # Variables
+        # Declared Variables
         del project_folder, project_name, project_gdb
 
         # Imports

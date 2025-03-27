@@ -76,7 +76,7 @@ def main():
             print("target is missing")
 
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml, target_xml_string, target_tree, target_root
 

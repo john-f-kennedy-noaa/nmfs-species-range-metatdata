@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
         main(source_gdb=source_gdb, target_gdb=target_gdb)
 
-        # Variables
+        # Declared Variables
         del source_gdb, target_gdb
         del project_folder
         # Imports

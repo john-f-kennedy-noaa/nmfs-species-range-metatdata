@@ -162,7 +162,7 @@ def ideas_1():
         del new_item_profile
         del item_profile, missing_item_atts
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -271,7 +271,7 @@ def ideas2():
         #del new_item_profile
         del item_profile, missing_item_atts
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -320,7 +320,7 @@ def main():
 
         del titles
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports

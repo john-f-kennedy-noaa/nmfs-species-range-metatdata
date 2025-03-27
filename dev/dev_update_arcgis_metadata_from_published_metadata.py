@@ -114,7 +114,7 @@ def update_metadata_from_published_md(project_file="", project=""):
 
         print(f"\n{'-' * 90}\n")
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_gdb
         del home_folder
 
@@ -231,7 +231,7 @@ def main(project_gdb="", metadata_folder=""):
 
         #update_metadata_from_published_md(project_file="", project="")
 
-        # Variables
+        # Declared Variables
 
         # Function parameters
         del project_gdb, metadata_folder
@@ -274,7 +274,7 @@ if __name__ == '__main__':
 
         main(project_gdb=project_gdb, metadata_folder=metadata_folder)
 
-        # Variables
+        # Declared Variables
         del project_folder, project_name, project_gdb, metadata_folder
         del today, date_string
         # Imports

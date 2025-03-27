@@ -17,252 +17,252 @@ import arcpy
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-def remove_duplicate_elements(root):
-    seen = {}
-    for element in root.iter():
-        key = (element.tag, element.text, tuple(element.attrib.items()))
-        if key in seen:
-            element.getparent().remove(element)
-        else:
-            seen[key] = True
-        del key, element
-    del seen, root
+##def remove_duplicate_elements(root):
+##    seen = {}
+##    for element in root.iter():
+##        key = (element.tag, element.text, tuple(element.attrib.items()))
+##        if key in seen:
+##            element.getparent().remove(element)
+##        else:
+##            seen[key] = True
+##        del key, element
+##    del seen, root
+##
+### function to update purpose and credits in metadata
+##def update_metadata(target_tree, source_tree, target_xml_name):
+##    try:
+##        from lxml import etree
+##        num_elements = 0
+##        source_root = source_tree.getroot()
+##        target_root = target_tree.getroot()
+##
+##        UpdateLinkage = False
+##        if UpdateLinkage:
+##            new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
+##            onLineSrcs = target_root.findall("./distInfo/distributor/distorTran/onLineSrc")
+##            for onLineSrc in onLineSrcs:
+##                if onLineSrc.find('./protocol').text == "ESRI REST Service":
+##                    old_linkage_element = onLineSrc.find('./linkage')
+##                    old_linkage = old_linkage_element.text
+##                    #print(old_linkage, flush=True)
+##                    old_item_name = old_linkage[old_linkage.find("/services/")+len("/services/"):old_linkage.find("/FeatureServer")]
+##                    new_linkage = old_linkage.replace(old_item_name, new_item_name)
+##                    #print(new_linkage, flush=True)
+##                    old_linkage_element.text = new_linkage
+##                    #print(old_linkage_element.text, flush=True)
+##                    del old_linkage_element
+##                    del old_item_name, old_linkage, new_linkage
+##                del onLineSrc
+##            del onLineSrcs, new_item_name
+##            num_elements += 1
+##        else:
+##            pass
+##        del UpdateLinkage
 
-# function to update purpose and credits in metadata
-def update_metadata(target_tree, source_tree, target_xml_name):
-    try:
-        from lxml import etree
-        num_elements = 0
-        source_root = source_tree.getroot()
-        target_root = target_tree.getroot()
-
-        UpdateLinkage = False
-        if UpdateLinkage:
-            new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            onLineSrcs = target_root.findall("./distInfo/distributor/distorTran/onLineSrc")
-            for onLineSrc in onLineSrcs:
-                if onLineSrc.find('./protocol').text == "ESRI REST Service":
-                    old_linkage_element = onLineSrc.find('./linkage')
-                    old_linkage = old_linkage_element.text
-                    #print(old_linkage, flush=True)
-                    old_item_name = old_linkage[old_linkage.find("/services/")+len("/services/"):old_linkage.find("/FeatureServer")]
-                    new_linkage = old_linkage.replace(old_item_name, new_item_name)
-                    #print(new_linkage, flush=True)
-                    old_linkage_element.text = new_linkage
-                    #print(old_linkage_element.text, flush=True)
-                    del old_linkage_element
-                    del old_item_name, old_linkage, new_linkage
-                del onLineSrc
-            del onLineSrcs, new_item_name
-            num_elements += 1
-        else:
-            pass
-        del UpdateLinkage
-
-        UpdateDetailedName = False
-        if UpdateDetailedName:
-            new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            detailed = target_root.find("eainfo/detailed")
-            detailed.set("Name", new_item_name)
-            del detailed, new_item_name
-            num_elements += 1
-        else:
-            pass
-        del UpdateDetailedName
-
-        # metadata/dqScope
-
-        UpdateDqScope = False
-        if UpdateDqScope:
-            #print(etree.tostring(source_root, pretty_print=True).decode(), flush=True)
-            #find = etree.XPath("//rpIndName[contains(.,'Jennifer Schultz')]")
-            find = etree.XPath("//dqScope")
-            target_elements = find(target_root)
-            del find
-            if target_elements:
-                #print("\n", flush=True)
-                for target_element in target_elements:
-                    #print(etree.tostring(target_element, pretty_print=True).decode(), flush=True)
-                    print(f"\t{target_element.tag}", flush=True)
-                    new_xml_string = '<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'
-                    new_element = etree.fromstring(new_xml_string)
-                    del new_xml_string
-
-                    # create an ElementTree object from the metadata XML string
-                    new_xml_string_tree = etree.ElementTree(new_element)
-                    new_xml_string_root = new_xml_string_tree.getroot()
-                    #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
-                    new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
-                    #print(f"\t\t{new_element_x_path}", flush=True)
-                    #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
-
-                    old_element_x_path = target_tree.getpath(target_element)
-                    #print(f"\t\t{old_element_x_path}", flush=True)
-                    #print(target_tree.xpath(old_element_x_path), flush=True)
-
-                    target_element.getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
-
-                    del new_xml_string_tree, new_xml_string_root
-                    del old_element_x_path, new_element_x_path
-                    del new_element
-                    del target_element
-            else:
-                print("Element is missing", flush=True)
-            del target_elements
-            num_elements += 1
-        del UpdateDqScope
-
-        UpdateDqInfoReport = True
-        if UpdateDqInfoReport:
-            #print(etree.tostring(source_root, pretty_print=True).decode(), flush=True)
-            #find = etree.XPath("//rpIndName[contains(.,'Jennifer Schultz')]")
-            # Find element with specific attribute value
-            # element = root.xpath("//element[@attr1='value1']")
-            #print(etree.tostring(report, pretty_print=True).decode().replace("\n\t\t", "\n"), flush=True)
-
-            find = etree.XPath("./dqInfo/report[@type='DQConcConsis']") # DQConcConsis, DQCompOm
-            target_elements = find(target_root)
-            del find
-
-            if target_elements:
-                #print(etree.tostring(target_elements[0], pretty_print=True).decode(), flush=True)
-                print(f"\tUpdating: {target_elements[0].attrib['type']}", flush=True)
-                new_xml_string = '<report xmlns="" type="DQConcConsis" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
-                new_element = etree.fromstring(new_xml_string)
-                del new_xml_string
-
-                # create an ElementTree object from the metadata XML string
-                new_xml_string_tree = etree.ElementTree(new_element)
-                new_xml_string_root = new_xml_string_tree.getroot()
-                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
-
-                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
-                #print(f"\t\t{new_element_x_path}", flush=True)
-                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
-
-                old_element_x_path = target_tree.getpath(target_elements[0])
-                #print(f"\t\t{old_element_x_path}", flush=True)
-                #print(target_tree.xpath(old_element_x_path)[0], flush=True)
-
-                target_elements[0].getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
-
-                del new_xml_string_tree, new_xml_string_root
-                del old_element_x_path, new_element_x_path
-                del new_element
-                num_elements += 1
-            else:
-                find = etree.XPath("./dqInfo")
-                perant_element = find(target_root)[0]
-                del find
-
-                print(f"\tInserting type='DQConcConsis'", flush=True)
-
-                new_xml_string = '<report xmlns="" type="DQConcConsis" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
-                new_element = etree.fromstring(new_xml_string)
-                del new_xml_string
-
-                # create an ElementTree object from the metadata XML string
-                new_xml_string_tree = etree.ElementTree(new_element)
-                new_xml_string_root = new_xml_string_tree.getroot()
-                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
-                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
-                #print(f"\t\t{new_element_x_path}", flush=True)
-                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
-
-                #perant_element.insert(1, new_xml_string_root)
-                perant_element.append(new_element)
-
-                #print(etree.tostring(perant_element, pretty_print=True).decode(), flush=True)
-
-                del new_xml_string_tree, new_xml_string_root, new_element_x_path
-                del new_element
-
-                del perant_element
-                num_elements += 1
-
-            del target_elements
-
-            find = etree.XPath("./dqInfo/report[@type='DQCompOm']") # DQConcConsis, DQCompOm
-            target_elements = find(target_root)
-            del find
-
-            if target_elements:
-                #print(etree.tostring(target_elements[0], pretty_print=True).decode(), flush=True)
-                print(f"\tUpdating: {target_elements[0].attrib['type']}", flush=True)
-                new_xml_string = '<report xmlns="" type="DQCompOm" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
-                new_element = etree.fromstring(new_xml_string)
-                del new_xml_string
-
-                # create an ElementTree object from the metadata XML string
-                new_xml_string_tree = etree.ElementTree(new_element)
-                new_xml_string_root = new_xml_string_tree.getroot()
-                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
-
-                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
-                #print(f"\t\t{new_element_x_path}", flush=True)
-                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
-
-                old_element_x_path = target_tree.getpath(target_elements[0])
-                #print(f"\t\t{old_element_x_path}", flush=True)
-                #print(target_tree.xpath(old_element_x_path)[0], flush=True)
-
-                target_elements[0].getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
-
-                del new_xml_string_tree, new_xml_string_root
-                del old_element_x_path, new_element_x_path
-                del new_element
-                num_elements += 1
-            else:
-                find = etree.XPath("./dqInfo")
-                perant_element = find(target_root)[0]
-                del find
-
-                print(f"\tInserting  type='DQCompOm'", flush=True)
-
-                new_xml_string = '<report xmlns="" type="DQCompOm" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
-                new_element = etree.fromstring(new_xml_string)
-                del new_xml_string
-
-                # create an ElementTree object from the metadata XML string
-                new_xml_string_tree = etree.ElementTree(new_element)
-                new_xml_string_root = new_xml_string_tree.getroot()
-                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
-                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
-                #print(f"\t\t{new_element_x_path}", flush=True)
-                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
-
-                #perant_element.insert(2, new_xml_string_root)
-                perant_element.append(new_element)
-
-                #print(etree.tostring(perant_element, pretty_print=True).decode(), flush=True)
-
-                del new_xml_string_tree, new_xml_string_root, new_element_x_path
-                del new_element
-
-                del perant_element
-                num_elements += 1
-
-            del target_elements
-
-            # Track changes
-            num_elements += 1
-        del UpdateDqInfoReport
-
-
-        # This is the current one that appears to work.
-        InsertProcessStep = False
-        if InsertProcessStep:
-            pass
-        else:
-            pass
-        del InsertProcessStep
-
-        # Function parameters
-        del target_tree, source_tree
-        del target_root, source_root, target_xml_name
-
-        # Imports
-        del etree
+##        UpdateDetailedName = False
+##        if UpdateDetailedName:
+##            new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
+##            detailed = target_root.find("eainfo/detailed")
+##            detailed.set("Name", new_item_name)
+##            del detailed, new_item_name
+##            num_elements += 1
+##        else:
+##            pass
+##        del UpdateDetailedName
+##
+##        # metadata/dqScope
+##
+##        UpdateDqScope = False
+##        if UpdateDqScope:
+##            #print(etree.tostring(source_root, pretty_print=True).decode(), flush=True)
+##            #find = etree.XPath("//rpIndName[contains(.,'Jennifer Schultz')]")
+##            find = etree.XPath("//dqScope")
+##            target_elements = find(target_root)
+##            del find
+##            if target_elements:
+##                #print("\n", flush=True)
+##                for target_element in target_elements:
+##                    #print(etree.tostring(target_element, pretty_print=True).decode(), flush=True)
+##                    print(f"\t{target_element.tag}", flush=True)
+##                    new_xml_string = '<dqScope xmlns=""><scpLvl><ScopeCd value="005"></ScopeCd></scpLvl><scpLvlDesc xmlns=""><datasetSet>Feature Class</datasetSet></scpLvlDesc></dqScope>'
+##                    new_element = etree.fromstring(new_xml_string)
+##                    del new_xml_string
+##
+##                    # create an ElementTree object from the metadata XML string
+##                    new_xml_string_tree = etree.ElementTree(new_element)
+##                    new_xml_string_root = new_xml_string_tree.getroot()
+##                    #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
+##                    new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
+##                    #print(f"\t\t{new_element_x_path}", flush=True)
+##                    #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
+##
+##                    old_element_x_path = target_tree.getpath(target_element)
+##                    #print(f"\t\t{old_element_x_path}", flush=True)
+##                    #print(target_tree.xpath(old_element_x_path), flush=True)
+##
+##                    target_element.getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
+##
+##                    del new_xml_string_tree, new_xml_string_root
+##                    del old_element_x_path, new_element_x_path
+##                    del new_element
+##                    del target_element
+##            else:
+##                print("Element is missing", flush=True)
+##            del target_elements
+##            num_elements += 1
+##        del UpdateDqScope
+##
+##        UpdateDqInfoReport = True
+##        if UpdateDqInfoReport:
+##            #print(etree.tostring(source_root, pretty_print=True).decode(), flush=True)
+##            #find = etree.XPath("//rpIndName[contains(.,'Jennifer Schultz')]")
+##            # Find element with specific attribute value
+##            # element = root.xpath("//element[@attr1='value1']")
+##            #print(etree.tostring(report, pretty_print=True).decode().replace("\n\t\t", "\n"), flush=True)
+##
+##            find = etree.XPath("./dqInfo/report[@type='DQConcConsis']") # DQConcConsis, DQCompOm
+##            target_elements = find(target_root)
+##            del find
+##
+##            if target_elements:
+##                #print(etree.tostring(target_elements[0], pretty_print=True).decode(), flush=True)
+##                print(f"\tUpdating: {target_elements[0].attrib['type']}", flush=True)
+##                new_xml_string = '<report xmlns="" type="DQConcConsis" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
+##                new_element = etree.fromstring(new_xml_string)
+##                del new_xml_string
+##
+##                # create an ElementTree object from the metadata XML string
+##                new_xml_string_tree = etree.ElementTree(new_element)
+##                new_xml_string_root = new_xml_string_tree.getroot()
+##                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
+##
+##                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
+##                #print(f"\t\t{new_element_x_path}", flush=True)
+##                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
+##
+##                old_element_x_path = target_tree.getpath(target_elements[0])
+##                #print(f"\t\t{old_element_x_path}", flush=True)
+##                #print(target_tree.xpath(old_element_x_path)[0], flush=True)
+##
+##                target_elements[0].getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
+##
+##                del new_xml_string_tree, new_xml_string_root
+##                del old_element_x_path, new_element_x_path
+##                del new_element
+##                num_elements += 1
+##            else:
+##                find = etree.XPath("./dqInfo")
+##                perant_element = find(target_root)[0]
+##                del find
+##
+##                print(f"\tInserting type='DQConcConsis'", flush=True)
+##
+##                new_xml_string = '<report xmlns="" type="DQConcConsis" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
+##                new_element = etree.fromstring(new_xml_string)
+##                del new_xml_string
+##
+##                # create an ElementTree object from the metadata XML string
+##                new_xml_string_tree = etree.ElementTree(new_element)
+##                new_xml_string_root = new_xml_string_tree.getroot()
+##                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
+##                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
+##                #print(f"\t\t{new_element_x_path}", flush=True)
+##                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
+##
+##                #perant_element.insert(1, new_xml_string_root)
+##                perant_element.append(new_element)
+##
+##                #print(etree.tostring(perant_element, pretty_print=True).decode(), flush=True)
+##
+##                del new_xml_string_tree, new_xml_string_root, new_element_x_path
+##                del new_element
+##
+##                del perant_element
+##                num_elements += 1
+##
+##            del target_elements
+##
+##            find = etree.XPath("./dqInfo/report[@type='DQCompOm']") # DQConcConsis, DQCompOm
+##            target_elements = find(target_root)
+##            del find
+##
+##            if target_elements:
+##                #print(etree.tostring(target_elements[0], pretty_print=True).decode(), flush=True)
+##                print(f"\tUpdating: {target_elements[0].attrib['type']}", flush=True)
+##                new_xml_string = '<report xmlns="" type="DQCompOm" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
+##                new_element = etree.fromstring(new_xml_string)
+##                del new_xml_string
+##
+##                # create an ElementTree object from the metadata XML string
+##                new_xml_string_tree = etree.ElementTree(new_element)
+##                new_xml_string_root = new_xml_string_tree.getroot()
+##                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
+##
+##                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
+##                #print(f"\t\t{new_element_x_path}", flush=True)
+##                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
+##
+##                old_element_x_path = target_tree.getpath(target_elements[0])
+##                #print(f"\t\t{old_element_x_path}", flush=True)
+##                #print(target_tree.xpath(old_element_x_path)[0], flush=True)
+##
+##                target_elements[0].getparent().replace(target_tree.xpath(old_element_x_path)[0], new_xml_string_tree.xpath(new_element_x_path)[0])
+##
+##                del new_xml_string_tree, new_xml_string_root
+##                del old_element_x_path, new_element_x_path
+##                del new_element
+##                num_elements += 1
+##            else:
+##                find = etree.XPath("./dqInfo")
+##                perant_element = find(target_root)[0]
+##                del find
+##
+##                print(f"\tInserting  type='DQCompOm'", flush=True)
+##
+##                new_xml_string = '<report xmlns="" type="DQCompOm" dimension="horizontal"><measDesc>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</measDesc><measResult><ConResult xmlns=""><conSpec xmlns=""><resTitle>UPDATE NEEDED. What document or online reference covers the specifications used.</resTitle><date><pubDate>2025-01-01T00:00:00</pubDate></date></conSpec><conExpl>Based on a review from species experts, we determined that all necessary features were included in the species range file. Attribute values confirmed and checked via team review.</conExpl><conPass>1</conPass></ConResult></measResult></report>'
+##                new_element = etree.fromstring(new_xml_string)
+##                del new_xml_string
+##
+##                # create an ElementTree object from the metadata XML string
+##                new_xml_string_tree = etree.ElementTree(new_element)
+##                new_xml_string_root = new_xml_string_tree.getroot()
+##                #print(etree.tostring(new_xml_string_tree, pretty_print=True).decode(), flush=True)
+##                new_element_x_path = new_xml_string_tree.getpath(new_xml_string_root)
+##                #print(f"\t\t{new_element_x_path}", flush=True)
+##                #print(new_xml_string_tree.xpath(new_element_x_path)[0], flush=True)
+##
+##                #perant_element.insert(2, new_xml_string_root)
+##                perant_element.append(new_element)
+##
+##                #print(etree.tostring(perant_element, pretty_print=True).decode(), flush=True)
+##
+##                del new_xml_string_tree, new_xml_string_root, new_element_x_path
+##                del new_element
+##
+##                del perant_element
+##                num_elements += 1
+##
+##            del target_elements
+##
+##            # Track changes
+##            num_elements += 1
+##        del UpdateDqInfoReport
+##
+##
+##        # This is the current one that appears to work.
+##        InsertProcessStep = False
+##        if InsertProcessStep:
+##            pass
+##        else:
+##            pass
+##        del InsertProcessStep
+##
+##        # Function parameters
+##        del target_tree, source_tree
+##        del target_root, source_root, target_xml_name
+##
+##        # Imports
+##        del etree
 
     except:
         traceback.print_exc()

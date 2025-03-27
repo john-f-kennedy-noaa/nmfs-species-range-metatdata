@@ -88,7 +88,7 @@ def main(project_folder="",project_name=""):
         except Exception as e:
             print(f"ERROR: {e}"); del e
 
-        # Variables
+        # Declared Variables
         del project_gdb
         # Function parameters
         del project_folder, project_name

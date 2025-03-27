@@ -81,7 +81,7 @@ def main(project_folder=""):
         # Pretty Format
         pretty_format_xml_file(target_xml)
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml, target_tree, target_root
 

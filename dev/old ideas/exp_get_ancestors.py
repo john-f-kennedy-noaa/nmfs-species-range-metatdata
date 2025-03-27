@@ -302,7 +302,7 @@ def main(project_folder=""):
 ##                        del rpIndName
 ##                    del tag_text_dict, contact_dict, contact_count
 
-                    # Variables
+                    # Declared Variables
                     #del elements
                     del target_tree, target_root
                     del target_xml_name
@@ -362,7 +362,7 @@ def main(project_folder=""):
 
             del target_xml
 
-        # Variables
+        # Declared Variables
         del project_folder, target_xmls
 
         # Imports

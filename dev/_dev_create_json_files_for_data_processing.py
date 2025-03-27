@@ -28,14 +28,31 @@ def main(project_folder=""):
         print(f"Environment:    {os.path.basename(sys.exec_prefix)}")
         print(f"{'-' * 80}\n")
 
-        root_dict = {"Esri"       :  0, "dataIdInfo"  :  1, "mdChar"      :  2,
-                     "mdContact"  :  3, "mdDateSt"    :  4, "mdFileID"    :  5,
-                     "mdLang"     :  6, "mdMaint"     :  7, "mdHrLv"      :  8,
-                     "mdHrLvName" :  9, "mdStanName"  : 10, "mdStanVer"   : 11,
-                     "refSysInfo" : 12, "spatRepInfo" : 13, "spdoinfo"    : 14,
-                     "dqInfo"     : 15, "distInfo"    : 16, "eainfo"      : 17,
-                     "contInfo"   : 18, "spref"       : 19, "spatRepInfo" : 20,
-                     "dataSetFn"  : 19, "Binary"      : 100,}
+        root_dict = {"Esri"        :  0,
+                     "dataIdInfo"  :  1,
+                     "mdLang"      :  2,
+                     "mdChar"      :  3,
+                     "distInfo"    :  4,
+                     "mdHrLv"      :  5,
+                     "mdHrLvName"  :  6,
+                     "refSysInfo"  :  7,
+                     "spatRepInfo" :  8,
+                     "spdoinfo"    :  9,
+                     "eainfo"      : 10,
+
+                     "mdContact"   :  20,
+                     "mdFileID"    :  21,
+                     "dqInfo"      :  22,
+                     "mdMaint"     : 10,
+                     "spref"       : 14,
+                     "contInfo"    : 17,
+                     "dataSetFn"   : 18,
+                     "Binary"      : 100,
+                     "mdDateSt"    :  6,
+                     "mdTimeSt"    :  6,
+                     #"mdStanName"  : 60,
+                     #"mdStanVer"   : 61,
+                     }
 
         import json
         json_path = rf"{project_folder}\root_dict.json"
@@ -52,15 +69,40 @@ def main(project_folder=""):
         del json_path
         del json
 
-        esri_dict ={"CreaDate"      :  0, "CreaTime"   :  1, "ArcGISFormat"   : 2,
-                    "ArcGISstyle"   :  3, "SyncOnce"   :  4, "DataProperties" : 5,
-                    "itemProps"     :  0, "itemName"   :  0, "imsContentType" : 1,
-                    "nativeExtBox"  :  2, "westBL"     :  0, "eastBL"   :  1, "southBL"  : 2,
-                    "northBL"       :  3, "exTypeCode" :  4, "coordRef" :  1, "type"     : 0,
-                    "geogcsn"       :  2, "csUnits"    :  3, "peXml"    :  4, "SyncDate" : 6,
-                    "SyncTime"      :  7, "ModDate"    :  8, "ModTime"  :  9,
-                    "scaleRange"    : 10, "minScale"   : 11, "maxScale" : 12,
-                    "ArcGISProfile" : 13,}
+        esri_dict ={"CreaDate"       : 0,
+                    "CreaTime"       : 1,
+                    "ArcGISFormat"   : 2,
+                    "ArcGISstyle"    : 3,
+                    "ArcGISProfile"  : 4,
+                    "SyncOnce"       : 5,
+                    "DataProperties" : 6,
+                        "lineage"      : 0,
+                        "itemProps"    :  1,
+                            "itemName"       :  0,
+                            "imsContentType" : 1,
+                        "nativeExtBox" :  2,
+                            "westBL"     : 0,
+                            "eastBL"     : 1,
+                            "southBL"    : 2,
+                            "northBL"    : 3,
+                            "exTypeCode" : 4,
+                        "itemLocation" : 3,
+                            "linkage"  : 0,
+                            "protocol" : 1,
+                        "coordRef"     : 4,
+                            "type"    : 0,
+                            "geogcsn" : 1,
+                            "csUnits" : 2,
+                            "projcsn" : 3,
+                            "peXml"   : 4,
+                    "SyncDate"       :  7,
+                    "SyncTime"       :  8,
+                    "ModDate"        :  9,
+                    "ModTime"        : 10,
+                    "scaleRange"     : 11,
+                    "minScale"       : 12,
+                    "maxScale"       : 13,
+                   }
 
         import json
         json_path = rf"{project_folder}\esri_dict.json"
@@ -77,13 +119,121 @@ def main(project_folder=""):
         del json_path
         del json
 
-        dataIdInfo_dict = { "idCitation" :  0, "searchKeys" :  1, "idPurp"    : 2,
-                            "idAbs"      :  3, "idCredit"   :  4, "idStatus"  : 5,
-                            "idPoC"      :  6, "themeKeys"  :  7, "placeKeys" : 8,
-                            "tempKeys"   : 9, "otherKeys"   : 10, "resConst"  : 12,
-                            "resMaint"   : 13, "envirDesc"  : 14, "dataLang"  : 15,
-                            "dataChar"   : 16, "spatRpType" : 17, "dataExt"   : 18,
-                            "" : 19, "tpCat"      : 20,}
+        dataIdInfo_dict = { "envirDesc"  :  0,
+                            "dataLang"   :  1,
+                            "dataChar"   :  2,
+                            "idCitation" :  3,
+                                "resTitle"     : 0,
+                                "resAltTitle"  : 1,
+                                "collTitle"    : 2,
+                                "date"         : 3,
+                                "presForm"     : 4,
+                                    "PresFormCd" : 0,
+                                "citRespParty" : 5,
+                            "spatRpType" :  4,
+                            "dataExt"    :  5,
+                                "exDesc"  : 0,
+                                "geoEle"  : 1,
+                                    "GeoBndBox" : 0,
+                                        "exTypeCode" : 0,
+                                        "westBL"     : 1,
+                                        "eastBL"     : 2,
+                                        "northBL"    : 3,
+                                        "southBL"    : 4,
+                                "tempEle" : 2,
+                                    "TempExtent" : 0,
+                                        "exTemp" : 0,
+                                            "TM_Period"  : 0,
+                                                "tmBegin" : 0,
+                                                "tmEnd"   : 1,
+                                            "TM_Instant" : 1,
+                                                "tmPosition" : 0,
+                            "searchKeys" :  1,
+                            "idPurp"     :  2,
+                            "idAbs"      :  3,
+                            "idCredit"   :  4,
+                            "idStatus"   :  5,
+                            "resConst"   :  6,
+                            "discKeys"   :  7,
+                                "keyword"   : 0,
+                                "thesaName" : 1,
+                                    "resTitle" : 0,
+                                    "date"     : 1,
+                                        "createDate" : 0,
+                                        "pubDate"    : 1,
+                                        "reviseDate" : 2,
+                                    "citOnlineRes" : 2,
+                                        "linkage" : 0,
+                                        "orFunct" : 1,
+                                            "OnFunctCd" : 0,
+                                    "thesaLang" : 2,
+                                        "languageCode" : 0,
+                                        "countryCode"  : 1,
+                            "themeKeys"  :  8,
+                                "keyword"   : 0,
+                                "thesaName" : 1,
+                                    "resTitle" : 0,
+                                    "date"     : 1,
+                                        "createDate" : 0,
+                                        "pubDate"    : 1,
+                                        "reviseDate" : 2,
+                                    "citOnlineRes" : 2,
+                                        "linkage" : 0,
+                                        "orFunct" : 1,
+                                            "OnFunctCd" : 0,
+                                    "thesaLang" : 2,
+                                        "languageCode" : 0,
+                                        "countryCode"  : 1,
+                            "placeKeys"  :  9,
+                                "keyword"   : 0,
+                                "thesaName" : 1,
+                                    "resTitle" : 0,
+                                    "date"     : 1,
+                                        "createDate" : 0,
+                                        "pubDate"    : 1,
+                                        "reviseDate" : 2,
+                                    "citOnlineRes" : 2,
+                                        "linkage" : 0,
+                                        "orFunct" : 1,
+                                            "OnFunctCd" : 0,
+                                    "thesaLang" : 2,
+                                        "languageCode" : 0,
+                                        "countryCode"  : 1,
+                            "tempKeys"   : 10,
+                                "keyword"   : 0,
+                                "thesaName" : 1,
+                                    "resTitle" : 0,
+                                    "date"     : 1,
+                                        "createDate" : 0,
+                                        "pubDate"    : 1,
+                                        "reviseDate" : 2,
+                                    "citOnlineRes" : 2,
+                                        "linkage" : 0,
+                                        "orFunct" : 1,
+                                            "OnFunctCd" : 0,
+                                    "thesaLang" : 2,
+                                        "languageCode" : 0,
+                                        "countryCode"  : 1,
+                            "otherKeys"  : 11,
+                                "keyword"   : 0,
+                                "thesaName" : 1,
+                                    "resTitle" : 0,
+                                    "date"     : 1,
+                                        "createDate" : 0,
+                                        "pubDate"    : 1,
+                                        "reviseDate" : 2,
+                                    "citOnlineRes" : 2,
+                                        "linkage" : 0,
+                                        "orFunct" : 1,
+                                            "OnFunctCd" : 0,
+                                    "thesaLang" : 2,
+                                        "languageCode" : 0,
+                                        "countryCode"  : 1,
+                            "idPoC"      : 11,
+                            "resMaint"   : 12,
+
+                            "tpCat"      : 18,
+                           }
 
         import json
         json_path = rf"{project_folder}\dataIdInfo_dict.json"
@@ -100,10 +250,18 @@ def main(project_folder=""):
         del json_path
         del json
 
-        idCitation_dict = {"idCitation" : 0, "resTitle" : 0, "resAltTitle" : 1,
-                           "collTitle"  : 2, "presForm" : 3, "PresFormCd"  : 0,
-                           "fgdcGeoform" : 1, "date" : 4, "createDate" : 0,
-                           "pubDate"    : 1, "reviseDate" : 2, "citRespParty"  : 6,
+        idCitation_dict = {"idCitation" : 0,
+                                "resTitle"    : 0,
+                                "resAltTitle" : 1,
+                                "collTitle"   : 2,
+                                "presForm"    : 3,
+                                    "PresFormCd"  : 0,
+                                    "fgdcGeoform" : 1,
+                                "date"        : 4,
+                                    "createDate" : 0,
+                                    "pubDate"    : 1,
+                                    "reviseDate" : 2,
+                                "citRespParty"  : 6,
                            }
 
         import json
@@ -227,6 +385,40 @@ def main(project_folder=""):
         del json_path
         del json
 
+        distInfo_dict = {"distributor" : 0,
+                            "distFormat" : 0,
+                                "formatName"   : 0,
+                                "formatVer"    : 1,
+                                "fileDecmTech" : 2,
+                                "formatInfo"   : 3,
+                            "distorTran" : 1,
+                                "unitsODist" : 0,
+                                "transSize"  : 1,
+                                "onLineSrc"  : 2,
+                                   "linkage" : 0,
+                                   "protocol" : 1,
+                                   "orName" : 2,
+                                   "orDesc" : 3,
+                                   "orFunct" : 4,
+                                      "OnFunctCd" : 0,
+                            "distorCont" : 2,
+                           }
+
+        import json
+        json_path = rf"{project_folder}\distInfo_dict.json"
+        # Write to File
+        with open(json_path, 'w') as json_file:
+            json.dump(distInfo_dict, json_file, indent=4)
+        del json_file
+        del distInfo_dict
+        with open(json_path, "r") as json_file:
+            distInfo_dict = json.load(json_file)
+        del json_file
+        print(distInfo_dict)
+        del distInfo_dict
+        del json_path
+        del json
+
         RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
                        "003" : "Owner",             "004" : "User",
                        "005" : "Distributor",       "006" : "Originator",
@@ -259,8 +451,8 @@ def main(project_folder=""):
 
 
         tpCat_dict = {"002": '<tpCat><TopicCatCd value="002"></TopicCatCd></tpCat>',
-         "007": '<tpCat><TopicCatCd value="007"></TopicCatCd></tpCat>',
-         "014": '<tpCat><TopicCatCd value="014"></TopicCatCd></tpCat>',}
+                      "007": '<tpCat><TopicCatCd value="007"></TopicCatCd></tpCat>',
+                      "014": '<tpCat><TopicCatCd value="014"></TopicCatCd></tpCat>',}
 
         import json
         json_path = rf"{project_folder}\tpCat_dict.json"
@@ -278,57 +470,58 @@ def main(project_folder=""):
         del json
 
         # ###################### DisMAP ########################################
-        contacts = {"citRespParty"     : {"rpIndName" : "Timothy J Haverland",                   "eMailAdd" : "tim.haverland@noaa.gov"},
-                        "idPoC"        : {"rpIndName" : "Melissa Karp",                          "eMailAdd" : "melissa.karp@noaa.gov"},
-                        "distorCont"   : {"rpIndName" : "NMFS Office of Science and Technology", "eMailAdd" : "tim.haverland@noaa.gov"},
-                        "mdContact"    : {"rpIndName" : "John F Kennedy",                        "eMailAdd" : "john.f.kennedy@noaa.gov"},
-                        "stepProc"     : [{"rpIndName" : "John F Kennedy",                        "eMailAdd" : "john.f.kennedy@noaa.gov"},
-                                          {"rpIndName" : "Melissa Karp",                          "eMailAdd" : "melissa.karp@noaa.gov"},
+        contact_dict = {"citRespParty" : [{"role"  : "Custodian",        "rpIndName" : "Timothy J Haverland", "eMailAdd" : "tim.haverland@noaa.gov"},],
+                        "idPoC"        : [{"role"  : "Point of Contact", "rpIndName" : "Melissa Ann Karp",    "eMailAdd" : "melissa.karp@noaa.gov"},],
+                        "distorCont"   : [{"role"  : "Distributor",      "rpIndName" : "Timothy J Haverland", "eMailAdd" : "tim.haverland@noaa.gov"},],
+                        "mdContact"    : [{"role"  : "Author",           "rpIndName" : "John F Kennedy",      "eMailAdd" : "john.f.kennedy@noaa.gov"},],
+                        "stepProc"     : [{"role"  : "Processor",        "rpIndName" : "John F Kennedy",      "eMailAdd" : "john.f.kennedy@noaa.gov"},
+                                          {"role"  : "Processor",        "rpIndName" : "Melissa Ann Karp",    "eMailAdd" : "melissa.karp@noaa.gov"},
                                          ],}
 
         import json
-        json_path = rf"{project_folder}\contacts.json"
+        json_path = rf"{project_folder}\contact_dict.json"
         # Write to File
-        with open(json_path, 'w') as json_file:
-            json.dump(contacts, json_file, indent=4)
-        del json_file
-        del contacts
+        #with open(json_path, 'w') as json_file:
+        #    json.dump(contact_dict, json_file, indent=4)
+        #del json_file
+        #del contact_dict
         with open(json_path, "r") as json_file:
-            contacts = json.load(json_file)
+            contact_dict = json.load(json_file)
         del json_file
-        print(contacts)
-        del contacts
+        print(contact_dict)
+        del contact_dict
         del json_path
         del json
 
         # ###################### DisMAP ########################################
         # ###################### ESA ########################################
 
-        contacts = {"citRespParty"     : [{"role"  : "Custodian",        "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
-                        "idPoC"        : [{"role"  : "Point of Contact", "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
-                        "distorCont"   : [{"role"  : "Distributor",      "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
-                        "mdContact"    : [{"role"  : "Author",           "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
-                        "stepProc"     : [{"role" : "Processor",        "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Dan Lawson",          "eMailAdd" : "dan.lawson@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Jeffrey A. Seminoff", "eMailAdd" : "jeffrey.seminoff@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Jennifer Schultz",    "eMailAdd" : "jennifer.schultz@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Jonathan Molineaux",  "eMailAdd" : "jonathan.molineaux@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Marc Romano",         "eMailAdd" : "marc.romano@noaa.gov"},
-                                          {"role" : "Processor",        "rpIndName" : "Susan Wang",          "eMailAdd" : "susan.wang@noaa.gov"},
+        contact_dict = {"citRespParty" : [{"role"  : "Custodian",        "rpIndName" : "Nikki Wildart",                      "eMailAdd" : "nikki.wildart@noaa.gov"},],
+                        "idPoC"        : [{"role"  : "Point of Contact", "rpIndName" : "Nikki Wildart",                      "eMailAdd" : "nikki.wildart@noaa.gov"},],
+                        "distorCont"   : [{"role"  : "Distributor",      "rpIndName" : "NMFS Office of Protected Resources", "eMailAdd" : "nikki.wildart@noaa.gov"},],
+                        "mdContact"    : [{"role"  : "Author",           "rpIndName" : "Nikki Wildart",                      "eMailAdd" : "nikki.wildart@noaa.gov"},],
+                        "srcCitatn"    : [{"role"  : "Author",           "rpIndName" : "Nikki Wildart",                      "eMailAdd" : "nikki.wildart@noaa.gov"},],
+                        "stepProc"     : [{"role" : "Processor",         "rpIndName" : "Nikki Wildart",                      "eMailAdd" : "nikki.wildart@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Dan Lawson",                         "eMailAdd" : "dan.lawson@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Jeffrey A. Seminoff",                "eMailAdd" : "jeffrey.seminoff@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Jennifer Schultz",                   "eMailAdd" : "jennifer.schultz@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Jonathan Molineaux",                 "eMailAdd" : "jonathan.molineaux@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Marc Romano",                        "eMailAdd" : "marc.romano@noaa.gov"},
+                                          {"role" : "Processor",         "rpIndName" : "Susan Wang",                         "eMailAdd" : "susan.wang@noaa.gov"},
                                          ],}
 
         import json
-        json_path = rf"{project_folder}\contacts.json"
+        json_path = rf"{project_folder}\contact_dict.json"
         # Write to File
         with open(json_path, 'w') as json_file:
-            json.dump(contacts, json_file, indent=4)
+            json.dump(contact_dict, json_file, indent=4)
         del json_file
-        del contacts
+        del contact_dict
         with open(json_path, "r") as json_file:
-            contacts = json.load(json_file)
+            contact_dict = json.load(json_file)
         del json_file
-        print(contacts)
-        del contacts
+        print(contact_dict)
+        del contact_dict
         del json_path
         del json
 
@@ -371,7 +564,7 @@ if __name__ == "__main__":
 
         main(project_folder=project_folder)
 
-        # Variables
+        # Declared Variables
         del project_folder
         # Imports
     except:

@@ -106,7 +106,7 @@ def export_metadata(project_gdb=""):
 
             pretty_format_xml_file(export_xml_metadata_path)
 
-            # Variables
+            # Declared Variables
             del xml_string
             del tree, root
             del export_xml_metadata_path
@@ -159,7 +159,7 @@ def main(project_folder=""):
                 print(e)
         del ExportMetadata
 
-        # Variables
+        # Declared Variables
         del project_gdb
 
         # Imports

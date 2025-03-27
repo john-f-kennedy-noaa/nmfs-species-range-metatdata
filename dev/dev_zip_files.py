@@ -104,7 +104,7 @@ def main(input_zip_file="", output_folder=""):
 
         zip_data(input_zip_file, output_folder)
 
-        # Variables
+        # Declared Variables
 
         # Function parameters
         del input_zip_file, output_folder

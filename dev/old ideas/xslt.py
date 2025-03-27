@@ -86,7 +86,7 @@ def main():
 ##        del xml
 
 
-        # Variables created in function
+        # Declared Variables created in function
         del project_folder, xslt
 
         # Imports

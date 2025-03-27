@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
         main(metadata_workspace=metadata_workspace)
 
-        # Variables
+        # Declared Variables
         del project_folder, metadata_workspace
         del today, date_string
         # Imports

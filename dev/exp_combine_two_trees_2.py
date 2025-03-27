@@ -165,7 +165,7 @@ def main():
                     del parent
                 elif len(_element) == 1 and not isinstance(_element[0].text, type(None)):
                     pass
-                    print(f"udate?\n\tTag: {_element[0].tag}, Text: {_element[0].text}")
+                    print(f"update?\n\tTag: {_element[0].tag}, Text: {_element[0].text}")
                 else: pass
                 #for __elem in __element:
                 #    print(__elem.tag)

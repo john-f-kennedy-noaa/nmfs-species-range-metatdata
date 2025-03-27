@@ -126,7 +126,7 @@ def main(project_folder=""):
 ##                        del user
 ##                        del rpIndName
 
-                    # Variables
+                    # Declared Variables
                     del elements
                     del target_tree, target_root
                     # Imports
@@ -179,7 +179,7 @@ def main(project_folder=""):
 
             del target_xml
 
-        # Variables
+        # Declared Variables
         del project_folder, target_xmls
 
         # Imports

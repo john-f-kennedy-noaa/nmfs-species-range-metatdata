@@ -74,8 +74,8 @@ def main(project_folder=str()):
 if __name__ == '__main__':
     try:
         #project_folder = rf"{os.path.dirname(os.path.dirname(__file__))}"
-        project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python"
-        #project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata"
+        #project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\DisMap\ArcGIS-Analysis-Python"
+        project_folder = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Projects\ArcPy Studies\XML\nmfs-species-range-metatdata"
         main(project_folder=project_folder)
     except Warning as w:
         print(w)

@@ -116,7 +116,7 @@ def root_sort(target_xml=""):
 ##            print(f"{target_element.tag:<11} : {tag_position_dict[target_element.tag]}")
 ##            del target_element
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml_string, target_tree, target_root
 
@@ -204,7 +204,7 @@ def dqInfo_sort(target_xml=""):
 
         del sort_function
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml_string, target_tree, target_root
 
@@ -305,7 +305,7 @@ def dataLineage_sort(target_xml=""):
 
         del sort_function
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml_string, target_tree, target_root
 

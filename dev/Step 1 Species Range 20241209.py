@@ -1641,7 +1641,7 @@ def create_feature_class_layers(project_gdb=""):
 
         arcpy.AddMessage(f"\n{'-' * 90}\n")
 
-        # Variables set in function
+        # Declared Variables set in function
         del aprx
         del home_folder
 
@@ -1706,7 +1706,7 @@ def get_feature_service_list():
 
         #del titles
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -1988,7 +1988,7 @@ def create_feature_class_services(project_gdb=""):
 
         del current_maps
 
-        # Variables set in function for aprx
+        # Declared Variables set in function for aprx
         del home_folder
         # Save aprx one more time and then delete
         aprx.save()
@@ -2000,7 +2000,7 @@ def create_feature_class_services(project_gdb=""):
             del feature_service_error
         del feature_service_errors
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_file, feature_service_list
 
         # Imports
@@ -2133,7 +2133,7 @@ def create_feature_class_services(project_gdb=""):
 ##
 ##        arcpy.AddMessage(f"\n{'-' * 90}\n")
 ##
-##        # Variables set in function
+##        # Declared Variables set in function
 ##        del project_gdb
 ##        del home_folder
 ##
@@ -2770,7 +2770,7 @@ def create_basic_template_xml_files(project_file="", project=""):
 
         del datasets
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_gdb, base_project_folder, metadata_folder
         del project_folder, scratch_folder, crfs_folder
         del metadata_dictionary, workspaces
@@ -3476,7 +3476,7 @@ def import_basic_template_xml_files(project_file="", project=""):
 
         del datasets
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_gdb, base_project_folder, metadata_folder
         del project_folder, scratch_folder, crfs_folder
         del metadata_dictionary, workspaces
@@ -3942,13 +3942,13 @@ def create_maps(project_file="", project=""):
 ##
 ##        del current_layouts, current_maps
 
-        # Variables set in function for aprx
+        # Declared Variables set in function for aprx
         del home_folder
         # Save aprx one more time and then delete
         aprx.save()
         del aprx
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_gdb, base_project_folder, metadata_folder
         del project_folder, scratch_folder
         del metadata_dictionary

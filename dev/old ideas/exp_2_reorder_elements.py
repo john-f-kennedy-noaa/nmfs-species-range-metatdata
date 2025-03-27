@@ -73,7 +73,7 @@ def main(project_folder=""):
 
         del tree, root
 
-        # Variables
+        # Declared Variables
         del target_xml
 
         # Imports

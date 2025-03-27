@@ -373,7 +373,7 @@ def contact_search_dictionary_email(target_xml_name, target_tree, search_express
                 del children
                 del user_dict
 
-                # Variables
+                # Declared Variables
                 del parent
                 del elem
 
@@ -672,7 +672,7 @@ def contact_search_dictionary_name(target_xml_name, target_tree, search_expressi
                     del user_dict
                     del rpIndName
 
-                # Variables
+                # Declared Variables
                 del rpIndNames
                 del parent
                 del elem
@@ -1042,7 +1042,7 @@ def contact_search_dictionary(target_xml_name, target_tree, search_expression, s
 ##                del contact_root, contact_tree
 ##                del target_tree_x_path, contact_root_x_path
 
-##                # Variables
+##                # Declared Variables
 ##                del parent
 ##                del elem
 ##
@@ -1133,7 +1133,7 @@ def element_search(target_xml="", search_element=""):
         #    print(f"The metadata file: {os.path.basename(xml)} can not be overwritten!!")
         #del target_xml_string
 
-        # Variables
+        # Declared Variables
         del target_tree, target_root
         del target_xml_name
         # Imports
@@ -1174,7 +1174,7 @@ def main(metadata_workspace=""):
 
             del target_xml
 
-        # Variables
+        # Declared Variables
         del target_xmls
 
         # Function parameters
@@ -1224,7 +1224,7 @@ if __name__ == '__main__':
 
         main(metadata_workspace=metadata_workspace)
 
-        # Variables
+        # Declared Variables
         del project_folder, metadata_workspace
         del today, date_string
         # Imports

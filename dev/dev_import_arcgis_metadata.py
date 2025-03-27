@@ -110,7 +110,7 @@ def main(project_gdb="", metadata_folder=""):
 
         import_metadata(project_gdb=project_gdb, metadata_folder=metadata_folder)
 
-        # Variables
+        # Declared Variables
 
         # Function parameters
         del project_gdb, metadata_folder
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
         main(project_gdb=project_gdb,metadata_folder=metadata_folder)
 
-        # Variables
+        # Declared Variables
         del project_folder, project_name, project_gdb, metadata_folder
         del today, date_string
         # Imports

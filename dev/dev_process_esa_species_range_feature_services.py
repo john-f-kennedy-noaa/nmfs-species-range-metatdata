@@ -253,7 +253,7 @@ def create_feature_class_layers(project_gdb=""):
 
         arcpy.AddMessage(f"\n{'-' * 90}\n")
 
-        # Variables set in function
+        # Declared Variables set in function
         del aprx
         del home_folder
 
@@ -318,7 +318,7 @@ def get_feature_service_list():
 
         #del titles
 
-        # Variables
+        # Declared Variables
         del gis
 
         # Imports
@@ -600,7 +600,7 @@ def create_feature_class_services(project_gdb=""):
 
         del current_maps
 
-        # Variables set in function for aprx
+        # Declared Variables set in function for aprx
         del home_folder
         # Save aprx one more time and then delete
         aprx.save()
@@ -612,7 +612,7 @@ def create_feature_class_services(project_gdb=""):
             del feature_service_error
         del feature_service_errors
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_file, feature_service_list
 
         # Imports
@@ -1074,13 +1074,13 @@ def create_maps(project_file="", project=""):
 ##
 ##        del current_layouts, current_maps
 
-        # Variables set in function for aprx
+        # Declared Variables set in function for aprx
         del home_folder
         # Save aprx one more time and then delete
         aprx.save()
         del aprx
 
-        # Variables set in function
+        # Declared Variables set in function
         del project_gdb, base_project_folder, metadata_folder
         del project_folder, scratch_folder
         del metadata_dictionary
@@ -1181,7 +1181,7 @@ def main(project_folder=str()):
             del result
         del CreateMaps
 
-        # Variables
+        # Declared Variables
         del project_gdb, source_gdb, version
         # Imports
         del project_folder

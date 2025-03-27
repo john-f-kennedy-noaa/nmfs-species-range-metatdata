@@ -62,7 +62,7 @@ def main(project_folder="", folders=list()):
         except Exception as e:
             print(f"ERROR: {e}"); del e
 
-        # Variables
+        # Declared Variables
 
         # Function parameters
         del project_folder, folders

@@ -373,7 +373,7 @@ def contact_search_dictionary_email(target_xml_name, target_tree, search_express
                 del children
                 del user_dict
 
-                # Variables
+                # Declared Variables
                 del parent
                 del elem
 
@@ -672,7 +672,7 @@ def contact_search_dictionary_name(target_xml_name, target_tree, search_expressi
                     del user_dict
                     del rpIndName
 
-                # Variables
+                # Declared Variables
                 del rpIndNames
                 del parent
                 del elem
@@ -1042,7 +1042,7 @@ def contact_search_dictionary(target_xml_name, target_tree, search_expression, s
 ##                del contact_root, contact_tree
 ##                del target_tree_x_path, contact_root_x_path
 
-##                # Variables
+##                # Declared Variables
 ##                del parent
 ##                del elem
 ##
@@ -1345,16 +1345,22 @@ def contact_search(target_xml, search_element="", search_term=""):
 
         record_count = 0
 
-        for parent in target_tree.xpath(f"//rpIndName/.. | //rpOrgName/.."):
-            remove_duplicate_elements(parent)
+        for parent in target_tree.xpath("//*[./rpCntInfo/cntAddress/eMailAdd | ./rpIndName]"):
+        #for parent in target_tree.xpath(f".//ancestor-or-self::rpIndName | .//ancestor-or-self::rpOrgName"):
+            print(target_tree.getpath(parent))
+            #remove_duplicate_elements(parent)
             print(f"\tRecord: '{record_count}' Parent: '{parent.tag}'")
             #print(etree.tostring(parent, pretty_print=True).decode())
             if parent.xpath("./rpIndName"):
                 rpIndName = parent.xpath("./rpIndName")[0]
                 print(f"\t\tName: {rpIndName.text}")
+                if not rpIndName:
+                    parent.getparent().remove(parent)
             if parent.xpath("./rpOrgName"):
                 rpOrgName = parent.xpath("./rpOrgName")[0]
                 print(f"\t\tOrg:  {rpOrgName.text}")
+                if not rpOrgName:
+                    parent.getparent().remove(parent)
 
             contact_xml_string = etree.fromstring(f'<{parent.tag}><editorSource>external</editorSource><editorDigest/><rpIndName/><rpOrgName/><rpPosName/><rpCntInfo><cntAddress addressType="both"><delPoint/><city/><adminArea/><postCode/><eMailAdd/><country>US</country></cntAddress><cntPhone><voiceNum tddtty=""></voiceNum><faxNum/></cntPhone><cntHours/><cntOnlineRes><linkage/><protocol/><orName/><orDesc/><orFunct><OnFunctCd value="002"></OnFunctCd></orFunct></cntOnlineRes></rpCntInfo><editorSave/><displayName/><role><RoleCd value="005"></RoleCd></role></{parent.tag}>')
             # create an ElementTree object from the metadata XML string
@@ -1376,7 +1382,7 @@ def contact_search(target_xml, search_element="", search_term=""):
                 #print(user_dict[child.tag])
                 #del user_dict
                 contact_child = contact_tree.xpath(f"./{child.tag}")[0]
-                contact_child.getparent().replace(contact_child, child)
+                #contact_child.getparent().replace(contact_child, child)
 
                 del contact_child
                 del child
@@ -1387,7 +1393,8 @@ def contact_search(target_xml, search_element="", search_term=""):
                 #print(f"\t\t{contact_child.tag}, {contact_child.text}")
                 child = parent.xpath(f"./{contact_child.tag}")
                 if not child:
-                    parent.insert(child_count, contact_child)
+                    pass
+                    # parent.insert(child_count, contact_child)
                 child_count+=1
                 del contact_child
                 del child
@@ -1403,7 +1410,7 @@ def contact_search(target_xml, search_element="", search_term=""):
 
             del children
             del parent
-        del contact_tree, contact_root
+            del contact_tree, contact_root
 
         del record_count
 
@@ -1421,7 +1428,7 @@ def contact_search(target_xml, search_element="", search_term=""):
 
         del target_xml_string
 
-        # Variables
+        # Declared Variables
         del contact_dict
         del target_tree, target_root
         del target_xml_name
@@ -1466,7 +1473,7 @@ def main(project_folder=""):
 
             del target_xml
 
-        # Variables
+        # Declared Variables
         del project_folder, target_xmls
 
         # Imports

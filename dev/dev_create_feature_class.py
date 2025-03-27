@@ -1494,7 +1494,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                      <distorTran xmlns="">
                         <onLineSrc xmlns="">
                            <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
-                           <protocol>ArcGIS REST Services</protocol>
+                           <protocol>ESRI REST Service</protocol>
                            <orName></orName>
                            <orDesc></orDesc>
                            <orFunct>
@@ -2599,7 +2599,7 @@ if __name__ == '__main__':
 
         main(project_gdb=project_gdb, metadata_workspace=metadata_workspace)
 
-        # Variables
+        # Declared Variables
         del project_folder, project_name, project_gdb, metadata_workspace
         del today, date_string
         # Imports

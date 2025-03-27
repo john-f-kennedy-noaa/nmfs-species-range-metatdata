@@ -299,7 +299,7 @@ def root_sort(target_xml=""):
 ##            f.write(target_xml_string)
 ##        del f
 
-        # Variables
+        # Declared Variables
         #del target_elements
         del target_xml_string, target_tree, target_root
 
@@ -385,7 +385,7 @@ def dqInfo_sort(target_xml=""):
 
         del sort_function
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml_string, target_tree, target_root
 
@@ -477,7 +477,7 @@ def dataLineage_sort(target_xml=""):
 
         del sort_function
 
-        # Variables
+        # Declared Variables
         del target_elements
         del target_xml_string, target_tree, target_root
 
@@ -580,7 +580,7 @@ def main(project_folder=""):
 
             del target_xml, target_xml_name
 
-        # Variables
+        # Declared Variables
         del tag_position_dict
         del target_xmls
         del project_folder

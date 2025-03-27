@@ -114,7 +114,7 @@ def contact_search_dictionary(target_xml_name, target_tree, search_expression):
                     del user
                     del rpIndName
 
-                # Variables
+                # Declared Variables
                 del rpIndNames
                 del parent
                 del elem
@@ -275,7 +275,7 @@ def contact_search(target_xml, search_element="", search_term=""):
 
         del search_expression
 
-        # Variables
+        # Declared Variables
         #del elements
         del target_tree, target_root
         del target_xml_name
@@ -338,7 +338,7 @@ def main(project_folder=""):
 
             del target_xml
 
-        # Variables
+        # Declared Variables
         del project_folder, target_xmls
 
         # Imports

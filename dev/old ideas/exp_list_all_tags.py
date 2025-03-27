@@ -67,7 +67,7 @@ def list_all_lements(metadata_xml=""):
         #all_elements = list(tree.iter())
         #print([element.tag for element in all_elements])
 
-        # Variables
+        # Declared Variables
         del tree
 
         # Imports
@@ -146,7 +146,7 @@ def list_children_of_parent(metadata_xml="", find_element=""):
 
 
 
-        # Variables
+        # Declared Variables
         del tree, root
         # Imports
         del etree
@@ -195,7 +195,7 @@ def main():
 
         del ListChildrenOfParent
 
-        # Variables
+        # Declared Variables
         del target_xmls
         del project_folder
         # Imports
