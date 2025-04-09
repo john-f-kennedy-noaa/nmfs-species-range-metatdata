@@ -112,8 +112,6 @@ def copy_feature_classes(project_gdb=str(), source_gdb=str()):
 
         print(f"\n{'--Start' * 10}--\n")
 
-        # work
-
         # Change workspace to get a list of source feature classes
         arcpy.env.workspace = source_gdb
         source_fcs = arcpy.ListFeatureClasses()
@@ -334,32 +332,134 @@ def copy_feature_classes(project_gdb=str(), source_gdb=str()):
         # Cleanup
         arcpy.management.ClearWorkspaceCache()
 
-def create_species_range_table(project_gdb="", version=""):
+
+def create_field_length_report(project_gdb="", version=""):
     try:
         # Imports
-
         # Use all of the cores on the machine
         arcpy.env.parallelProcessingFactor = "100%"
         arcpy.env.overwriteOutput = True
-
         # Define variables
         project_folder = os.path.dirname(project_gdb)
         scratch_folder = rf"{project_folder}\Scratch"
         scratch_gdb    = rf"{scratch_folder}\scratch.gdb"
-
         # Set the workspace environment to local file geodatabase
         arcpy.env.workspace = project_gdb
         # Set the scratchWorkspace environment to local file geodatabase
         arcpy.env.scratchWorkspace = scratch_gdb
-
         # Clean-up variables
         del scratch_folder, scratch_gdb
+        print(f"\n{'--Start' * 10}--\n")
 
+        species_range_table      = rf"{project_gdb}\SpeciesRangeTable{version}"
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        CreateFieldLengthReport = True
+        if CreateFieldLengthReport:
+            field_report = dict()
+            print(f"Create field length report")
+            print(f"Get list of field names")
+            fields = [f for f in arcpy.ListFields(species_range_table) if f.type not in ['OID']]
+            print(f"Loop over fields")
+            count = 0
+            for field in fields:
+                count+=1
+                #print(f"\t{field.name}\n\t\t{field.aliasName}\n\t\t{field.type}\n\t\t{field.length}")
+                if field.type == "String":
+                    with arcpy.da.SearchCursor(species_range_table, [field.name]) as cursor:
+                        text_length = 0
+                        for row in cursor:
+                            if row[0] != None and len(row[0]) > text_length:
+                                text_length = len(row[0])
+                            else:
+                                text_length = text_length
+                            del row
+                    del cursor
+                    field_report[field.name] = {"Field Name" : f"{field.name}", "Alias" : f"{field.aliasName}", "Type" : f"{field.type}", "Field Length" : f"{field.length}", "Text Length" : f"{text_length}"}
+                    del text_length
+                else:
+                    field_report[field.name] = {"Field Name" : f"{field.name}", "Alias" : f"{field.aliasName}", "Type" : f"{field.type}", "Field Length" : f"{field.length}", "Text Length" : f"{text_length}"}
+                del field
+            del fields
+            del count
+            print(f"Create the CSV file")
+            # Feature Class,Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Length, Text Length,,,,,,,,,,
+            f = open(f"species ranges field name type length report {version}.csv","w")
+            for field in field_report:
+                field_info = field_report[field]
+                for key in field_info:
+                    f.write(f"{key}, {field_info[key]}" + "\n")
+                    del key
+                f.write("\n")
+                del field_info
+                del field
+            # Python will convert \n to os.linesep
+            f.close()
+            del f
+            del field_report
+        del CreateFieldLengthReport
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        SpeciesRangeTableToExcel = False
+        if SpeciesRangeTableToExcel:
+            _species_range_table = rf"{project_gdb}\SpeciesRangeTable"
+            print(f"Table To Excel")
+            arcpy.conversion.TableToExcel(
+                                          Input_Table                        = _species_range_table,
+                                          Output_Excel_File                  = rf"{project_folder}\{os.path.basename(species_range_table)} Out.xlsx",
+                                          #Use_field_alias_as_column_header   = "ALIAS",
+                                          Use_field_alias_as_column_header   = "NAME",
+                                          #Use_domain_and_subtype_description = "DESCRIPTION"
+                                          Use_domain_and_subtype_description = "CODE"
+                                         )
+            print("\tTable to Excel:\n\t\t"+arcpy.GetMessages().replace("\n", "\n\t\t")+"\n")
+            del _species_range_table
+        else:
+            pass
+        del SpeciesRangeTableToExcel
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        print(f"\n{'--End' * 10}--")
+
+        # Declared Variables
+        del project_folder, species_range_table
+        # Imports
+        # Function parameters
+        del project_gdb, version
+
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        # Cleanup
+        arcpy.management.ClearWorkspaceCache()
+
+def create_species_range_table_from_fcs(project_gdb="", version=""):
+    try:
+        # Imports
+        # Use all of the cores on the machine
+        arcpy.env.parallelProcessingFactor = "100%"
+        arcpy.env.overwriteOutput = True
+        # Define variables
+        project_folder = os.path.dirname(project_gdb)
+        scratch_folder = rf"{project_folder}\Scratch"
+        scratch_gdb    = rf"{scratch_folder}\scratch.gdb"
+        # Set the workspace environment to local file geodatabase
+        arcpy.env.workspace = project_gdb
+        # Set the scratchWorkspace environment to local file geodatabase
+        arcpy.env.scratchWorkspace = scratch_gdb
+        # Clean-up variables
+        del scratch_folder, scratch_gdb
         print(f"\n{'--Start' * 10}--\n")
 
         fcs = arcpy.ListFeatureClasses("*")
 
-        species_range_table = arcpy.management.CreateTable(project_gdb, f"SpeciesRangeTable{version}")
+        species_range_table_from_fcs = arcpy.management.CreateTable(project_gdb, f"SpeciesRangeTableFromFcs{version}")
 
         field_description = [
                              ["FeatureClass", "TEXT", "Feature Class", 50, "#", "#"],
@@ -386,7 +486,7 @@ def create_species_range_table(project_gdb="", version=""):
                              ["FEATNAME",     "TEXT", "Feature Name", 250, "#", "#"],
                             ]
 
-        arcpy.management.AddFields(species_range_table, field_description, None)
+        arcpy.management.AddFields(species_range_table_from_fcs, field_description, None)
 
         del field_description
 
@@ -408,10 +508,10 @@ def create_species_range_table(project_gdb="", version=""):
                     #print(f"\t{fc} : {row}")
                     #print(f"\t{species_range_table_row}")
 
-                    insert_fields = [f.name for f in arcpy.ListFields(species_range_table) if f.type not in ['Geometry', 'OID']]
+                    insert_fields = [f.name for f in arcpy.ListFields(species_range_table_from_fcs) if f.type not in ['Geometry', 'OID']]
                     #print(insert_fields)
                     # Open an InsertCursor using a context manager
-                    with arcpy.da.InsertCursor(species_range_table, insert_fields) as insert_cursor:
+                    with arcpy.da.InsertCursor(species_range_table_from_fcs, insert_fields) as insert_cursor:
                         insert_cursor.insertRow(species_range_table_row)
 
                     del insert_cursor
@@ -420,18 +520,12 @@ def create_species_range_table(project_gdb="", version=""):
                     del row
             del fields, cursor
             del fc
-
-        #print(max_length)
-        #del max_length
-
-        del species_range_table
-
-        species_range_table = rf"{project_gdb}\SpeciesRangeTable{version}"
+        del fcs
 
         print(f"Table To Excel")
         arcpy.conversion.TableToExcel(
-                                      Input_Table                        = species_range_table,
-                                      Output_Excel_File                  = rf"{project_folder}\{os.path.basename(species_range_table)}.xlsx",
+                                      Input_Table                        = species_range_table_from_fcs,
+                                      Output_Excel_File                  = rf"{project_folder}\Create{os.path.basename(species_range_table_from_fcs)}.xlsx",
                                       #Use_field_alias_as_column_header   = "ALIAS",
                                       Use_field_alias_as_column_header   = "NAME",
                                       #Use_domain_and_subtype_description = "DESCRIPTION"
@@ -439,17 +533,16 @@ def create_species_range_table(project_gdb="", version=""):
                                      )
         print("\tTable to Excel:\n\t\t"+arcpy.GetMessages().replace("\n", "\n\t\t")+"\n")
 
-        del species_range_table, version
         arcpy.management.Compact(project_gdb)
-        del fcs
-        del project_folder
 
         print(f"\n{'--End' * 10}--")
 
+        # Declared Variables
+        del species_range_table_from_fcs
+        del project_folder
         # Imports
-
         # Function parameters
-        del project_gdb
+        del project_gdb, version
 
     except:
         traceback.print_exc()
@@ -462,33 +555,27 @@ def create_species_range_table(project_gdb="", version=""):
         # Cleanup
         arcpy.management.ClearWorkspaceCache()
 
-def import_species_range_table(project_gdb="", version=""):
+def import_species_range_table_from_xlxs(project_gdb="", version=""):
     try:
         # Imports
-
         # Use all of the cores on the machine
         arcpy.env.parallelProcessingFactor = "100%"
         arcpy.env.overwriteOutput = True
-
         # Define variables
         project_folder = os.path.dirname(project_gdb)
         scratch_folder = rf"{project_folder}\Scratch"
         scratch_gdb    = rf"{scratch_folder}\scratch.gdb"
-
         # Set the workspace environment to local file geodatabase
         arcpy.env.workspace = project_gdb
         # Set the scratchWorkspace environment to local file geodatabase
         arcpy.env.scratchWorkspace = scratch_gdb
-
         # Clean-up variables
         del scratch_folder, scratch_gdb
 
         print(f"\n{'--Start' * 10}--\n")
 
-        species_range_table_xlsx = rf"{project_folder}\SpeciesRangeTable {version}.xlsx"
         species_range_table      = rf"{project_gdb}\SpeciesRangeTable{version}"
-
-        del version
+        species_range_table_xlsx = rf"{project_folder}\SpeciesRangeTable{version}.xlsx"
 
         ExcelToTable = False
         if ExcelToTable:
@@ -496,138 +583,67 @@ def import_species_range_table(project_gdb="", version=""):
             arcpy.conversion.ExcelToTable(
                                           Input_Excel_File = species_range_table_xlsx,
                                           Output_Table     = species_range_table,
-                                          Sheet            = "SpeciesRangeTable",
+                                          Sheet            = "SpeciesRangeTable20241212",
                                           field_names_row  = 1,
                                           cell_range       = "B2:W103"
                                          )
         del ExcelToTable
-
         del species_range_table_xlsx
 
-        field_report = {}
-
-        CreateFieldLengthReport = False
-        if CreateFieldLengthReport:
-            print(f"Create field length report")
-
-            print(f"Get list of field names")
-            fields = [f for f in arcpy.ListFields(species_range_table) if f.type not in ['OID']]
-
-            print(f"Loop over fields")
-            count = 0
-            for field in fields:
-                count+=1
-
-                #print(f"\t{field.name}\n\t\t{field.aliasName}\n\t\t{field.type}\n\t\t{field.length}")
-
-                if field.type == "String":
-
-                    with arcpy.da.SearchCursor(species_range_table, [field.name]) as cursor:
-                        text_length = 0
-                        for row in cursor:
-                            if row[0] != None and len(row[0]) > text_length:
-                                text_length = len(row[0])
-                            else:
-                                text_length = text_length
-                            del row
-                    del cursor
-
-                    field_report[field.name] = {"Field Name" : f"{field.name}", "Alias" : f"{field.aliasName}", "Type" : f"{field.type}", "Field Length" : f"{field.length}", "Text Length" : f"{text_length}"}
-                    del text_length
-                else:
-                    field_report[field.name] = {"Field Name" : f"{field.name}", "Alias" : f"{field.aliasName}", "Type" : f"{field.type}", "Field Length" : f"{field.length}", "Text Length" : f"{text_length}"}
-                del field
-            del fields
-            del count
-
-            print(f"Create the CSV file")
-            # Feature Class,Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Field Length, Text Length, Field, Alias, Type,Length, Text Length,,,,,,,,,,
-            f = open(f"species ranges field name type length report {version}.csv","w")
-
-            for field in field_report:
-                field_info = field_report[field]
-                for key in field_info:
-                    f.write(f"{key}, {field_info[key]}" + "\n")
-                    del key
-                f.write("\n")
-                del field_info
-                del field
-            del field_report
-            # Python will convert \n to os.linesep
-            f.close()
-            del f
-        del CreateFieldLengthReport
-        del field_report
+        #fields = [f.name for f in arcpy.ListFields(species_range_table) if f.type not in ['Geometry', 'OID'] and f.name not in ['OBJECTID_1', 'Shape_Length', 'Shape_Area']]
+        #print(len(fields))
+        #for field in fields:
+        #    print(field)
+        #    del field
+        #del fields
 
         print("Process Feature Classes")
-
         fcs = arcpy.ListFeatureClasses("*")
-
         for fc in sorted(fcs):
             print(f"\tFeature Class: '{fc}'")
-
-            fc_fields = [f.name for f in arcpy.ListFields(fc) if f.type not in ['Geometry', 'OID'] and f.name not in ['Shape_Length', 'Shape_Area']]
+            fc_fields = [f.name for f in arcpy.ListFields(fc) if f.type not in ['Geometry', 'OID'] and f.name not in ['OBJECTID_1', 'Shape_Length', 'Shape_Area']]
+            #print(len(fc_fields))
+            #for fc_field in fc_fields:
+            #    print(fc_field)
+            #    del fc_field
             with arcpy.da.SearchCursor(fc, fc_fields) as fc_cursor:
                 for fc_row in fc_cursor:
                     range_id = fc_row[0]
                     print(f"\t\tFeaure Class: {fc}, ID: {range_id}")
-
-                    tb_fields = [f.name for f in arcpy.ListFields(species_range_table) if f.type not in ['Geometry', 'OID']]
+                    tb_fields = [f.name for f in arcpy.ListFields(species_range_table) if f.type not in ['OBJECTID_1', 'FeatureClass', 'Geometry', 'OID']]
                     with arcpy.da.SearchCursor(species_range_table, tb_fields, f"FeatureClass = '{fc}' and ID = '{range_id}'") as tb_cursor:
                         for tb_row in tb_cursor:
-                            print(f"\t\t\t{tb_row[2:3]}")
+                            print(f"\t\t\t{tb_row[3:4]}")
 
                             with arcpy.da.UpdateCursor(fc, fc_fields[1:], f"ID = '{range_id}'") as update_cursor:
+                                #print(tb_row[2:])
+                                #print(len(tb_row[2:]))
                                 for update_row in update_cursor:
-                                    update_cursor.updateRow(tb_row[2:])
+                                    #print(update_row)
+                                    #print(len(update_row))
+                                    update_cursor.updateRow(tb_row[3:])
                                     del update_row
                             del update_cursor
-
                             del tb_row
                     del tb_cursor
                     del tb_fields
-
                     del range_id
                     del fc_row
-            del fc_fields, fc_cursor
+            del fc_cursor
+            del fc_fields
             del fc
-
         del species_range_table
         del fcs
-
-##        #print(max_length)
-##        #del max_length
-##
-##        del species_range_table
-##
-##        species_range_table = rf"{gdb}\SpeciesRangeTable"
-##
-##        print(f"Table To Excel")
-##        arcpy.conversion.TableToExcel(
-##                                      Input_Table                        = species_range_table,
-##                                      Output_Excel_File                  = rf"{project_folder}\{os.path.basename(species_range_table)} Out.xlsx",
-##                                      #Use_field_alias_as_column_header   = "ALIAS",
-##                                      Use_field_alias_as_column_header   = "NAME",
-##                                      #Use_domain_and_subtype_description = "DESCRIPTION"
-##                                      Use_domain_and_subtype_description = "CODE"
-##                                     )
-##        print("\tTable to Excel:\n\t\t"+arcpy.GetMessages().replace("\n", "\n\t\t")+"\n")
-##
-##        del species_range_table
-##
-##
-##        del fcs
-
-        del project_folder
 
         arcpy.management.Compact(project_gdb)
 
         print(f"\n{'--End' * 10}--")
 
+        # Declared Variables
+        del project_folder
         # Imports
-
         # Function parameters
-        del project_gdb
+        del project_gdb, version
 
     except:
         traceback.print_exc()
@@ -639,186 +655,6 @@ def import_species_range_table(project_gdb="", version=""):
     finally:
         # Cleanup
         arcpy.management.ClearWorkspaceCache()
-
-##def export_metadata(project_gdb=""):
-##    try:
-##        # Imports
-##        from arcpy import metadata as md
-##        from src.project_tools import pretty_format_xml_file
-##
-##        # Use all of the cores on the machine
-##        arcpy.env.parallelProcessingFactor = "100%"
-##        arcpy.env.overwriteOutput = True
-##
-##        # Define variables
-##        project_folder = os.path.dirname(project_gdb)
-##        scratch_folder = rf"{project_folder}\Scratch"
-##        scratch_gdb    = rf"{scratch_folder}\scratch.gdb"
-##        export_folder  = rf"{project_folder}\Export"
-##
-##        # Set the workspace environment to local file geodatabase
-##        arcpy.env.workspace = project_gdb
-##        # Set the scratchWorkspace environment to local file geodatabase
-##        arcpy.env.scratchWorkspace = scratch_gdb
-##
-##        # Clean-up variables
-##        del scratch_folder, scratch_gdb
-##
-##        print(f"\n{'--Start' * 10}--\n")
-##
-##        fcs = arcpy.ListFeatureClasses()
-##
-##        print(f"Synchronize and export feature classes metadata from Project GDB\n")
-##        for fc in sorted(fcs):
-##            print(f"Exporting the metadata record for: '{fc}'")
-##
-##            fc_path = rf"{project_gdb}\{fc}"
-##
-##            export_xml_metadata_path = rf"{export_folder}\{fc}.xml"
-##
-##            dataset_md = md.Metadata(fc_path)
-##            dataset_md.synchronize("ALWAYS")
-##            dataset_md.save()
-##            dataset_md.reload()
-##            dataset_md.saveAsXML(export_xml_metadata_path, "REMOVE_ALL_SENSITIVE_INFO")
-##            #if dataset_md.thumbnailUri:
-##            #    arcpy.management.Copy(dataset_md.thumbnailUri, rf"{export_folder}\{fc} Thumbnail.jpg")
-##            #    arcpy.management.Copy(dataset_md.thumbnailUri, rf"{export_folder}\{fc} Browse Graphic.jpg")
-##
-##            del dataset_md
-##
-##            if arcpy.Exists(export_xml_metadata_path):
-##                pretty_format_xml_file(export_xml_metadata_path)
-##            else:
-##                pass
-##
-##            del export_xml_metadata_path
-##            del fc, fc_path
-##
-##        del fcs
-##        del project_folder, export_folder
-##
-##        print(f"\n{'--End' * 10}--")
-##
-##        # Imports
-##        del md, pretty_format_xml_file
-##        # Function parameters
-##        del project_gdb
-##
-##    #except Exception as e:
-##    #    raise Exception(e)
-##    except arcpy.ExecuteWarning:
-##        arcpy.AddWarning(arcpy.GetMessages())
-##    except arcpy.ExecuteError:
-##        arcpy.AddError(arcpy.GetMessages())
-##    except:
-##        traceback.print_exc()
-##    else:
-##        # While in development, leave here. For test, move to finally
-##        rk = [key for key in locals().keys() if not key.startswith('__')]
-##        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
-##        return True
-##    finally:
-##        # Cleanup
-##        arcpy.management.ClearWorkspaceCache()
-
-def import_metadata(project_gdb=""):
-    try:
-        # Imports
-        from arcpy import metadata as md
-
-        # Use all of the cores on the machine
-        arcpy.env.parallelProcessingFactor = "100%"
-        arcpy.env.overwriteOutput = True
-
-        # Define variables
-        project_folder = os.path.dirname(project_gdb)
-        scratch_folder = rf"{project_folder}\Scratch"
-        scratch_gdb    = rf"{scratch_folder}\scratch.gdb"
-        export_folder  = rf"{project_folder}\Export"
-
-        # Set the workspace environment to local file geodatabase
-        arcpy.env.workspace = project_gdb
-        # Set the scratchWorkspace environment to local file geodatabase
-        arcpy.env.scratchWorkspace = scratch_gdb
-
-        # Clean-up variables
-        del scratch_folder, scratch_gdb
-
-        print(f"\n{'--Start' * 10}--\n")
-
-        arcpy.env.workspace = project_gdb
-
-        fcs = arcpy.ListFeatureClasses()
-
-        print(f"Import and synchronize feature classes metadata from Project GDB\n")
-        for fc in sorted(fcs):
-            print(f"Importing the metadata record for: '{fc}'")
-
-            fc_path = rf"{project_gdb}\{fc}"
-
-            import_xml_metadata_path = rf"{export_folder}\{fc}.xml"
-            #import_xml_metadata_path = rf"{project_folder}\SpeciesRangeMetadataTemplate.xml"
-
-            #import_xml_md = md.Metadata(import_xml_metadata_path)
-
-            dataset_md = md.Metadata(fc_path)
-            dataset_md.synchronize('ALWAYS')
-            dataset_md.save()
-
-            #if not dataset_md.isReadOnly:
-            #dataset_md.copy(import_xml_md)
-            dataset_md.importMetadata(import_xml_metadata_path)
-            dataset_md.save()
-            dataset_md.synchronize('SELECTIVE')
-            dataset_md.save()
-            dataset_md.title = dataset_md.title.replace("_", " ")
-            dataset_md.save()
-            dataset_md.synchronize('ALWAYS')
-            dataset_md.save()
-            del dataset_md
-            #del import_xml_md
-
-            del import_xml_metadata_path
-            del fc, fc_path
-
-        del fcs
-        del project_folder, export_folder
-
-        print(f"\n{'--End' * 10}--")
-
-        # Imports
-        del md
-        # Function parameters
-        del project_gdb
-
-    except KeyboardInterrupt:
-        raise SystemExit
-    except arcpy.ExecuteWarning:
-        arcpy.AddWarning(arcpy.GetMessages())
-        traceback.print_exc()
-    except arcpy.ExecuteError:
-        arcpy.AddError(arcpy.GetMessages())
-        traceback.print_exc()
-        raise Exception
-    except Exception as e:
-        arcpy.AddError(str(e))
-        traceback.print_exc()
-        raise Exception
-    except:
-        traceback.print_exc()
-    else:
-        try:
-            remaining_keys = [key for key in locals().keys() if not key.startswith('__')]
-            if remaining_keys:
-                arcpy.AddWarning(f"Remaining Keys in '{inspect.stack()[0][3]}': ##--> '{', '.join(remaining_keys)}' <--## Line Number: {traceback.extract_stack()[-1].lineno}")
-            else:
-                pass
-            del remaining_keys
-        except:
-            raise Exception(traceback.print_exc())
-    finally:
-        pass
 
 def schema_field_report(project_gdb=""):
     try:
@@ -1596,462 +1432,6 @@ def create_feature_class_services(project_gdb=""):
     finally:
         pass
 
-def create_maps(project_file="", project=""):
-    try:
-        # Import
-        from arcpy import metadata as md
-
-        import dismap
-        importlib.reload(dismap)
-        from dismap import dataset_title_dict, pretty_format_xml_file
-
-        arcpy.env.overwriteOutput          = True
-        arcpy.env.parallelProcessingFactor = "100%"
-        arcpy.SetLogMetadata(True)
-        arcpy.SetSeverityLevel(2)
-        arcpy.SetMessageLevels(['NORMAL']) # NORMAL, COMMANDSYNTAX, DIAGNOSTICS, PROJECTIONTRANSFORMATION
-
-        # Map Cleanup
-        MapCleanup = False
-        if MapCleanup:
-            map_cleanup(project_file)
-        del MapCleanup
-
-        base_project_folder = rf"{os.path.dirname(project_file)}"
-        project_file   = rf"{base_project_folder}\DisMAP.aprx"
-        project_folder      = rf"{base_project_folder}\{project}"
-        project_gdb         = rf"{project_folder}\{project}.gdb"
-        metadata_folder     = rf"{project_folder}\Export Metadata"
-        scratch_folder      = rf"{project_folder}\Scratch"
-
-        arcpy.env.workspace        = project_gdb
-        arcpy.env.scratchWorkspace = rf"{scratch_folder}\scratch.gdb"
-
-        aprx = arcpy.mp.ArcGISProject(project_file)
-        home_folder = aprx.homeFolder
-
-        #print(f"\n{'-' * 90}\n")
-
-        metadata_dictionary = dataset_title_dict(project_gdb)
-
-        datasets = list()
-
-        walk = arcpy.da.Walk(project_gdb)
-
-        for dirpath, dirnames, filenames in walk:
-            for filename in filenames:
-                datasets.append(os.path.join(dirpath, filename))
-                del filename
-            del dirpath, dirnames, filenames
-        del walk
-
-        for dataset_path in sorted(datasets):
-            print(dataset_path)
-            dataset_name = os.path.basename(dataset_path)
-            data_type = arcpy.Describe(dataset_path).dataType
-            if data_type == "Table":
-                #print(f"Dataset Name: {dataset_name}")
-                #print(f"\tData Type: {data_type}")
-
-                if "IDW" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if "Indicators" in dataset_name:
-                        print(f"\tRegion Indicators")
-
-                    elif "LayerSpeciesYearImageName" in dataset_name:
-                        print(f"\tRegion Layer Species Year Image Name")
-
-                    else:
-                        print(f"\tRegion Table")
-
-                elif "GLMME" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if "Indicators" in dataset_name:
-                        print(f"\tGLMME Region Indicators")
-
-                    elif "LayerSpeciesYearImageName" in dataset_name:
-                        print(f"\tGLMME Layer Species Year Image Name")
-
-                    else:
-                        print(f"\tGLMME Region Table")
-
-                else:
-                    print(f"Dataset Name: {dataset_name}")
-                    if "Indicators" in dataset_name:
-                        print(f"\tMain Indicators Table")
-
-                    elif "LayerSpeciesYearImageName" in dataset_name:
-                        print(f"\tLayer Species Year Image Name")
-
-                    elif "Datasets" in dataset_name:
-                        print(f"\tDataset Table")
-
-                    elif "Species_Filter" in dataset_name:
-                        print(f"\tSpecies Filter Table")
-
-                    else:
-                        print(f"\tDataset Name: {dataset_name}")
-
-            elif data_type == "FeatureClass":
-                #print(f"\tData Type: {data_type}")
-
-                if "IDW" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Boundary"):
-                        print(f"\tBoundary")
-
-                    elif dataset_name.endswith("Extent_Points"):
-                        print(f"\tExtent_Points")
-
-                    elif dataset_name.endswith("Fishnet"):
-                        print(f"\tFishnet")
-
-                    elif dataset_name.endswith("Lat_Long"):
-                        print(f"\tLat_Long")
-
-                    elif dataset_name.endswith("Region"):
-                        print(f"\tRegion")
-
-                    elif dataset_name.endswith("Sample_Locations"):
-                        print(f"\tSample_Locations")
-
-                    else:
-                        pass
-
-                elif "GLMME" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Boundary"):
-                        print(f"\tBoundary")
-
-                    elif dataset_name.endswith("Extent_Points"):
-                        print(f"\tExtent_Points")
-
-                    elif dataset_name.endswith("Fishnet"):
-                        print(f"\tFishnet")
-
-                    elif dataset_name.endswith("Lat_Long"):
-                        print(f"\tLat_Long")
-
-                    elif dataset_name.endswith("Region"):
-                        print(f"\tRegion")
-
-                    elif dataset_name.endswith("GRID_Points"):
-                        print(f"\tGRID_Points")
-
-                    else:
-                        pass
-
-                elif "DisMAP_Regions" == dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Regions"):
-                        print(f"\tDisMAP Regions")
-
-                else:
-                    print(f"Else Dataset Name: {dataset_name}")
-
-            elif data_type == "RasterDataset":
-
-                if "IDW" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Bathymetry"):
-                        print(f"\tBathymetry")
-
-                    elif dataset_name.endswith("Latitude"):
-                        print(f"\tLatitude")
-
-                    elif dataset_name.endswith("Longitude"):
-                        print(f"\tLongitude")
-
-                    elif dataset_name.endswith("Raster_Mask"):
-                        print(f"\tRaster_Mask")
-
-                elif "GLMME" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Bathymetry"):
-                        print(f"\tBathymetry")
-
-                    elif dataset_name.endswith("Latitude"):
-                        print(f"\tLatitude")
-
-                    elif dataset_name.endswith("Longitude"):
-                        print(f"\tLongitude")
-
-                    elif dataset_name.endswith("Raster_Mask"):
-                        print(f"\tRaster_Mask")
-
-            elif data_type == "MosaicDataset":
-
-                if "IDW" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Mosaic"):
-                        print(f"\tMosaic")
-
-                elif "GLMME" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("Mosaic"):
-                        print(f"\tMosaic")
-
-                elif "CRF" in dataset_name:
-                    print(f"Dataset Name: {dataset_name}")
-                    if dataset_name.endswith("CRF"):
-                        print(f"\tCRF")
-
-                else:
-                    pass
-            else:
-                pass
-
-            del data_type
-
-            del dataset_name, dataset_path
-        del datasets
-
-##        # DatasetCode, CSVFile, TransformUnit, TableName, GeographicArea, CellSize,
-##        # PointFeatureType, FeatureClassName, Region, Season, DateCode, Status,
-##        # DistributionProjectCode, DistributionProjectName, SummaryProduct,
-##        # FilterRegion, FilterSubRegion, FeatureServiceName, FeatureServiceTitle,
-##        # MosaicName, MosaicTitle, ImageServiceName, ImageServiceTitle
-##
-##        # Get values for table_name from Datasets table
-##        #fields = ["FeatureClassName", "FeatureServiceName", "FeatureServiceTitle"]
-##        fields = ["DatasetCode", "PointFeatureType", "FeatureClassName", "Region", "Season", "DateCode", "DistributionProjectCode"]
-##        datasets = [row for row in arcpy.da.SearchCursor(rf"{project_gdb}\Datasets", fields, where_clause = f"FeatureClassName IS NOT NULL AND DistributionProjectCode NOT IN ('GLMME', 'GFDL')")]
-##        #datasets = [row for row in arcpy.da.SearchCursor(rf"{project_gdb}\Datasets", fields, where_clause = f"FeatureClassName IS NOT NULL and TableName = 'AI_IDW'")]
-##        del fields
-##
-##        for dataset in datasets:
-##            dataset_code, point_feature_type, feature_class_name, region_latitude, season, date_code, distribution_project_code = dataset
-##
-##            feature_service_name  = f"{dataset_code}_{point_feature_type}_{date_code}".replace("None", "").replace(" ", "_").replace("__", "_")
-##
-##            if distribution_project_code == "IDW":
-##                feature_service = f"{region_latitude} {season} {point_feature_type} {date_code}".replace("None", "").replace("  ", " ")
-##            elif distribution_project_code in ["GLMME", "GFDL"]:
-##                feature_service = f"{region_latitude} {distribution_project_code} {point_feature_type} {date_code}".replace("None", "").replace("  ", " ")
-##            else:
-##                feature_service = f"{feature_service_name}".replace("_", " ")
-##
-##            map_title = feature_service.replace("GRID Points", "").replace("Sample Locations", "").replace("  ", " ")
-##
-##            feature_class_path = f"{project_gdb}\{feature_class_name}"
-##
-##            print(f"Dataset Code: {dataset_code}")
-##            print(f"\tFeature Service Name:   {feature_service_name}")
-##            print(f"\tFeature Service Title:  {feature_service}")
-##            print(f"\tMap Title:              {map_title}")
-##            print(f"\tFeature Class Name:     {feature_class_name}")
-##            print(f"\tFeature Class Path:     {feature_class_path}")
-##
-##            height = arcpy.Describe(feature_class_path).extent.YMax - arcpy.Describe(feature_class_path).extent.YMin
-##            width  = arcpy.Describe(feature_class_path).extent.XMax - arcpy.Describe(feature_class_path).extent.XMin
-##
-##            # map_width, map_height
-##            map_width, map_height = 2, 3
-##            #map_width, map_height = 8.5, 11
-##
-##            if height > width:
-##                page_height = map_height; page_width = map_width
-##            elif height < width:
-##                page_height = map_width; page_width = map_height
-##            else:
-##                page_width = map_width; page_height = map_height
-##
-##            del map_width, map_height
-##            del height, width
-##
-##            if map_title not in [cm.name for cm in aprx.listMaps()]:
-##                print(f"Creating Map: {map_title}")
-##                aprx.createMap(f"{map_title}", "Map")
-##                aprx.save()
-##
-##            if map_title not in [cl.name for cl in aprx.listLayouts()]:
-##                print(f"Creating Layout: {map_title}")
-##                aprx.createLayout(page_width, page_height, "INCH", f"{map_title}")
-##                aprx.save()
-##
-##            del feature_service_name, feature_service
-##            del dataset_code, point_feature_type, feature_class_name, region_latitude, season
-##            del date_code, distribution_project_code
-##
-##            current_map = [cm for cm in aprx.listMaps() if cm.name == map_title][0]
-##            print(f"Current Map:  {current_map.name}")
-##
-##            feature_class_layer = arcpy.management.MakeFeatureLayer(feature_class_path, f"{map_title}")
-##
-##            feature_class_layer_file = arcpy.management.SaveToLayerFile(feature_class_layer, rf"{home_folder}\Layers\{feature_class_layer}.lyrx")
-##            del feature_class_layer_file
-##
-##            feature_class_layer_file = arcpy.mp.LayerFile(rf"{home_folder}\Layers\{feature_class_layer}.lyrx")
-##
-##            arcpy.management.Delete(feature_class_layer)
-##            del feature_class_layer
-##
-##            current_map.addLayer(feature_class_layer_file)
-##            del feature_class_layer_file
-##
-##            #aprx_basemaps = aprx.listBasemaps()
-##            #basemap = 'GEBCO Basemap/Contours (NOAA NCEI Visualization)'
-##            basemap = "Terrain with Labels"
-##
-##            current_map.addBasemap(basemap)
-##            del basemap
-##
-##            #current_map_view = current_map.defaultView
-##            #current_map_view.exportToPNG(rf"{home_folder}\Layers\{map_title}.png", width=200, height=133, resolution = 96, color_mode="24-BIT_TRUE_COLOR", embed_color_profile=True)
-##            #del current_map_view
-##
-##        # #            from arcpy import metadata as md
-##        # #
-##        # #            fc_md = md.Metadata(feature_class_path)
-##        # #            fc_md.thumbnailUri = rf"{home_folder}\Layers\{map_title}.png"
-##        # #            fc_md.save()
-##        # #            del fc_md
-##        # #            del md
-##
-##            aprx.save()
-##
-##            current_layout = [cl for cl in aprx.listLayouts() if cl.name == map_title][0]
-##            print(f"Current Layout: {current_layout.name}")
-##
-##            current_layout.openView()
-##
-##            print(f"Create a new map frame using a point geometry")
-##            #Create a new map frame using a point geometry
-##            mf1 = current_layout.createMapFrame(arcpy.Point(0.01,0.01), current_map, 'New MF - Point')
-##            #mf1.elementWidth = 10
-##            #mf1.elementHeight = 7.5
-##            mf1.elementWidth  = page_width  - 0.01
-##            mf1.elementHeight = page_height - 0.01
-##
-##            lyr = current_map.listLayers(f"{map_title}")[0]
-##
-##            #Zoom to ALL selected features and export to PDF
-##            arcpy.SelectLayerByAttribute_management(lyr, 'NEW_SELECTION')
-##            mf1.zoomToAllLayers(True)
-##            arcpy.SelectLayerByAttribute_management(lyr, 'CLEAR_SELECTION')
-##
-##            #Set the map frame extent to the extent of a layer and export to PDF
-##            mf1.camera.setExtent(mf1.getLayerExtent(lyr, False, True))
-##            mf1.camera.scale = mf1.camera.scale * 1.1 #add a slight buffer
-##
-##            del lyr
-##
-##            print(f"Create a new bookmark set to the map frame's default extent")
-##            #Create a new bookmark set to the map frame's default extent
-##            bkmk = mf1.createBookmark('Default Extent', "The map's default extent")
-##            bkmk.updateThumbnail()
-##            del mf1
-##            del bkmk
-##
-##            #Create point text element using a system style item
-##            #txtStyleItem = aprx.listStyleItems('ArcGIS 2D', 'TEXT', 'Title (Serif)')[0]
-##            #ptTxt = aprx.createTextElement(current_layout, arcpy.Point(5.5, 4.25), 'POINT', f'{map_title}', 10, style_item=txtStyleItem)
-##            #del txtStyleItem
-##
-##            #Change the anchor position and reposition the text to center
-##            #ptTxt.setAnchor('Center_Point')
-##            #ptTxt.elementPositionX = page_width / 2.0
-##            #ptTxt.elementPositionY = page_height - 0.25
-##            #del ptTxt
-##
-##            #print(f"Using CIM to update border")
-##            #current_layout_cim = current_layout.getDefinition('V3')
-##            #for elm in current_layout_cim.elements:
-##            #    if type(elm).__name__ == 'CIMMapFrame':
-##            #        if elm.graphicFrame.borderSymbol.symbol.symbolLayers:
-##            #            sym = elm.graphicFrame.borderSymbol.symbol.symbolLayers[0]
-##            #            sym.width = 5
-##            #            sym.color.values = [255, 0, 0, 100]
-##            #        else:
-##            #            arcpy.AddWarning(elm.name + ' has NO symbol layers')
-##            #current_layout.setDefinition(current_layout_cim)
-##            #del current_layout_cim, elm, sym
-##
-##            ExportLayout = True
-##            if ExportLayout:
-##                #Export the resulting imported layout and changes to JPEG
-##                print(f"Exporting '{current_layout.name}'")
-##                current_layout.exportToJPEG(rf"{home_folder}\Layouts\{current_layout.name}.jpg")
-##            del ExportLayout
-##
-##
-##            from arcpy import metadata as md
-##
-##            fc_md = md.Metadata(feature_class_path)
-##            #fc_md.thumbnailUri = rf"{home_folder}\Layers\{map_title}.png"
-##            fc_md.thumbnailUri = rf"{home_folder}\Layouts\{current_layout.name}.jpg"
-##            fc_md.save()
-##            del fc_md
-##            del md
-##
-##            aprx.save()
-##
-##            aprx.deleteItem(current_map); del current_map
-##            aprx.deleteItem(current_layout); del current_layout
-##
-##            del page_width, page_height
-##            del map_title, feature_class_path
-##            del dataset
-##        del datasets
-##
-##        # TODO: Possibly create a dictionary that can be saved to JSON
-##
-##        aprx.save()
-##
-##        print(f"\nCurrent Maps & Layouts")
-##
-##        current_maps    = aprx.listMaps()
-##        current_layouts = aprx.listLayouts()
-##
-##        if current_maps:
-##            print(f"\nCurrent Maps\n")
-##            for current_map in current_maps:
-##                print(f"\tProject Map: {current_map.name}")
-##                del current_map
-##        else:
-##            arcpy.AddWarning("No maps in Project")
-##
-##        if current_layouts:
-##            print(f"\nCurrent Layouts\n")
-##            for current_layout in current_layouts:
-##                print(f"\tProject Layout: {current_layout.name}")
-##                del current_layout
-##        else:
-##            arcpy.AddWarning("No layouts in Project")
-##
-##        print(f"\n{'-' * 90}\n")
-##
-##        del current_layouts, current_maps
-
-        # Declared Variables set in function for aprx
-        del home_folder
-        # Save aprx one more time and then delete
-        aprx.save()
-        del aprx
-
-        # Declared Variables set in function
-        del project_gdb, base_project_folder, metadata_folder
-        del project_folder, scratch_folder
-        del metadata_dictionary
-
-        # Imports
-        del dismap, dataset_title_dict
-        del md
-
-        # Function Parameters
-        del project_file, project
-
-    except:
-        traceback.print_exc()
-    else:
-        # While in development, leave here. For test, move to finally
-        rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
-        return True
-    finally:
-        # Cleanup
-        arcpy.management.ClearWorkspaceCache()
-
 # Main function
 def main(project_folder=str()):
     try:
@@ -2063,10 +1443,8 @@ def main(project_folder=str()):
         print(f"Location:       {os.path.dirname(__file__)}")
         print(f"Python Version: {sys.version} Environment: {os.path.basename(sys.exec_prefix)}")
         print(f"{'-' * 80}\n")
-        project_gdb     = rf"{project_folder}\National Mapper.gdb"
-        #source_zip_file = rf"{project_folder}\NMFS_ESA_Range.gdb (20241121).zip"
-        #source_zip_file = rf"{project_folder}\NMFS_ESA_Range.gdb (20241209).zip"
-        #source_gdb      = rf"{project_folder}\NMFS_ESA_Range_20241121.gdb"
+        #project_gdb     = rf"{project_folder}\National Mapper.gdb"
+        project_gdb     = rf"{project_folder}\NMFS_ESA_Range_20250122.gdb"
         source_gdb      = rf"{project_folder}\NMFS_ESA_Range.gdb"
 
         version = "20241212"
@@ -2088,7 +1466,7 @@ def main(project_folder=str()):
             pass
         del CreateGdbsAndFolder
 
-        ExtractSourceZipFile = True
+        ExtractSourceZipFile = False
         if ExtractSourceZipFile:
             os.chdir(project_folder)
             source_zip_file = rf"{project_folder}\NMFS_ESA_Range.gdb (20241209).zip"
@@ -2103,7 +1481,7 @@ def main(project_folder=str()):
             del ZipFile
         del ExtractSourceZipFile
 
-        CopyFeatureClasses = True
+        CopyFeatureClasses = False
         if CopyFeatureClasses:
             try:
                 copy_feature_classes(project_gdb=project_gdb, source_gdb=source_gdb)
@@ -2111,41 +1489,25 @@ def main(project_folder=str()):
                 raise Exception(e)
         del CopyFeatureClasses
 
-        CreateSpeciesRangeTable = True
-        if CreateSpeciesRangeTable:
-            create_species_range_table(project_gdb=project_gdb, version=version)
-        del CreateSpeciesRangeTable
+        #SpeciesRangeTable20241212
+        ImportSpeciesRangeTableFromXlxs = True
+        if ImportSpeciesRangeTableFromXlxs:
+            print(f"\nProcessing: '{os.path.basename(project_gdb)}'", flush=True)
+            import_species_range_table_from_xlxs(project_gdb=project_gdb, version=version)
+        del ImportSpeciesRangeTableFromXlxs
 
-        ImportSpeciesRangeTable = True
-        if ImportSpeciesRangeTable:
-            import_species_range_table(project_gdb=project_gdb, version=version)
-        del ImportSpeciesRangeTable
+        # This creates the initial table, before updates
+        CreateSpeciesRangeTableFromFcs = False # Are you sure?
+        if CreateSpeciesRangeTableFromFcs:
+            create_species_range_table_from_fcs(project_gdb=project_gdb, version=version)
+        else:
+            pass
+        del CreateSpeciesRangeTableFromFcs
 
         SchemaFieldReport = False
         if SchemaFieldReport:
             schema_field_report(project_gdb=project_gdb)
         del SchemaFieldReport
-
-        # Move to single py script
-        #ExportMetadata = False
-        #if ExportMetadata:
-        #    try:
-        #        export_metadata(project_gdb=project_gdb)
-        #    except Exception as e:
-        #        print(e)
-        #del ExportMetadata
-
-        # This is being replaced
-        #ImportMetadata = False
-        #if ImportMetadata:
-        #    #_project_folder = os.path.dirname(project_gdb)
-        #    #_project_gdb = rf"{project_folder}\Metadata Folder\National Mapper.gdb"
-        #    try:
-        #        import_metadata(project_gdb=project_gdb)
-        #    except Exception as e:
-        #        print(e)
-        #    #del _project_folder, _project_gdb
-        #del ImportMetadata
 
         CreateFeatureClassLayers = False
         if CreateFeatureClassLayers:
@@ -2166,11 +1528,6 @@ def main(project_folder=str()):
             print(result)
             del result
         del CreateMaps
-
-        #CreateFeatureClasses = False
-        #if CreateFeatureClasses:
-        #    create_feature_classes(project_gdb=project_gdb, source_gdb=source_gdb)
-        #del CreateFeatureClasses
 
         # Declared Variables
         del project_gdb, source_gdb, version

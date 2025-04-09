@@ -504,9 +504,9 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         citRespParty  = idCitation.xpath(f"./citRespParty")
         xml = '''<citRespParty>
                     <editorSource>extermal</editorSource>
-                    <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                    <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                     <rpIndName>Nikki Wildart</rpIndName>
-                    <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                    <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                     <rpPosName>Biologist</rpPosName>
                     <rpCntInfo>
                         <cntAddress addressType="both">
@@ -712,9 +712,9 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         mdContact = target_tree.xpath(f"./mdContact")
         xml = '''<mdContact>
             <editorSource>extermal</editorSource>
-            <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+            <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
             <rpIndName>Nikki Wildart</rpIndName>
-            <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
             <rpPosName>Biologist</rpPosName>
             <rpCntInfo>
                 <cntAddress addressType="both">
@@ -1153,9 +1153,9 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
                             <stepDesc>Metadata Update</stepDesc>
                             <stepProc>
                                 <editorSource>extermal</editorSource>
-                                <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                                 <rpIndName>Nikki Wildart</rpIndName>
-                                <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                                 <rpPosName>Biologist</rpPosName>
                                 <rpCntInfo>
                                     <cntAddress addressType="both">
@@ -1436,7 +1436,7 @@ def update_xml_elements(species_range_fc="", fc_metadata_xml_file=""):
         # #######################################################################
         xml = '''<distInfo>
                     <distFormat>
-                        <formatName Sync="TRUE">File Geodatabase Feature Class</formatName>
+                        <formatName Sync="FALSE">File Geodatabase Feature Class</formatName>
                         <formatVer>NMFS DisMAP 2024</formatVer>
                         <fileDecmTech>ZIP</fileDecmTech>
                     </distFormat>
@@ -2064,7 +2064,7 @@ def insert_xml_elements(fc_metadata_xml_file=""):
         print(f"Replacing {element} root")
         xml = '''<distInfo>
                     <distFormat>
-                        <formatName Sync="TRUE">File Geodatabase Feature Class</formatName>
+                        <formatName Sync="FALSE">File Geodatabase Feature Class</formatName>
                         <formatVer>NMFS ESA Range Geodatabase 2024</formatVer>
                         <fileDecmTech>ZIP</fileDecmTech>
                     </distFormat>

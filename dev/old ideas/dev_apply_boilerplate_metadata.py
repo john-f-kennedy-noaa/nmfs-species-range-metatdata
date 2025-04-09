@@ -456,7 +456,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
                                 },
 
                 "Nikki Wildart" : {"editorSource"                   : "extermal",
-                                   "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                                   "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                    "rpIndName"                      : "Nikki Wildart",
                                    "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                    "rpPosName"                      : "Biologist",
@@ -742,7 +742,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
                                 },
 
                 "Nikki Wildart" : {"editorSource"                   : "extermal",
-                                   "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                                   "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                    "rpIndName"                      : "Nikki Wildart",
                                    "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                    "rpPosName"                      : "Biologist",
@@ -1046,7 +1046,7 @@ def update_metadata(target_tree, source_tree, target_xml_name):
                                 },
 
                 "Nikki Wildart" : {"editorSource"                   : "extermal",
-                                   "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                                   "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                    "rpIndName"                      : "Nikki Wildart",
                                    "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                    "rpPosName"                      : "Biologist",

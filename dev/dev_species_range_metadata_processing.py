@@ -407,345 +407,6 @@ def export_to_inport_xml_files(base_project_file="", project_name=""):
     finally:
         pass
 
-def create_maps(base_project_file="", project_name="", dataset=""):
-    try:
-        # Import
-        from arcpy import metadata as md
-
-        import dismap
-        importlib.reload(dismap)
-        from dismap import parse_xml_file_format_and_save
-
-        arcpy.env.overwriteOutput          = True
-        arcpy.env.parallelProcessingFactor = "100%"
-        arcpy.SetLogMetadata(True)
-        arcpy.SetSeverityLevel(2)
-        arcpy.SetMessageLevels(['NORMAL']) # NORMAL, COMMANDSYNTAX, DIAGNOSTICS, PROJECTIONTRANSFORMATION
-
-        base_project_folder = rf"{os.path.dirname(base_project_file)}"
-        base_project_file   = rf"{base_project_folder}\DisMAP.aprx"
-        project_folder      = rf"{base_project_folder}\{project_name}"
-        project_gdb         = rf"{project_folder}\{project_name}.gdb"
-        metadata_folder     = rf"{project_folder}\Export Metadata"
-        scratch_folder      = rf"{project_folder}\Scratch"
-
-        arcpy.env.workspace        = project_gdb
-        arcpy.env.scratchWorkspace = rf"{scratch_folder}\scratch.gdb"
-
-        aprx = arcpy.mp.ArcGISProject(base_project_file)
-
-        dataset_name = os.path.basename(dataset)
-
-        print(f"Dataset Name: {dataset_name}")
-
-        if dataset_name not in [cm.name for cm in aprx.listMaps()]:
-            print(f"Creating Map: {dataset_name}")
-            aprx.createMap(f"{dataset_name}", "Map")
-            aprx.save()
-        else:
-            pass
-
-        current_map = aprx.listMaps(f"{dataset_name}")[0]
-        print(f"Current Map:  {current_map.name}")
-
-        if dataset_name not in [lyr.name for lyr in current_map.listLayers(f"{dataset_name}")]:
-            print(f"Adding {dataset_name} to Map")
-
-            map_layer = arcpy.management.MakeFeatureLayer(dataset, f"{dataset_name}")
-
-            #arcpy.management.Delete(rf"{project_folder}\Layers\{dataset_name}.lyrx")
-            #os.remove(rf"{project_folder}\Layers\{dataset_name}.lyrx")
-
-            map_layer_file = arcpy.management.SaveToLayerFile(map_layer, rf"{project_folder}\Layers\{dataset_name}.lyrx")
-            del map_layer_file
-
-            map_layer_file = arcpy.mp.LayerFile(rf"{project_folder}\Layers\{dataset_name}.lyrx")
-
-            arcpy.management.Delete(map_layer)
-            del map_layer
-
-            current_map.addLayer(map_layer_file)
-            del map_layer_file
-
-            aprx.save()
-        else:
-            pass
-
-        #aprx_basemaps = aprx.listBasemaps()
-        #basemap = 'GEBCO Basemap/Contours (NOAA NCEI Visualization)'
-        basemap = "Terrain with Labels"
-
-        current_map.addBasemap(basemap)
-        del basemap
-
-        # Set Reference Scale
-        current_map.referenceScale = 50000000
-
-        # Clear Selection
-        current_map.clearSelection()
-
-        current_map_cim = current_map.getDefinition('V3')
-        current_map_cim.enableWraparound = True
-        current_map.setDefinition(current_map_cim)
-
-        # Return the layer's CIM definition
-        cim_lyr = lyr.getDefinition('V3')
-
-        # Modify the color, width and dash template for the SolidStroke layer
-        symLvl1 = cim_lyr.renderer.symbol.symbol.symbolLayers[0]
-        symLvl1.color.values = [0, 0, 0, 100]
-        symLvl1.width = 1
-
-        # Push the changes back to the layer object
-        lyr.setDefinition(cim_lyr)
-        del symLvl1, cim_lyr
-
-        aprx.save()
-
-        height = arcpy.Describe(dataset).extent.YMax - arcpy.Describe(dataset).extent.YMin
-        width  = arcpy.Describe(dataset).extent.XMax - arcpy.Describe(dataset).extent.XMin
-
-        # map_width, map_height
-        map_width, map_height = 8.5, 11
-
-        if height > width:
-            page_height = map_height; page_width = map_width
-        elif height < width:
-            page_height = map_width; page_width = map_height
-        else:
-            page_width = map_width; page_height = map_height
-
-        del map_width, map_height
-        del height, width
-
-        if dataset_name not in [cl.name for cl in aprx.listLayouts()]:
-            print(f"Creating Layout: {dataset_name}")
-            aprx.createLayout(page_width, page_height, "INCH", f"{dataset_name}")
-            aprx.save()
-        else:
-            print(f"Layout: {dataset_name} exists")
-
-        #Set the default map camera to the extent of the park boundary before opening the new view
-        #default camera only affects newly opened views
-        lyr = current_map.listLayers(f"{dataset_name}")[-1]
-
-        #
-        arcpy.management.SelectLayerByAttribute(lyr, 'NEW_SELECTION', "DatasetCode in ('ENBS', 'HI', 'NEUS_SPR')")
-
-        mv = current_map.openView()
-        mv.panToExtent(mv.getLayerExtent(lyr, True, True))
-        mv.zoomToAllLayers()
-        del mv
-
-        arcpy.management.SelectLayerByAttribute(lyr, 'CLEAR_SELECTION')
-
-        av = aprx.activeView
-        av.exportToPNG(rf"{project_folder}\Layers\{dataset_name}.png", width=288, height=192, resolution = 96, color_mode="24-BIT_TRUE_COLOR", embed_color_profile=True)
-        av.exportToJPEG(rf"{project_folder}\Layers\{dataset_name}.jpg", width=288, height=192, resolution = 96, jpeg_color_mode="24-BIT_TRUE_COLOR", embed_color_profile=True)
-        del av
-
-        #print(current_map.referenceScale)
-
-        #export the newly opened active view to PDF, then delete the new map
-        #mv = aprx.activeView
-        #mv.exportToPDF(r"C:\Temp\RangerStations.pdf", width=700, height=500, resolution=96)
-        #aprx.deleteItem(current_map)
-
-        #mv = aprx.activeView
-        #mv = current_map.defaultView
-        #mv.zoomToAllLayers()
-        #print(mv.camera.getExtent())
-        #arcpy.management.Delete(rf"{project_folder}\Layers\{dataset_name}.png")
-        #arcpy.management.Delete(rf"{project_folder}\Layers\{dataset_name}.jpg")
-
-        #os.remove(rf"{project_folder}\Layers\{dataset_name}.png")
-        #os.remove(rf"{project_folder}\Layers\{dataset_name}.jpg")
-
-
-        #mv.exportToPNG(rf"{project_folder}\Layers\{dataset_name}.png", width=288, height=192, resolution = 96, color_mode="24-BIT_TRUE_COLOR", embed_color_profile=True)
-        #mv.exportToJPEG(rf"{project_folder}\Layers\{dataset_name}.jpg", width=288, height=192, resolution = 96, jpeg_color_mode="24-BIT_TRUE_COLOR", embed_color_profile=True)
-        #del mv
-
-        #Export the resulting imported layout and changes to JPEG
-        #print(f"Exporting '{current_layout.name}'")
-        #current_map.exportToJPEG(rf"{project_folder}\Layouts\{current_layout.name}.jpg", page_width, page_height)
-        #current_map.exportToPNG(rf"{project_folder}\Layouts\{current_layout.name}.png", page_width, page_height)
-
-        #fc_md = md.Metadata(dataset)
-        #fc_md.thumbnailUri = rf"{project_folder}\Layouts\{dataset_name}.png"
-        #fc_md.thumbnailUri = rf"{project_folder}\Layouts\{dataset_name}.jpg"
-        #fc_md.save()
-        #del fc_md
-
-        aprx.save()
-
-
-    # #            from arcpy import metadata as md
-    # #
-    # #            fc_md = md.Metadata(dataset)
-    # #            fc_md.thumbnailUri = rf"{project_folder}\Layers\{dataset_name}.png"
-    # #            fc_md.save()
-    # #            del fc_md
-    # #            del md
-
-##        aprx.save()
-##
-##        current_layout = [cl for cl in aprx.listLayouts() if cl.name == dataset_name][0]
-##        print(f"Current Layout: {current_layout.name}")
-##
-##        current_layout.openView()
-##
-##        # Remove all map frames
-##        for mf in current_layout.listElements("MapFrame_Element"): current_layout.deleteElement(mf); del mf
-##
-##        # print(f'Layout Name: {current_layout.name}')
-##        # print(f'    Width x height: {current_layout.pageWidth} x {current_layout.pageHeight} units are {current_layout.pageUnits}')
-##        # print(f'    MapFrame count: {str(len(current_layout.listElements("MapFrame_Element")))}')
-##        # for mf in current_layout.listElements("MapFrame_Element"):
-##        #     if len(current_layout.listElements("MapFrame_Element")) > 0:
-##        #         print(f'        MapFrame name: {mf.name}')
-##        # print(f'    Total element count: {str(len(current_layout.listElements()))} \n')
-##
-##
-##        print(f"Create a new map frame using a point geometry")
-##        #Create a new map frame using a point geometry
-##        #mf1 = current_layout.createMapFrame(arcpy.Point(0.01,0.01), current_map, 'New MF - Point')
-##        mf1 = current_layout.createMapFrame(arcpy.Point(0.0,0.0), current_map, 'New MF - Point')
-##        #mf1.elementWidth = 10
-##        #mf1.elementHeight = 7.5
-##        #mf1.elementWidth  = page_width  - 0.01
-##        #mf1.elementHeight = page_height - 0.01
-##        mf1.elementWidth  = page_width
-##        mf1.elementHeight = page_height
-
-##        lyr = current_map.listLayers(f"{dataset_name}")[0]
-##
-##        #Zoom to ALL selected features and export to PDF
-##        #arcpy.SelectLayerByAttribute_management(lyr, 'NEW_SELECTION')
-##        #mf1.zoomToAllLayers(True)
-##        #arcpy.SelectLayerByAttribute_management(lyr, 'CLEAR_SELECTION')
-##
-##        #Set the map frame extent to the extent of a layer
-##        #mf1.camera.setExtent(mf1.getLayerExtent(lyr, False, True))
-##        #mf1.camera.scale = mf1.camera.scale * 1.1 #add a slight buffer
-##
-##        del lyr
-
-##        print(f"Create a new bookmark set to the map frame's default extent")
-##        #Create a new bookmark set to the map frame's default extent
-##        bkmk = mf1.createBookmark('Default Extent', "The map's default extent")
-##        bkmk.updateThumbnail()
-##        del mf1
-##        del bkmk
-
-        # Create point text element using a system style item
-        # txtStyleItem = aprx.listStyleItems('ArcGIS 2D', 'TEXT', 'Title (Serif)')[0]
-        # ptTxt = aprx.createTextElement(current_layout, arcpy.Point(5.5, 4.25), 'POINT', f'{dataset_name}', 10, style_item=txtStyleItem)
-        # del txtStyleItem
-
-        # Change the anchor position and reposition the text to center
-        # ptTxt.setAnchor('Center_Point')
-        # ptTxt.elementPositionX = page_width / 2.0
-        # ptTxt.elementPositionY = page_height - 0.25
-        # del ptTxt
-
-        # print(f"Using CIM to update border")
-        # current_layout_cim = current_layout.getDefinition('V3')
-        # for elm in current_layout_cim.elements:
-        #     if type(elm).__name__ == 'CIMMapFrame':
-        #         if elm.graphicFrame.borderSymbol.symbol.symbolLayers:
-        #             sym = elm.graphicFrame.borderSymbol.symbol.symbolLayers[0]
-        #             sym.width = 5
-        #             sym.color.values = [255, 0, 0, 100]
-        #         else:
-        #             arcpy.AddWarning(elm.name + ' has NO symbol layers')
-        # current_layout.setDefinition(current_layout_cim)
-        # del current_layout_cim, elm, sym
-
-##        ExportLayout = True
-##        if ExportLayout:
-##            #Export the resulting imported layout and changes to JPEG
-##            print(f"Exporting '{current_layout.name}'")
-##            current_layout.exportToJPEG(rf"{project_folder}\Layouts\{current_layout.name}.jpg")
-##            current_layout.exportToPNG(rf"{project_folder}\Layouts\{current_layout.name}.png")
-##        del ExportLayout
-
-##        #Export the resulting imported layout and changes to JPEG
-##        print(f"Exporting '{current_layout.name}'")
-##        current_map.exportToJPEG(rf"{project_folder}\Layouts\{current_layout.name}.jpg", page_width, page_height)
-##        current_map.exportToPNG(rf"{project_folder}\Layouts\{current_layout.name}.png", page_width, page_height)
-##
-##        fc_md = md.Metadata(dataset)
-##        fc_md.thumbnailUri = rf"{project_folder}\Layouts\{current_layout.name}.png"
-##        #fc_md.thumbnailUri = rf"{project_folder}\Layouts\{current_layout.name}.jpg"
-##        fc_md.save()
-##        del fc_md
-##
-##        aprx.save()
-
-        # aprx.deleteItem(current_map)
-        #aprx.deleteItem(current_layout)
-
-        del current_map
-        #, current_layout
-        #del page_width, page_height
-        del dataset_name, dataset
-
-        aprx.save()
-
-        print(f"\nCurrent Maps & Layouts")
-
-        current_maps    = aprx.listMaps()
-        #current_layouts = aprx.listLayouts()
-
-        if current_maps:
-            print(f"\nCurrent Maps\n")
-            for current_map in current_maps:
-                print(f"\tProject Map: {current_map.name}")
-                del current_map
-        else:
-            arcpy.AddWarning("No maps in project_name")
-
-##        if current_layouts:
-##            print(f"\nCurrent Layouts\n")
-##            for current_layout in current_layouts:
-##                print(f"\tProject Layout: {current_layout.name}")
-##                del current_layout
-##        else:
-##            arcpy.AddWarning("No layouts in Project")
-
-        #del current_layouts
-        del current_maps
-
-        # Declared Variables set in function for aprx
-
-        # Save aprx one more time and then delete
-        aprx.save()
-        del aprx
-
-        # Declared Variables set in function
-        del project_gdb, base_project_folder, metadata_folder
-        del project_folder, scratch_folder
-
-        # Imports
-        del dismap, parse_xml_file_format_and_save
-        del md
-
-        # Function Parameters
-        del base_project_file, project_name
-
-    except Exception:
-        pass
-    except:
-        traceback.print_exc()
-    else:
-        # While in development, leave here. For test, move to finally
-        rk = [key for key in locals().keys() if not key.startswith('__')]
-        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
-        return True
-    finally:
-        pass
-
 def remove_duplicate_elements(root):
     seen = {}
     for element in root.iter():
@@ -893,6 +554,9 @@ def insert_missing_elements(dataset_path):
                             <Esri>
                                 <ArcGISstyle>ISO 19139 Metadata Implementation Specification GML3.2</ArcGISstyle>
                                 <ArcGISProfile>ISO19139</ArcGISProfile>
+                                <locales>
+                                    <locale xmlns="" language="eng" country="US"/>
+                                </locales>
                             </Esri>
                             <dataIdInfo>
                                 <envirDesc Sync="TRUE">Esri ArcGIS 13.1.0.41833</envirDesc>
@@ -911,9 +575,9 @@ def insert_missing_elements(dataset_path):
                                     </date>
                                     <citRespParty>
                                         <editorSource>external</editorSource>
-                                        <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                        <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                                         <rpIndName>Nikki Wildart</rpIndName>
-                                        <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                        <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                                         <rpPosName>Biologist</rpPosName>
                                         <rpCntInfo>
                                             <cntAddress addressType="both">
@@ -1048,9 +712,9 @@ def insert_missing_elements(dataset_path):
                                 </idStatus>
                                 <idPoC>
                                     <editorSource>external</editorSource>
-                                    <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                    <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                                     <rpIndName>Nikki Wildart</rpIndName>
-                                    <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                    <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                                     <rpPosName>Biologist</rpPosName>
                                     <rpCntInfo>
                                         <cntAddress addressType="both">
@@ -1226,9 +890,9 @@ def insert_missing_elements(dataset_path):
                                         </presForm>
                                         <citRespParty>
                                             <editorSource>external</editorSource>
-                                            <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                            <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                                             <rpIndName>Nikki Wildart</rpIndName>
-                                            <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                                             <rpPosName>Biologist</rpPosName>
                                             <rpCntInfo>
                                                 <cntAddress addressType="both">
@@ -1262,47 +926,119 @@ def insert_missing_elements(dataset_path):
                                     </srcCitatn>
                                 </dataSource>
                                 <prcStep>
-                                    <stepDesc>Create feature class from template polygon range</stepDesc>
+                                    <stepDesc>pre-Update Metadata 2025</stepDesc>
                                     <stepDateTm></stepDateTm>
                                     <stepProc>
                                         <editorSource>external</editorSource>
-                                        <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
-                                        <rpIndName>Nikki Wildart</rpIndName>
-                                        <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
-                                        <rpPosName>Biologist</rpPosName>
-                                        <rpCntInfo>
-                                            <cntAddress addressType="both">
-                                                <delPoint>1315 East West Highway</delPoint>
-                                                <city>Silver Spring</city>
-                                                <adminArea>MD</adminArea>
-                                                <postCode>20910</postCode>
-                                                <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
-                                                <country>US</country>
-                                            </cntAddress>
-                                            <cntPhone>
-                                                <voiceNum tddtty="">(301) 427-8443</voiceNum>
-                                                <faxNum>(301) 427-8443</faxNum>
-                                            </cntPhone>
-                                            <cntHours>0700 - 1800 EST/EDT</cntHours>
-                                            <cntOnlineRes>
-                                                <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
-                                                <orName>NMFS Office of Protected Resources</orName>
-                                                <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
-                                                <orFunct>
-                                                    <OnFunctCd value="002"></OnFunctCd>
-                                                </orFunct>
-                                            </cntOnlineRes>
+                                        <editorDigest>4bc6ef8bbddbe5cc92212524cb0927aa3a89276c</editorDigest>
+                                        <rpIndName>Jonathan Molineaux</rpIndName>
+                                        <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                        <rpPosName>Fisheries Biologist</rpPosName>
+                                        <rpCntInfo editorFillOnly="True" editorExpand="True">
+                                          <cntAddress addressType="both">
+                                            <delPoint>1315 East West Highway</delPoint>
+                                            <city>Silver Spring</city>
+                                            <adminArea>MD</adminArea>
+                                            <postCode>20910-3282</postCode>
+                                            <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+                                            <country>US</country>
+                                          </cntAddress>
+                                          <cntPhone>
+                                            <voiceNum tddtty="">301-427-8400</voiceNum>
+                                            <faxNum>301-427-8400</faxNum>
+                                          </cntPhone>
+                                          <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                          <cntOnlineRes>
+                                            <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                            <protocol>REST Service</protocol>
+                                            <orName>NMFS Office of Protected Resources</orName>
+                                            <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                            <orFunct>
+                                              <OnFunctCd value="002" />
+                                            </orFunct>
+                                          </cntOnlineRes>
                                         </rpCntInfo>
+                                        <displayName>Jonathan Molineaux</displayName>
                                         <editorSave>True</editorSave>
-                                        <displayName>Nikki Wildart</displayName>
+                                        <role>
+                                            <RoleCd value="009"></RoleCd>
+                                        </role>
+                                    </stepProc>
+                                    <stepProc>
+                                        <editorSource>external</editorSource>
+                                        <editorDigest>cbb16b8e6eb47d2d5ac78868506ddc944074588f</editorDigest>
+                                        <rpIndName>Jennifer Schultz</rpIndName>
+                                        <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                        <rpPosName>Fisheries Biologist</rpPosName>
+                                        <rpCntInfo editorFillOnly="True" editorExpand="True">
+                                          <cntAddress addressType="both">
+                                            <delPoint>1315 East West Highway</delPoint>
+                                            <city>Silver Spring</city>
+                                            <adminArea>MD</adminArea>
+                                            <postCode>20910-3282</postCode>
+                                            <country>US</country>
+                                            <eMailAdd>jennifer.schultz@noaa.gov</eMailAdd>
+                                          </cntAddress>
+                                          <cntPhone>
+                                            <voiceNum tddtty="">301-427-8400</voiceNum>
+                                            <faxNum>301-427-8400</faxNum>
+                                          </cntPhone>
+                                          <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                          <cntOnlineRes>
+                                            <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                            <protocol>REST Service</protocol>
+                                            <orName>NMFS Office of Protected Resources</orName>
+                                            <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                            <orFunct>
+                                              <OnFunctCd value="002" />
+                                            </orFunct>
+                                          </cntOnlineRes>
+                                        </rpCntInfo>
+                                        <displayName>Jennifer Schultz</displayName>
+                                        <editorSave>True</editorSave>
                                         <role>
                                             <RoleCd value="009"></RoleCd>
                                         </role>
                                     </stepProc>
                                     <stepSrc type="used">
-                                        <srcDesc>NMFS ESA Range Geodatabase 2024</srcDesc>
+                                        <srcDesc>pre-Update Metadata 2025</srcDesc>
                                         <srcMedName><MedNameCd value="015"/></srcMedName>
-                                        <srcCitatn></srcCitatn>
+                                            <srcCitatn>
+                                            <editorSource>external</editorSource>
+                                            <editorDigest>4bc6ef8bbddbe5cc92212524cb0927aa3a89276c</editorDigest>
+                                            <rpIndName>Jonathan Molineaux</rpIndName>
+                                            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                            <rpPosName>Fisheries Biologist</rpPosName>
+                                            <rpCntInfo editorFillOnly="True" editorExpand="True">
+                                              <cntAddress addressType="both">
+                                                <delPoint>1315 East West Highway</delPoint>
+                                                <city>Silver Spring</city>
+                                                <adminArea>MD</adminArea>
+                                                <postCode>20910-3282</postCode>
+                                                <eMailAdd>jonathan.molineaux@noaa.gov</eMailAdd>
+                                                <country>US</country>
+                                              </cntAddress>
+                                              <cntPhone>
+                                                <voiceNum tddtty="">301-427-8400</voiceNum>
+                                                <faxNum>301-427-8400</faxNum>
+                                              </cntPhone>
+                                              <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                              <cntOnlineRes>
+                                                <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                                <protocol>REST Service</protocol>
+                                                <orName>NMFS Office of Protected Resources</orName>
+                                                <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                                <orFunct>
+                                                  <OnFunctCd value="002" />
+                                                </orFunct>
+                                              </cntOnlineRes>
+                                            </rpCntInfo>
+                                            <displayName>Jonathan Molineaux</displayName>
+                                            <editorSave>True</editorSave>
+                                            <role>
+                                                <RoleCd value="009"></RoleCd>
+                                            </role>
+                                        </srcCitatn>
                                     </stepSrc>
                                 </prcStep>
                                 <prcStep>
@@ -1310,9 +1046,9 @@ def insert_missing_elements(dataset_path):
                                     <stepDateTm></stepDateTm>
                                     <stepProc>
                                         <editorSource>external</editorSource>
-                                        <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+                                        <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
                                         <rpIndName>Nikki Wildart</rpIndName>
-                                        <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+                                        <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                                         <rpPosName>Biologist</rpPosName>
                                         <rpCntInfo>
                                             <cntAddress addressType="both">
@@ -1344,83 +1080,114 @@ def insert_missing_elements(dataset_path):
                                         </role>
                                     </stepProc>
                                     <stepSrc type="used">
-                                        <srcDesc>NMFS ESA Range Geodatabase 2024</srcDesc>
+                                        <srcDesc>Update Metadata 2025</srcDesc>
                                         <srcMedName><MedNameCd value="015"/></srcMedName>
                                         <srcCitatn>
+                                            <editorSource>external</editorSource>
+                                            <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
+                                            <rpIndName>Nikki Wildart</rpIndName>
+                                            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                            <rpPosName>Biologist</rpPosName>
+                                            <rpCntInfo>
+                                                <cntAddress addressType="both">
+                                                    <delPoint>1315 East West Highway</delPoint>
+                                                    <city>Silver Spring</city>
+                                                    <adminArea>MD</adminArea>
+                                                    <postCode>20910</postCode>
+                                                    <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                                                    <country>US</country>
+                                                </cntAddress>
+                                                <cntPhone>
+                                                    <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                                                    <faxNum>(301) 427-8443</faxNum>
+                                                </cntPhone>
+                                                <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                                <cntOnlineRes>
+                                                    <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                                    <orName>NMFS Office of Protected Resources</orName>
+                                                    <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                                    <orFunct>
+                                                        <OnFunctCd value="002"></OnFunctCd>
+                                                    </orFunct>
+                                                </cntOnlineRes>
+                                            </rpCntInfo>
+                                            <editorSave>True</editorSave>
+                                            <displayName>Nikki Wildart</displayName>
+                                            <role>
+                                                <RoleCd value="009"></RoleCd>
+                                            </role>
                                         </srcCitatn>
                                     </stepSrc>
                                 </prcStep>
                             </dataLineage>
                         </dqInfo>
-                            <distInfo>
-                                <distFormat>
-                                    <formatName Sync="TRUE">ESRI File Geodatabase</formatName>
-                                    <formatVer>po r </formatVer>
-                                    <fileDecmTech>Compressed</fileDecmTech>
-                                    <formatInfo>NMFS ESA Range Geodatabase 2024</formatInfo>
-                                </distFormat>
-                                <distributor>
-                                    <distorCont>
-                                        <editorSource>external</editorSource>
-                                        <editorDigest>d6865ab3a834719aef999600529568de978609bf</editorDigest>
-                                        <rpIndName>NMFS Office of Protected Resources</rpIndName>
-                                        <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
-                                        <rpPosName>Biologist</rpPosName>
-                                        <rpCntInfo>
-                                            <cntAddress addressType="both">
-                                                <delPoint>1315 East West Highway</delPoint>
-                                                <city>Silver Spring</city>
-                                                <adminArea>MD</adminArea>
-                                                <postCode>20910</postCode>
-                                                <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
-                                                <country>US</country>
-                                            </cntAddress>
-                                            <cntPhone>
-                                                <voiceNum tddtty="">(301) 427-8443</voiceNum>
-                                                <faxNum>(301) 427-8443</faxNum>
-                                            </cntPhone>
-                                            <cntHours>0700 - 1800 EST/EDT</cntHours>
-                                            <cntOnlineRes>
-                                                <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
-                                                <orName>NMFS Office of Protected Resources</orName>
-                                                <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
-                                                <orFunct>
-                                                    <OnFunctCd value="002"></OnFunctCd>
-                                                </orFunct>
-                                            </cntOnlineRes>
-                                        </rpCntInfo>
-                                        <editorSave>True</editorSave>
-                                        <displayName>NMFS Office of Protected Resources</displayName>
-                                        <role>
-                                            <RoleCd value="005"></RoleCd>
-                                        </role>
-                                    </distorCont>
-                                    <distorTran xmlns="">
-                                        <unitsODist>MB</unitsODist>
-                                        <transSize>8</transSize>
-                                        <onLineSrc xmlns="">
-                                           <linkage>https://www.fisheries.noaa.gov/science-and-data</linkage>
-                                           <protocol>REST Service</protocol>
-                                           <orName>NMFS ESA Range Geodatabase 2024</orName>
-                                           <orDesc>File Geodatabase Download</orDesc>
-                                           <orFunct>
-                                              <OnFunctCd value="001"/>
-                                           </orFunct>
-                                        </onLineSrc>
-                                     </distorTran>
-                                    <distorTran xmlns="">
-                                        <onLineSrc xmlns="">
-                                            <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
-                                            <protocol>ESRI REST Service</protocol>
-                                            <orName>Dataset</orName>
-                                            <orDesc>Dataset Feature Service</orDesc>
+                        <distInfo>
+                            <distFormat>
+                                <formatName Sync="FALSE">ESRI File Geodatabase</formatName>
+                                <formatVer></formatVer>
+                                <fileDecmTech>Zip</fileDecmTech>
+                                <formatInfo>NMFS ESA Range Geodatabase 2024</formatInfo>
+                            </distFormat>
+                            <distributor>
+                                <distorCont>
+                                    <editorSource>external</editorSource>
+                                    <editorDigest>99eeb229b62021b29d40c56ebdbdf556fd68df7e</editorDigest>
+                                    <rpIndName>NMFS Office of Protected Resources</rpIndName>
+                                    <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                    <rpPosName>Biologist</rpPosName>
+                                    <rpCntInfo>
+                                        <cntAddress addressType="both">
+                                            <delPoint>1315 East West Highway</delPoint>
+                                            <city>Silver Spring</city>
+                                            <adminArea>MD</adminArea>
+                                            <postCode>20910</postCode>
+                                            <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                                            <country>US</country>
+                                        </cntAddress>
+                                        <cntPhone>
+                                            <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                                            <faxNum>(301) 427-8443</faxNum>
+                                        </cntPhone>
+                                        <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                        <cntOnlineRes>
+                                            <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                            <orName>NMFS Office of Protected Resources</orName>
+                                            <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
                                             <orFunct>
-                                               <OnFunctCd value="002"/>
+                                                <OnFunctCd value="002"></OnFunctCd>
                                             </orFunct>
-                                        </onLineSrc>
-                                    </distorTran>
-                                </distributor>
-                            </distInfo>
+                                        </cntOnlineRes>
+                                    </rpCntInfo>
+                                    <editorSave>True</editorSave>
+                                    <displayName>NMFS Office of Protected Resources</displayName>
+                                    <role>
+                                        <RoleCd value="005"></RoleCd>
+                                    </role>
+                                </distorCont>
+                            </distributor>
+                            <distTranOps xmlns="">
+                                <unitsODist>MB</unitsODist>
+                                <transSize>8</transSize>
+                                <onLineSrc xmlns="">
+                                   <linkage>https://www.fisheries.noaa.gov/science-and-data</linkage>
+                                   <protocol>REST Service</protocol>
+                                   <orName>NMFS ESA Range Geodatabase 2024</orName>
+                                   <orDesc>File Geodatabase Download</orDesc>
+                                   <orFunct>
+                                      <OnFunctCd value="001"/>
+                                   </orFunct>
+                                </onLineSrc>
+                                <onLineSrc xmlns="">
+                                    <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
+                                    <protocol>ESRI REST Service</protocol>
+                                    <orName>NMFS ESA Range Geodatabase 2024</orName>
+                                    <orDesc>Dataset Feature Service</orDesc>
+                                    <orFunct>
+                                       <OnFunctCd value="002"/>
+                                    </orFunct>
+                                </onLineSrc>
+                            </distTranOps>
+                        </distInfo>
                     </metadata>
                      '''
 
@@ -1432,7 +1199,6 @@ def insert_missing_elements(dataset_path):
         #print(etree.tostring(target_source_merge, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         # Merge Source wtih Target
         source_target_merge = xml_tree_merge(target_source_merge, target_root)
-
         del target_source_merge
         del source_tree, source_root, xml_file
 
@@ -1448,17 +1214,36 @@ def insert_missing_elements(dataset_path):
             dataset_md.save()
             dataset_md.synchronize("ALWAYS")
             dataset_md.save()
-            #dataset_md.reload()
-            del dataset_md
+            dataset_md.reload()
+            #dataset_md_xml = dataset_md.xml
+            #del dataset_md
+            # Parse the XML
+            #_target_tree = etree.parse(StringIO(dataset_md_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #del dataset_md_xml
+            #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
         else:
             pass
         del SaveBackXml
         del dataset_md_xml
-        del source_target_merge
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        species_range_dict = dict()
+        field_names = [f.name for f in arcpy.ListFields(dataset_path) if f.type not in ['Geometry', 'OID'] and f.name in ["SCIENAME", "COMNAME", "LISTENTITY", "DPSESU", "NMFSPAGE", "FEATNAME"]]
+        with arcpy.da.SearchCursor(dataset_path, field_names) as cursor:
+            for row in cursor:
+                species_range_dict[dataset_name] =  {"SCIENAME" : row[0], "COMNAME" : row[1], "LISTENTITY" : row[2], "DPSESU" : row[3], "NMFSPAGE" : row[4], "FEATNAME" : row[5],}
+                del row
+        del cursor
+
+        del field_names
+
+        for feature_class in species_range_dict:
+            #print(feature_class, species_range_dict[feature_class])
+            del feature_class
 
         dataset_md = md.Metadata(dataset_path)
         dataset_md.synchronize("ALWAYS")
@@ -1473,53 +1258,82 @@ def insert_missing_elements(dataset_path):
         target_root = target_tree.getroot()
         del parser, dataset_md_xml
 
+        target_root.xpath("./distInfo/distFormat/formatName")[0].set('Sync', "FALSE")
+        target_root.xpath("./dataIdInfo/envirDesc")[0].set('Sync', "TRUE")
+
+        for idCredit in target_root.xpath("./dataIdInfo/idCredit"):
+            #print(etree.tostring(idCredit, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            idCredit.text = "NOAA Fisheries. 2024. Endangered Species Act Species Range Geodatabase. Silver Spring, MD: National Oceanic and Atmospheric Administration (NOAA), National Marine Fisheries Service (NMFS), Office of Protected Resources (OPR)."
+            del idCredit
+        #print(etree.tostring(target_root.xpath("./dataIdInfo/idCredit")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+
+        resTitle = target_root.xpath("./dataIdInfo/idCitation/resTitle")[0]
+        resTitle.text = f"{species_range_dict[dataset_name]['COMNAME'].title()} {dataset_name[dataset_name.rfind('_')+1:]}"
+        del resTitle
+        resAltTitle = target_root.xpath("./dataIdInfo/idCitation/resAltTitle")[0]
+        resAltTitle.text = f"{species_range_dict[dataset_name]['COMNAME'].title()} ({species_range_dict[dataset_name]['SCIENAME']}) Range"
+        #print(resAltTitle.text)
+        del resAltTitle
+
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # discKeys, themeKeys, placeKeys, tempKeys
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        # discKeys
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        keywords = target_root.xpath("//dataIdInfo/discKeys/keyword")
+        #searchKeys = target_root.xpath("./dataIdInfo/searchKeys")[0].text = ""
+        #searchKeys = target_root.xpath("./dataIdInfo/searchKeys")[0]
+        #print(etree.tostring(searchKeys, encoding='UTF-8', method='xml', pretty_print=True).decode())
+        searchKeys = target_root.xpath("./dataIdInfo/searchKeys")
+        for searchKey in searchKeys:
+            #print(etree.tostring(searchKey, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            for keyword in searchKey.xpath("./keyword"):
+                if isinstance(keyword.text, type(None)):
+                    keyword.getparent().remove(keyword)
+                else:
+                    pass #print(etree.tostring(keyword, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del searchKey
+        del searchKeys
+        target_root.xpath("./dataIdInfo/searchKeys/keyword")[0].text = f"{species_range_dict[dataset_name]['LISTENTITY']}; ESA; range; NMFS"
+
+        keywords = target_root.xpath("./dataIdInfo/discKeys/keyword")
         if keywords is not None and len(keywords) and len(keywords[0]) == 0:
-            new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            keyword = target_root.xpath("//dataIdInfo/discKeys/keyword")[0]
-            keyword.text = f"Enter scientific keywords for {new_item_name}, separated by a semicolon"
-            del keyword, new_item_name
-        elif keywords is not None and len(keywords) and len(keywords[0]) >= 1:
-            pass
+            keyword = target_root.xpath("./dataIdInfo/discKeys/keyword")[0]
+            keyword.text = f"{species_range_dict[dataset_name]['SCIENAME']}"
+            del keyword
+        #elif keywords is not None and len(keywords) and len(keywords[0]) >= 1:
+        #    pass
         del keywords
-        createDate = target_root.xpath("//dataIdInfo/discKeys/thesaName/date/createDate")
+        createDate = target_root.xpath("./dataIdInfo/discKeys/thesaName/date/createDate")
         if createDate is not None and len(createDate) and len(createDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/discKeys/thesaName/date/createDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/discKeys/thesaName/date/createDate")[0].text = CreaDateTime
         elif createDate is not None and len(createDate) and len(createDate[0]) == 1:
             pass
         else:
             pass
         del createDate
-        pubDate    = target_root.xpath("//dataIdInfo/discKeys/thesaName/date/pubDate")
+        pubDate    = target_root.xpath("./dataIdInfo/discKeys/thesaName/date/pubDate")
         if pubDate is not None and len(pubDate) and len(pubDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/discKeys/thesaName/date/pubDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/discKeys/thesaName/date/pubDate")[0].text = CreaDateTime
         elif pubDate is not None and len(pubDate) and len(pubDate[0]) == 1:
             pass
         else:
             pass
         del pubDate
-        reviseDate = target_root.xpath("//dataIdInfo/discKeys/thesaName/date/reviseDate")
+        reviseDate = target_root.xpath("./dataIdInfo/discKeys/thesaName/date/reviseDate")
         if reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/discKeys/thesaName/date/reviseDate")[0].text = ModDateTime
+            target_root.xpath("./dataIdInfo/discKeys/thesaName/date/reviseDate")[0].text = ModDateTime
         elif reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 1:
             pass
         else:
             pass
         del reviseDate
-        resTitle = target_root.xpath("//dataIdInfo/discKeys/thesaName/resTitle")
+        resTitle = target_root.xpath("./dataIdInfo/discKeys/thesaName/resTitle")
         if resTitle is not None and len(resTitle) and len(resTitle[0]) == 0:
-            target_root.xpath("//dataIdInfo/discKeys/thesaName/resTitle")[0].text = "Integrated Taxonomic Information System (ITIS)"
+            target_root.xpath("./dataIdInfo/discKeys/thesaName/resTitle")[0].text = "Integrated Taxonomic Information System (ITIS)"
         elif resTitle is not None and len(resTitle) and len(resTitle[0]) == 1:
             pass
         else:
             pass
         del resTitle
-        discKeys = target_root.xpath("//dataIdInfo/discKeys")
+        discKeys = target_root.xpath("./dataIdInfo/discKeys")
         for i in range(0, len(discKeys)):
             #print(etree.tostring(discKeys[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del i
@@ -1527,48 +1341,48 @@ def insert_missing_elements(dataset_path):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # themeKeys
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        keywords = target_root.xpath("//dataIdInfo/themeKeys/keyword")
+        keywords = target_root.xpath("./dataIdInfo/themeKeys/keyword")
         if keywords is not None and len(keywords) and len(keywords[0]) == 0:
             new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            keyword = target_root.xpath("//dataIdInfo/themeKeys/keyword")[0]
-            keyword.text = f"Enter theme keywords, that do not fit elsewhere, for {new_item_name}, separated by a semicolon"
+            keyword = target_root.xpath("./dataIdInfo/themeKeys/keyword")[0]
+            keyword.text = f"{species_range_dict[dataset_name]['COMNAME'].title()}; {species_range_dict[dataset_name]['SCIENAME']}; Endangered Species; NMFS"
             del keyword, new_item_name
         elif keywords is not None and len(keywords) and len(keywords[0]) >= 1:
             pass
         del keywords
-        createDate = target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/createDate")
+        createDate = target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/createDate")
         if createDate is not None and len(createDate) and len(createDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/createDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/createDate")[0].text = CreaDateTime
         elif createDate is not None and len(createDate) and len(createDate[0]) == 1:
             pass
         else:
             pass
         del createDate
-        pubDate    = target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/pubDate")
+        pubDate    = target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/pubDate")
         if pubDate is not None and len(pubDate) and len(pubDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/pubDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/pubDate")[0].text = CreaDateTime
         elif pubDate is not None and len(pubDate) and len(pubDate[0]) == 1:
             pass
         else:
             pass
         del pubDate
-        reviseDate = target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/reviseDate")
+        reviseDate = target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/reviseDate")
         if reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/themeKeys/thesaName/date/reviseDate")[0].text = ModDateTime
+            target_root.xpath("./dataIdInfo/themeKeys/thesaName/date/reviseDate")[0].text = ModDateTime
         elif reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 1:
             pass
         else:
             pass
         del reviseDate
-        resTitle = target_root.xpath("//dataIdInfo/themeKeys/thesaName/resTitle")
+        resTitle = target_root.xpath("./dataIdInfo/themeKeys/thesaName/resTitle")
         if resTitle is not None and len(resTitle) and len(resTitle[0]) == 0:
-            target_root.xpath("//dataIdInfo/themeKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Science Keyword"
+            target_root.xpath("./dataIdInfo/themeKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Science Keyword"
         elif resTitle is not None and len(resTitle) and len(resTitle[0]) == 1:
             pass
         else:
             pass
         del resTitle
-        themeKeys = target_root.xpath("//dataIdInfo/themeKeys")
+        themeKeys = target_root.xpath("./dataIdInfo/themeKeys")
         for i in range(0, len(themeKeys)):
             #print(etree.tostring(themeKeys[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del i
@@ -1576,48 +1390,48 @@ def insert_missing_elements(dataset_path):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # placeKeys
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        keywords = target_root.xpath("//dataIdInfo/placeKeys/keyword")
+        keywords = target_root.xpath("./dataIdInfo/placeKeys/keyword")
         if keywords is not None and len(keywords) and len(keywords[0]) == 0:
             new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            keyword = target_root.xpath("//dataIdInfo/placeKeys/keyword")[0]
+            keyword = target_root.xpath("./dataIdInfo/placeKeys/keyword")[0]
             keyword.text = f"Enter place/geography keywords for {new_item_name}, separated by a semicolon"
             del keyword, new_item_name
         elif keywords is not None and len(keywords) and len(keywords[0]) >= 1:
             pass
         del keywords
-        createDate = target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/createDate")
+        createDate = target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/createDate")
         if createDate is not None and len(createDate) and len(createDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/createDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/createDate")[0].text = CreaDateTime
         elif createDate is not None and len(createDate) and len(createDate[0]) == 1:
             pass
         else:
             pass
         del createDate
-        pubDate = target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/pubDate")
+        pubDate = target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/pubDate")
         if pubDate is not None and len(pubDate) and len(pubDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/pubDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/pubDate")[0].text = CreaDateTime
         elif pubDate is not None and len(pubDate) and len(pubDate[0]) == 1:
             pass
         else:
             pass
         del pubDate
-        reviseDate = target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/reviseDate")
+        reviseDate = target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/reviseDate")
         if reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/placeKeys/thesaName/date/reviseDate")[0].text = ModDateTime
+            target_root.xpath("./dataIdInfo/placeKeys/thesaName/date/reviseDate")[0].text = ModDateTime
         elif reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 1:
             pass
         else:
             pass
         del reviseDate
-        resTitle = target_root.xpath("//dataIdInfo/placeKeys/thesaName/resTitle")
+        resTitle = target_root.xpath("./dataIdInfo/placeKeys/thesaName/resTitle")
         if resTitle is not None and len(resTitle) and len(resTitle[0]) == 0:
-            target_root.xpath("//dataIdInfo/placeKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Location Keywords"
+            target_root.xpath("./dataIdInfo/placeKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Location Keywords"
         elif resTitle is not None and len(resTitle) and len(resTitle[0]) == 1:
             pass
         else:
             pass
         del resTitle
-        placeKeys = target_root.xpath("//dataIdInfo/placeKeys")
+        placeKeys = target_root.xpath("./dataIdInfo/placeKeys")
         for i in range(0, len(placeKeys)):
             #print(etree.tostring(placeKeys[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del i
@@ -1625,48 +1439,48 @@ def insert_missing_elements(dataset_path):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # tempKeys
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        keywords = target_root.xpath("//dataIdInfo/tempKeys/keyword")
+        keywords = target_root.xpath("./dataIdInfo/tempKeys/keyword")
         if keywords is not None and len(keywords) and len(keywords[0]) == 0:
             new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-            keyword = target_root.xpath("//dataIdInfo/tempKeys/keyword")[0]
+            keyword = target_root.xpath("./dataIdInfo/tempKeys/keyword")[0]
             keyword.text = f"Enter temporal keywords (e.g. year, year range, season, etc.) for {new_item_name}, separated by a semicolon"
             del keyword, new_item_name
         elif keywords is not None and len(keywords) and len(keywords[0]) >= 1:
             pass
         del keywords
-        createDate = target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/createDate")
+        createDate = target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/createDate")
         if createDate is not None and len(createDate) and len(createDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/createDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/createDate")[0].text = CreaDateTime
         elif createDate is not None and len(createDate) and len(createDate[0]) == 1:
             pass
         else:
             pass
         del createDate
-        pubDate = target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/pubDate")
+        pubDate = target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/pubDate")
         if pubDate is not None and len(pubDate) and len(pubDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/pubDate")[0].text = CreaDateTime
+            target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/pubDate")[0].text = CreaDateTime
         elif pubDate is not None and len(pubDate) and len(pubDate[0]) == 1:
             pass
         else:
             pass
         del pubDate
-        reviseDate = target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/reviseDate")
+        reviseDate = target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/reviseDate")
         if reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 0:
-            target_root.xpath("//dataIdInfo/tempKeys/thesaName/date/reviseDate")[0].text = ModDateTime
+            target_root.xpath("./dataIdInfo/tempKeys/thesaName/date/reviseDate")[0].text = ModDateTime
         elif reviseDate is not None and len(reviseDate) and len(reviseDate[0]) == 1:
             pass
         else:
             pass
         del reviseDate
-        resTitle = target_root.xpath("//dataIdInfo/tempKeys/thesaName/resTitle")
+        resTitle = target_root.xpath("./dataIdInfo/tempKeys/thesaName/resTitle")
         if resTitle is not None and len(resTitle) and len(resTitle[0]) == 0:
-            target_root.xpath("//dataIdInfo/tempKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Temporal Data Resolution Keywords"
+            target_root.xpath("./dataIdInfo/tempKeys/thesaName/resTitle")[0].text = "Global Change Master Directory (GCMD) Temporal Data Resolution Keywords"
         elif resTitle is not None and len(resTitle) and len(resTitle[0]) == 1:
             pass
         else:
             pass
         del resTitle
-        tempKeys = target_root.xpath("//dataIdInfo/tempKeys")
+        tempKeys = target_root.xpath("./dataIdInfo/tempKeys")
         for i in range(0, len(tempKeys)):
             #print(etree.tostring(tempKeys[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del i
@@ -1674,13 +1488,17 @@ def insert_missing_elements(dataset_path):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Data Extent
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        dataExt = target_root.xpath("//dataIdInfo/dataExt")[0]
+        dataExt = target_root.xpath("./dataIdInfo/dataExt")[0]
         exDesc = dataExt.xpath("//exDesc")
         if len(exDesc) == 0:
-            _xml = "<exDesc>The geographic and temporal extent of the dataset are listed below.</exDesc>"
+            _xml = "<exDesc>[Location extent description]. The data represents an approximate distribution of the listed entity based on the best available information from [date of first source] to [date of final species expert review].</exDesc>"
             _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             dataExt.insert(0, _root)
             del _root, _xml
+        elif len(exDesc) == 1:
+            exDesc[0].text = "[Location extent description]. The data represents an approximate distribution of the listed entity based on the best available information from [date of first source] to [date of final species expert review]."
+        else:
+            pass
         del exDesc
         tempEle = dataExt.xpath("//tempEle")
         if len(tempEle) == 0:
@@ -1699,12 +1517,12 @@ def insert_missing_elements(dataset_path):
             del _root, _xml
         del tempEle
         del dataExt
-        dataExt = target_root.xpath("//dataIdInfo/dataExt")
+        dataExt = target_root.xpath("./dataIdInfo/dataExt")
         for i in range(1, len(dataExt)):
             #print(etree.tostring(dataExt[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del i
         del dataExt
-        dataExt = target_root.xpath("//dataIdInfo/dataExt")
+        dataExt = target_root.xpath("./dataIdInfo/dataExt")
         for i in range(1, len(dataExt)):
             dataExt[i].getparent().remove(dataExt[i])
             del i
@@ -1714,16 +1532,18 @@ def insert_missing_elements(dataset_path):
         PresFormCd   = target_root.xpath("/metadata/dataIdInfo/idCitation/presForm/PresFormCd")[0]
         fgdcGeoform  = target_root.xpath("/metadata/dataIdInfo/idCitation/presForm/fgdcGeoform")[0]
         SpatRepTypCd = target_root.xpath("/metadata/dataIdInfo/spatRpType/SpatRepTypCd")[0]
+        #print(etree.tostring(fgdcGeoform, encoding='UTF-8', method='xml', pretty_print=True).decode())
+
         datasetSet   = target_root.xpath("/metadata/dqInfo/dqScope/scpLvlDesc/datasetSet")[0]
         target_root.xpath("/metadata/dqInfo/dqScope/scpLvl/ScopeCd")[0].set('value', "005")
         if PresFormCd.get("value") == "005" and SpatRepTypCd.get("value") == "001":
-            fgdcGeoform.text = "Vector Digital Data"
+            fgdcGeoform.text = "vector digital data"
             datasetSet.text  = "Vector Digital Data"
-        elif PresFormCd.get("value") == "011" and SpatRepTypCd.get("value") == "002":
-            fgdcGeoform.text = "Raster Digital Data"
+        elif PresFormCd.get("value") == "003" and SpatRepTypCd.get("value") == "002":
+            fgdcGeoform.text = "raster digital data"
             datasetSet.text  = "Raster Digital Data"
         elif PresFormCd.get("value") == "011" and SpatRepTypCd.get("value") == "003":
-            fgdcGeoform.text = "Tabular Digital Data"
+            fgdcGeoform.text = "tabular digital data"
             datasetSet.text  = "Tabular Digital Data"
         else:
             pass
@@ -1758,19 +1578,20 @@ def insert_missing_elements(dataset_path):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # Replace all distInfo to catch incomplete distInfo
         distInfo = target_root.xpath("./distInfo")[0]
         #print(etree.tostring(distInfo, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         _xml = b'''<distInfo>
                     <distFormat>
-                        <formatName Sync="TRUE">ESRI File Geodatabase</formatName>
+                        <formatName Sync="FALSE">ESRI File Geodatabase</formatName>
                         <formatVer>po r </formatVer>
-                        <fileDecmTech>Compressed</fileDecmTech>
+                        <fileDecmTech>Zip</fileDecmTech>
                         <formatInfo>NMFS ESA Range Geodatabase 2024</formatInfo>
                     </distFormat>
                     <distributor>
                         <distorCont>
                             <editorSource>external</editorSource>
-                            <editorDigest>d6865ab3a834719aef999600529568de978609bf</editorDigest>
+                            <editorDigest>99eeb229b62021b29d40c56ebdbdf556fd68df7e</editorDigest>
                             <rpIndName>NMFS Office of Protected Resources</rpIndName>
                             <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
                             <rpPosName>Biologist</rpPosName>
@@ -1803,58 +1624,59 @@ def insert_missing_elements(dataset_path):
                                 <RoleCd value="005"></RoleCd>
                             </role>
                         </distorCont>
-                        <distorTran xmlns="">
-                            <unitsODist>MB</unitsODist>
-                            <transSize>8</transSize>
-                            <onLineSrc xmlns="">
-                               <linkage>https://www.fisheries.noaa.gov/science-and-data</linkage>
-                               <protocol>REST Service</protocol>
-                               <orName>NMFS ESA Range Geodatabase 2024</orName>
-                               <orDesc>File Geodatabase Download</orDesc>
-                               <orFunct>
-                                  <OnFunctCd value="001"/>
-                               </orFunct>
-                            </onLineSrc>
-                         </distorTran>
-                        <distorTran xmlns="">
-                            <onLineSrc xmlns="">
-                                <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
-                                <protocol>ESRI REST Service</protocol>
-                                <orName>Dataset</orName>
-                                <orDesc>Dataset Feature Service</orDesc>
-                                <orFunct>
-                                   <OnFunctCd value="002"/>
-                                </orFunct>
-                            </onLineSrc>
-                        </distorTran>
                     </distributor>
+                    <distTranOps xmlns="">
+                        <unitsODist>MB</unitsODist>
+                        <transSize>8</transSize>
+                        <onLineSrc xmlns="">
+                           <linkage>https://www.fisheries.noaa.gov/science-and-data</linkage>
+                           <protocol>REST Service</protocol>
+                           <orName>NMFS ESA Range Geodatabase 2024</orName>
+                           <orDesc>File Geodatabase Download</orDesc>
+                           <orFunct>
+                              <OnFunctCd value="001"/>
+                           </orFunct>
+                        </onLineSrc>
+                        <onLineSrc xmlns="">
+                            <linkage>https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/.../FeatureServer</linkage>
+                            <protocol>ESRI REST Service</protocol>
+                            <orName>NMFS ESA Range Geodatabase 2024</orName>
+                            <orDesc>Dataset Feature Service</orDesc>
+                            <orFunct>
+                               <OnFunctCd value="002"/>
+                            </orFunct>
+                        </onLineSrc>
+                    </distTranOps>
                 </distInfo>'''
-        _tree = etree.parse(BytesIO(_xml), etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-        distInfo.getparent().replace(distInfo, _tree.getroot())
-        distInfo = target_root.xpath("./distInfo")[0]
-        #print(etree.tostring(distInfo, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
-        del distInfo
+
+
+        _distInfo = etree.parse(BytesIO(_xml), etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+        _distributor = _distInfo.xpath("distributor")[0]
+        distributor  = target_root.xpath("./distInfo/distributor")[0]
+        distributor.getparent().replace(distributor, _distributor)
+        #print(etree.tostring(target_root.xpath("./distInfo")[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        del _distInfo, _distributor, distributor
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Main distFormat
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         formatName = target_root.xpath("./distInfo/distFormat/formatName")[0]
-        formatVer = target_root.xpath("./distInfo/distFormat/formatVer")[0].text
         envirDesc = target_root.xpath("./dataIdInfo/envirDesc")[0]
         envirDesc.set('Sync', "TRUE")
-                                                                # 001 = Grid
-        '''<spatRpType>                                         # 002 = Grid
-         <SpatRepTypCd value="003" Sync="TRUE"></SpatRepTypCd>  # 003 = Text Table
-        </spatRpType>'''
-
+        target_root.xpath("./distInfo/distFormat/fileDecmTech")[0].text = "Zip"
+        #                                                        # 001 = Grid
+        #'''<spatRpType>                                         # 002 = Grid
+        # <SpatRepTypCd value="003" Sync="TRUE"></SpatRepTypCd>  # 003 = Text Table
+        #</spatRpType>'''
         format_name_text = ""
         try:
             GeoObjTypCd = target_root.xpath("./spatRepInfo/VectSpatRep/geometObjs/geoObjTyp/GeoObjTypCd")[0].get("value")
             if GeoObjTypCd == "002":
                format_name_text = "ESRI File Geodatabase"
+            del GeoObjTypCd
         except:
             format_name_text = "ESRI Geodatabase Table"
-        del GeoObjTypCd
+
         formatName.text = format_name_text
         del format_name_text
         formatVer_text = str.rstrip(str.lstrip(envirDesc.text))
@@ -1864,35 +1686,11 @@ def insert_missing_elements(dataset_path):
         del envirDesc
         del formatVer
         del formatName
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        formatName = target_root.xpath("./distInfo/distributor/distFormat/formatName")[1]
-##        formatVer = target_root.xpath("./distInfo/distributor/distFormat/formatVer")[1].text
-##        envirDesc = target_root.xpath("./dataIdInfo/envirDesc")[0]
-##        envirDesc.set('Sync', "TRUE")
-##        GeoObjTypCd = target_root.xpath("./spatRepInfo/VectSpatRep/geometObjs/geoObjTyp/GeoObjTypCd")[0].get("value")
-##        if GeoObjTypCd == "002":
-##            formatName.text = "ESRI File Geodatabase"
-##        del GeoObjTypCd
-##        formatVer_text = str.rstrip(str.lstrip(envirDesc.text))
-##        formatVer = target_root.xpath("./distInfo/distributor/distFormat/formatVer")[1]
-##        formatVer.text = str.rstrip(str.lstrip(formatVer_text))
-##        del formatVer_text
-##        del envirDesc
-##        del formatVer
-##        del formatName
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        distFormat_0 = target_root.xpath("./distInfo[.//formatName/text()]")
-##        for distFormat in distFormat_0:
-##            #print(etree.tostring(distFormat, encoding='UTF-8', method='xml', pretty_print=True).decode())
-##            del distFormat
-##        del distFormat_0
-##        distFormat_0 = target_root.xpath("./distInfo/distributor/distFormat")
-##        for distFormat in distFormat_0:
-##            #print(etree.tostring(distFormat, encoding='UTF-8', method='xml', pretty_print=True).decode())
-##            del distFormat
-##        del distFormat_0
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # Remove junk
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         mdStanName = target_root.xpath("./mdStanName")
         for _mdStanName in mdStanName:
             _mdStanName.getparent().remove(_mdStanName)
@@ -1904,9 +1702,17 @@ def insert_missing_elements(dataset_path):
             _mdStanVer.getparent().remove(_mdStanVer)
             del _mdStanVer
         del mdStanVer
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # onLineSrcs
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        distorTran = target_root.xpath("//distorTran")
+        for _distorTran in distorTran:
+            _distorTran.getparent().remove(_distorTran)
+        #print(etree.tostring(target_root.xpath("./distInfo")[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
 
         new_item_name = target_root.find("./Esri/DataProperties/itemProps/itemName").text
-        onLineSrcs = target_root.findall("./distInfo/distributor/distorTran/onLineSrc")
+        onLineSrcs = target_root.findall("./distInfo/distTranOps/onLineSrc")
         for onLineSrc in onLineSrcs:
             if onLineSrc.find('./protocol').text == "ESRI REST Service":
                 old_linkage_element = onLineSrc.find('./linkage')
@@ -1919,87 +1725,246 @@ def insert_missing_elements(dataset_path):
                 #print(old_linkage_element.text, flush=True)
                 del old_linkage_element
                 del old_item_name, old_linkage, new_linkage
+            else:
+                pass
             del onLineSrc
         del onLineSrcs, new_item_name
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # statement
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        statement = target_root.xpath("./dqInfo/dataLineage/statement")
+        if statement is not None and len(statement) == 0:
+            pass # Need to insert statement
+        elif statement is not None and len(statement) and len(statement[0]) == 0:
+            target_root.xpath("./dqInfo/dataLineage/statement")[0].text = "Need to update datalienage statement"
+        elif statement is not None and len(statement) and len(statement[0]) == 1:
+            pass
+        elif statement is not None and len(statement) and len(statement[0]) >= 1:
+            pass
+        else:
+            pass
+        #print(f"\n\t{etree.tostring(statement[0], encoding='UTF-8', method='xml', pretty_print=True).decode()}\n")
+        del statement
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # srcDesc
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        srcDesc = target_root.xpath("./dqInfo/dataLineage/dataSource/srcDesc")
+        if srcDesc is not None and len(srcDesc) == 0:
+            pass # Need to insert srcDesc
+        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) == 0:
+            target_root.xpath("./dqInfo/dataLineage/dataSource/srcDesc")[0].text = "Need to update srcDesc"
+        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) == 1:
+            pass
+        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) >= 1:
+            pass
+        else:
+            pass
+        #print(f"\n\t{etree.tostring(srcDesc[0], encoding='UTF-8', method='xml', pretty_print=True).decode()}\n")
+        del srcDesc
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # prcStep
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #print(f"Step Desc Pre-2025")
+        #stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")
+        #if len(stepDescPre2025) == 0:
+        #    pass
+        #    #print(f"\tStep Desc Pre-2025 is MISSING!!!")
+        #elif len(stepDescPre2025) == 1:
+        #    pass
+        #    #print(f"\tStep Desc Pre-2025 is FOUND!!!")
+        #elif len(stepDescPre2025) > 1:
+        #    pass
+        #    #print(f"\tStep Desc Pre-2025 TOO MANY FOUND!!!")
+        #else:
+        #    pass
+        #    print(etree.tostring(stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #del stepDescPre2025
+        #print(f"Step Desc 2025")
+        stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='Update Metadata 2025']")
+        if len(stepDesc2025) == 0:
+            #print(f"\tStep Desc 2025 is MISSING!!!")
+            _xml = b''' <dataLineage>
+                            <prcStep>
+                                <stepDesc>Update Metadata 2025</stepDesc>
+                                <stepDateTm></stepDateTm>
+                                <stepProc>
+                                    <editorSource>external</editorSource>
+                                    <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
+                                    <rpIndName>Nikki Wildart</rpIndName>
+                                    <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                    <rpPosName>Biologist</rpPosName>
+                                    <rpCntInfo>
+                                        <cntAddress addressType="both">
+                                            <delPoint>1315 East West Highway</delPoint>
+                                            <city>Silver Spring</city>
+                                            <adminArea>MD</adminArea>
+                                            <postCode>20910</postCode>
+                                            <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                                            <country>US</country>
+                                        </cntAddress>
+                                        <cntPhone>
+                                            <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                                            <faxNum>(301) 427-8443</faxNum>
+                                        </cntPhone>
+                                        <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                        <cntOnlineRes>
+                                            <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                            <orName>NMFS Office of Protected Resources</orName>
+                                            <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                            <orFunct>
+                                                <OnFunctCd value="002"></OnFunctCd>
+                                            </orFunct>
+                                        </cntOnlineRes>
+                                    </rpCntInfo>
+                                    <editorSave>True</editorSave>
+                                    <displayName>Nikki Wildart</displayName>
+                                    <role>
+                                        <RoleCd value="009"></RoleCd>
+                                    </role>
+                                </stepProc>
+                                <stepSrc type="used">
+                                    <srcDesc>Update Metadata 2025</srcDesc>
+                                    <srcMedName><MedNameCd value="015"/></srcMedName>
+                                    <srcCitatn>
+                                        <editorSource>external</editorSource>
+                                        <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
+                                        <rpIndName>Nikki Wildart</rpIndName>
+                                        <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
+                                        <rpPosName>Biologist</rpPosName>
+                                        <rpCntInfo>
+                                            <cntAddress addressType="both">
+                                                <delPoint>1315 East West Highway</delPoint>
+                                                <city>Silver Spring</city>
+                                                <adminArea>MD</adminArea>
+                                                <postCode>20910</postCode>
+                                                <eMailAdd>nikki.wildart@noaa.gov</eMailAdd>
+                                                <country>US</country>
+                                            </cntAddress>
+                                            <cntPhone>
+                                                <voiceNum tddtty="">(301) 427-8443</voiceNum>
+                                                <faxNum>(301) 427-8443</faxNum>
+                                            </cntPhone>
+                                            <cntHours>0700 - 1800 EST/EDT</cntHours>
+                                            <cntOnlineRes>
+                                                <linkage>https://www.fisheries.noaa.gov/about/office-protected-resources</linkage>
+                                                <orName>NMFS Office of Protected Resources</orName>
+                                                <orDesc>NOAA Fisheries Office of Protected Resources</orDesc>
+                                                <orFunct>
+                                                    <OnFunctCd value="002"></OnFunctCd>
+                                                </orFunct>
+                                            </cntOnlineRes>
+                                        </rpCntInfo>
+                                        <editorSave>True</editorSave>
+                                        <displayName>Nikki Wildart</displayName>
+                                        <role>
+                                            <RoleCd value="009"></RoleCd>
+                                        </role>
+                                    </srcCitatn>
+                                </stepSrc>
+                            </prcStep>
+                        </dataLineage>'''
 
-##        statement = target_root.xpath("./dqInfo/dataLineage/statement")
-##        if statement is not None and len(statement) == 0:
-##            pass # Need to insert statement
-##        elif statement is not None and len(statement) and len(statement[0]) == 0:
-##            target_root.xpath("./dqInfo/dataLineage/statement")[0].text = "Need to update datalienage"
-##        elif statement is not None and len(statement) and len(statement[0]) == 1:
-##            pass
-##        elif statement is not None and len(statement) and len(statement[0]) >= 1:
-##            pass
-##        else:
-##            pass
-##        #print(etree.tostring(target_root.xpath("./dqInfo/dataLineage/statement")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##        del statement
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        # srcDesc
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        srcDesc = target_root.xpath("./dqInfo/dataLineage/dataSource/srcDesc")
-##        if srcDesc is not None and len(srcDesc) == 0:
-##            pass # Need to insert srcDesc
-##        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) == 0:
-##            target_root.xpath("./dqInfo/dataLineage/dataSource/srcDesc")[0].text = "Need to update srcDesc"
-##        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) == 1:
-##            pass
-##        elif srcDesc is not None and len(srcDesc) and len(srcDesc[0]) >= 1:
-##            pass
-##        else:
-##            pass
-##        #print(etree.tostring(target_root.xpath("./dqInfo/dataLineage/dataSource")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##        del srcDesc
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        # prcStep
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        prcStep = target_root.xpath("./dqInfo/dataLineage/prcStep")
-##        if prcStep is not None and len(prcStep) == 0:
-##            pass
-##        elif prcStep is not None and len(prcStep) and len(prcStep[0]) == 0:
-##            pass
-##            #target_root.xpath("./dqInfo/dataLineage/prcStep")[0].text = "Need to update srcDesc"
-##        elif prcStep is not None and len(prcStep) and len(prcStep[0]) == 1:
-##            stepDesc = prcStep.xpath("./stepDesc")[0]
-##            prcStep.insert(0, stepDesc)
-##            del stepDesc
-##            stepDateTm = prcStep.xpath("./stepDateTm")[0]
-##            prcStep.insert(1, stepDateTm)
-##            del stepDateTm
-##        elif prcStep is not None and len(prcStep) and len(prcStep[0]) >= 1:
-##            pass
-##        else:
-##            pass
-##        #print(etree.tostring(target_root.xpath("./dqInfo/dataLineage/prcStep")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##        del prcStep
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        # prcStep
-##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        stepProcs = target_root.xpath("./dqInfo/dataLineage/prcStep/stepProc")
-##        if stepProcs is not None and len(stepProcs) == 0:
-##            pass
-##        elif stepProcs is not None and len(stepProcs) and len(stepProcs[0]) == 0:
-##            pass
-##        elif stepProcs is not None and len(stepProcs) and len(stepProcs[0]) == 1:
-##            pass
-##        elif stepProcs is not None and len(stepProcs) and len(stepProcs[0]) >= 1:
-##            for stepProc in stepProcs:
-##                if stepProc is not None and len(stepProc) == 0:
-##                    target_root.xpath("./dqInfo/dataLineage/prcStep")[0].remove(stepProc)
-##                elif stepProc is not None and len(stepProc) and len(stepProcs[0]) == 0:
+            _stepDesc2025 = etree.parse(BytesIO(_xml), etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+
+            _prcStep = _stepDesc2025.xpath("/dataLineage/prcStep")[0]
+            dataLineage  = target_root.xpath("./dqInfo/dataLineage")[0]
+            dataLineage.insert(10, _prcStep)
+            #print(etree.tostring(target_root.xpath("./dqInfo/dataLineage")[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            del _stepDesc2025, dataLineage
+        elif len(stepDesc2025) == 1:
+            pass
+            #print(f"\tStep Desc 2025 is FOUND!!!")
+            #print(etree.tostring(stepDesc2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        elif len(stepDesc2025) > 1:
+            pass
+            #print(f"\tStep Desc 2025 TOO MANY FOUND!!!")
+        else:
+            pass
+            #print(etree.tostring(stepDesc2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        del stepDesc2025
+
+        prcStep = target_root.xpath("./dqInfo/dataLineage/prcStep")
+        #print(len(prcStep))
+        if prcStep is not None and len(prcStep) == 0:
+            pass
+            #print("prcStep missing")
+        elif prcStep is not None and len(prcStep) and len(prcStep[0]) == 0:
+            #print("found empty element prcStep. Now adding content.")
+            target_root.xpath("./dqInfo/dataLineage/prcStep")[0].text = "Update Metadata 2025"
+        elif prcStep is not None and len(prcStep) and len(prcStep[0]) >= 1:
+            for i in range(0, len(prcStep)):
+                stepDesc = prcStep[i].xpath("./stepDesc")[0]
+                if stepDesc.text == "pre-Update Metadata 2025":
+                    prcStep[i].xpath("./stepDateTm")[0].text = CreaDateTime
+                elif stepDesc.text == "Update Metadata 2025":
+                    prcStep[i].xpath("./stepDateTm")[0].text = ModDateTime
+                elif stepDesc.text not in ["pre-Update Metadata 2025", "Update Metadata 2025"]:
+                    prcStep[i].xpath("./stepDateTm")[0].text = CreaDateTime
+                del stepDesc
+                del i
+        else:
+            pass
+        del prcStep
+
+        srcDesc = target_root.xpath("./dqInfo/dataLineage/dataSource/srcDesc")
+        for _srcDesc in srcDesc:
+            #print(f"\t{etree.tostring(_srcDesc, encoding='UTF-8', method='xml', pretty_print=True).decode()}")
+            del _srcDesc
+
+##        if dataSources is not None and len(dataSources) == 0:
+##            print(dataSources)
+##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) == 0:
+##            print(dataSources)
+##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) == 1:
+##            print(dataSources)
+##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) >= 1:
+##            for i in range(0, len(dataSources)):
+##                if dataSources[i] is not None and len(dataSources[i]) == 0:
+##                    pass # target_root.xpath("./dqInfo/dataLineage/prcStep")[0].remove(stepProc)
+##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) == 0:
+##                    pass # print(etree.tostring(reports[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
+##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) == 1:
 ##                    pass
-##                elif stepProc is not None and len(stepProc) and len(stepProcs[0]) == 1:
-##                    pass
-##                elif stepProc is not None and len(stepProc) and len(stepProcs[0]) > 1:
-##                    pass
+##                    #print(etree.tostring(dataSources[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
+##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) > 1:
+##                    citRespParty = target_root.xpath("./dqInfo/dataLineage/dataSource/srcCitatn/citRespParty")
+##                    if citRespParty is not None and len(citRespParty) == 0:
+##                        pass
+##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) == 0:
+##                        pass # print(etree.tostring(reports[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
+##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) == 1:
+##                        new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
+##                        new_contact = copy.deepcopy(new_contact_tree[0])
+##                        new_contact.tag = "citRespParty"
+##                        _xml = f'<role><RoleCd value="002"></RoleCd></role>'
+##                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+##                        new_contact.insert(100, _root)
+##                        del _root, _xml
+##                        citRespParty[0].getparent().replace(citRespParty[0], new_contact)
+##                        del new_contact, new_contact_tree
+##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) > 1:
+##                        pass
+##                    del citRespParty
 ##                else:
 ##                    pass
-##            del stepProc
+##                del i
 ##        else:
 ##            pass
-##        #print(etree.tostring(stepProcs[0].getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
-##        del stepProcs
+        # print(etree.tostring(reports[0].getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #del dataSources
+
+        dataLineage = target_root.xpath("./dqInfo/dataLineage")
+        for i in range(0, len(dataLineage)):
+            #print(etree.tostring(dataLineage[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del i
+        del dataLineage
+        #distInfo = target_root.xpath("./distInfo")[0]
+        #print(etree.tostring(distInfo, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        #del distInfo
+
+
+
+
 ##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ##        # report
 ##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -2054,48 +2019,7 @@ def insert_missing_elements(dataset_path):
 ##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ##        # report
 ##        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-##        dataSources = target_root.xpath("./dqInfo/dataLineage/dataSource")
-##        if dataSources is not None and len(dataSources) == 0:
-##            print(dataSources)
-##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) == 0:
-##            print(dataSources)
-##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) == 1:
-##            print(dataSources)
-##        elif dataSources is not None and len(dataSources) and len(dataSources[0]) >= 1:
-##            for i in range(0, len(dataSources)):
-##                if dataSources[i] is not None and len(dataSources[i]) == 0:
-##                    pass # target_root.xpath("./dqInfo/dataLineage/prcStep")[0].remove(stepProc)
-##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) == 0:
-##                    pass # print(etree.tostring(reports[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) == 1:
-##                    pass
-##                    #print(etree.tostring(dataSources[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##                elif dataSources[i] is not None and len(dataSources[i]) and len(dataSources[i]) > 1:
-##                    citRespParty = target_root.xpath("./dqInfo/dataLineage/dataSource/srcCitatn/citRespParty")
-##                    if citRespParty is not None and len(citRespParty) == 0:
-##                        pass
-##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) == 0:
-##                        pass # print(etree.tostring(reports[i], encoding='UTF-8', method='xml', pretty_print=True).decode())
-##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) == 1:
-##                        new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
-##                        new_contact = copy.deepcopy(new_contact_tree[0])
-##                        new_contact.tag = "citRespParty"
-##                        _xml = f'<role><RoleCd value="002"></RoleCd></role>'
-##                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-##                        new_contact.insert(100, _root)
-##                        del _root, _xml
-##                        citRespParty[0].getparent().replace(citRespParty[0], new_contact)
-##                        del new_contact, new_contact_tree
-##                    elif citRespParty is not None and len(citRespParty) and len(citRespParty) > 1:
-##                        pass
-##                    del citRespParty
-##                else:
-##                    pass
-##                del i
-##        else:
-##            pass
-##        # print(etree.tostring(reports[0].getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
-##        del dataSources
+
 
         for child in target_root.xpath("/metadata/Esri"):
             child[:] = sorted(child, key=lambda x: esri_dict[x.tag])
@@ -2129,10 +2053,10 @@ def insert_missing_elements(dataset_path):
             dataset_md.save()
             dataset_md.synchronize("ALWAYS")
             dataset_md.save()
-            _tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-            _tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
-            del _tree
-            #dataset_md.saveAsXML(, "REMOVE_ALL_SENSITIVE_INFO")
+            #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+            #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
             del dataset_md
         else:
             pass
@@ -2158,7 +2082,7 @@ def insert_missing_elements(dataset_path):
     finally:
         pass
 
-def update_existing_contacts(dataset_path=""):
+def update_existing_contacts(dataset_path):
     try:
         # Imports
         from lxml import etree
@@ -2166,8 +2090,17 @@ def update_existing_contacts(dataset_path=""):
         import copy
         from arcpy import metadata as md
 
-        arcpy.env.overwriteOutput          = True
-        arcpy.env.parallelProcessingFactor = "100%"
+        import json
+        json_path = rf"{project_folder}\root_dict.json"
+        with open(json_path, "r") as json_file:
+            root_dict = json.load(json_file)
+        del json_file
+        json_path = rf"{project_folder}\contact_element_order_dict.json"
+        with open(json_path, "r") as json_file:
+            contact_element_order_dict = json.load(json_file)
+        del json_file
+        del json_path
+        del json
 
         dataset_md = md.Metadata(dataset_path)
         dataset_md.synchronize("ALWAYS")
@@ -2182,117 +2115,64 @@ def update_existing_contacts(dataset_path=""):
         target_root = target_tree.getroot()
         del parser, dataset_md_xml
 
-        contacts_xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
-        contacts_xml_tree = etree.parse(contacts_xml, parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True)) # To parse from a string, use the fromstring() function instead.
-        del contacts_xml
-        contacts_xml_root = contacts_xml_tree.getroot()
-        #etree.indent(contacts_xml_root, space="  ")
-        #print(etree.tostring(contacts_xml_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
-
         dataset_name = os.path.basename(dataset_path)
         print(f"Processing Add/Update Existing Contacts for dataset: '{dataset_name}'")
 
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        # Search for rpIndName or eMailAdd first
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        for child in target_root.xpath("."):
+            child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+            del child
 
-        #print(f"\tSearch for rpIndName or eMailAdd first")
-        contacts = target_tree.xpath("//*[./rpIndName/text() or ./rpCntInfo/cntAddress/eMailAdd/text()]")
+        contacts = target_tree.xpath("//*[./rpIndName/text() or ./rpOrgName/text() or ./rpCntInfo/cntAddress/eMailAdd/text()]")
+        for child in contacts:
+            child[:] = sorted(child, key=lambda x: contact_element_order_dict[x.tag])
+            del child
         contacts_count = len(contacts)
         count=0
         for contact in contacts:
             count+=1
-            #print(f"\tContact Path: {target_tree.getpath(contact)} {count} of {contacts_count}")
             #print(etree.tostring(contact, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
-            contact_name = contact.find("rpIndName").text if contact.find("rpIndName") is not None else None
-            contact_email = contact.find("rpCntInfo/cntAddress/eMailAdd").text if contact.find("rpCntInfo/cntAddress/eMailAdd") is not None else ""
-            #print(contact_name, contact_email)
+            #print(f"\tContact Path: {target_tree.getpath(contact)} {count} of {contacts_count}")
+            contact_name     = contact.find("rpIndName").text if contact.find("rpIndName") is not None else None
+            contact_org_name = contact.find("rpOrgName").text if contact.find("rpOrgName") is not None else None
+            contact_email    = contact.find("rpCntInfo/cntAddress/eMailAdd").text if contact.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
+            contact_name     = str.rstrip(str.lstrip(contact_name))     if contact_name is not None else None
+            contact_org_name = str.rstrip(str.lstrip(contact_org_name)) if contact_org_name is not None else None
+            contact_email    = str.rstrip(str.lstrip(contact_email))    if contact_email is not None else None
 
-            if contact_name is not None and contact_email is not None:
-                #print(f"\t\tName and email: {contact_name}, {contact_email}")
-                #print(f"\t\t\t{target_tree.getpath(contact)}\n")
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{contact_name}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='True']]")
-                if len(new_contact_tree) == 0:
-                    #print(f"\tContact: {contact_name}, {contact_email} not in contacts.xml\n")
-                    #raise Exception(f"\n!!!! Contact: {contact_name}, {contact_email} not in contacts.xml!!!\n")
-                    try:
-                        new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='False']]")
-                        new_contact = copy.deepcopy(new_contact_tree[0])
-                        new_contact.tag = contact.tag
-                        new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                        _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                        _contact.getparent().replace(_contact, new_contact)
-                        del _contact, new_contact, new_contact_tree
-                    except:
-                        pass
-                elif len(new_contact_tree) == 1:
-                    new_contact = copy.deepcopy(new_contact_tree[0])
-                    new_contact.tag = contact.tag
-                    new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                    _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                    _contact.getparent().replace(_contact, new_contact)
-                    del _contact, new_contact
+            #print(f"\t\tName: '{contact_name}', Org Name: '{contact_org_name}', Email: '{contact_email}'\n")
+            new_contact_xml  = get_new_contact(contact_name, contact_org_name, contact_email)
+            #print(new_contact_xml)
+            new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            new_contact_root = new_contact_tree.getroot()
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            del new_contact_xml
+
+            if isinstance(contact.find(f"role"), type(None)):
+                if contact.tag == "srcCitatn":
+                    _xml = '<role><RoleCd value="009"></RoleCd></role>'
+                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+                    contact.insert(10, _root)
+                    del _root, _xml
                 else:
                     pass
-                del new_contact_tree
-            elif not contact_name and contact_email:
-                #print(f"\t\tEmail: {contact_email}")
-                #print(f"\t\t\t{target_tree.getpath(contact)}")
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='True']]")
-                if len(new_contact_tree) == 0:
-                    #print(f"\tContact: {contact_name}, {contact_email} not in contacts.xml\n")
-                    #raise Exception(f"\n!!!! Contact: {contact_name}, {contact_email} not in contacts.xml!!!\n")
-                    new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='False']]")
-                    new_contact = copy.deepcopy(new_contact_tree[0])
-                    new_contact.tag = contact.tag
-                    new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                    _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                    _contact.getparent().replace(_contact, new_contact)
-                    del _contact, new_contact, new_contact_tree
-                elif len(new_contact_tree) > 0:
-                    new_contact = copy.deepcopy(new_contact_tree[0])
-                    new_contact.tag = contact.tag
-                    new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                    _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                    _contact.getparent().replace(_contact, new_contact)
-                    del _contact, new_contact
-                else:
-                    pass
-                del new_contact_tree
-            elif contact_name and not contact_email:
-                #print(f"\t\tName: {contact_name}")
-                #print(f"\t\t\t{target_tree.getpath(contact)}")
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{contact_name}'] and ./editorSave[text()='True']]")
-                if len(new_contact_tree) == 0:
-                    #print(f"\tContact: {contact_name}, {contact_email} not in contacts.xml\n")
-                    #raise Exception(f"\n!!!! Contact: {contact_name}, {contact_email} not in contacts.xml!!!\n")
-                    new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='False']]")
-                    new_contact = copy.deepcopy(new_contact_tree[0])
-                    new_contact.tag = contact.tag
-                    new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                    _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                    _contact.getparent().replace(_contact, new_contact)
-                    del _contact, new_contact, new_contact_tree
-                elif len(new_contact_tree) > 0:
-                    new_contact = copy.deepcopy(new_contact_tree[0])
-                    new_contact.tag = contact.tag
-                    new_contact.insert(100, copy.deepcopy(contact.find(f"role")))
-                    _contact = target_tree.xpath(f"/{target_tree.getpath(contact)}")[0]
-                    _contact.getparent().replace(_contact, new_contact)
-                    del _contact, new_contact
-                else:
-                    pass
-                del new_contact_tree
-            del contact_name, contact_email, contact
+            else:
+                pass
+            #print(etree.tostring(contact.getparent(), encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #print(f"\tGood News! Contact: {contact_name}, {contact_org_name}, {contact_email} is in contacts.xml\n")
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #print(etree.tostring(contact, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            new_contact_root.tag = contact.tag
+            new_contact_root.insert(100, copy.deepcopy(contact.find(f"role")))
+            #etree.indent(new_contact_root, '    ')
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            contact.getparent().replace(contact, new_contact_root)
+            del new_contact_root, new_contact_tree
+
+            del contact_name, contact_org_name, contact_email, contact
         del contacts, contacts_count, count
 
-        contacts = target_tree.xpath("//*[./rpIndName/text() or ./rpCntInfo/cntAddress/eMailAdd/text()]")
-        for contact in contacts:
-            #print(etree.tostring(contact, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
-            del contact
-        del contacts
-
         etree.indent(target_tree, space='    ')
+        #print(etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
         dataset_md_xml = etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
         SaveBackXml = True
@@ -2300,35 +2180,153 @@ def update_existing_contacts(dataset_path=""):
             dataset_md = md.Metadata(dataset_path)
             dataset_md.xml = dataset_md_xml
             dataset_md.save()
-            dataset_md.synchronize("ALWAYS")
+            dataset_md.synchronize("CREATED")
             dataset_md.save()
-            #dataset_md.reload()
+            #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+            #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
             del dataset_md
         else:
             pass
         del SaveBackXml
         del dataset_md_xml
 
-        # Declared variables
-        del dataset_name
-        del contacts_xml_tree, contacts_xml_root
+        # Declared Variables
+        del dataset_name #, species_range_dict
         del target_tree, target_root
+        del contact_element_order_dict, root_dict
         # Imports
-        del md, etree, copy, StringIO, BytesIO
+        del etree, StringIO, BytesIO, copy, md,
         # Function Parameters
         del dataset_path
 
-    except Exception:
-        traceback.print_exc()
+
     except:
         traceback.print_exc()
     else:
+        pass
         # While in development, leave here. For test, move to finally
         rk = [key for key in locals().keys() if not key.startswith('__')]
         if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
         return True
     finally:
         pass
+
+def get_new_contact(contact_name, contact_org_name, contact_email):
+    try:
+        from lxml import etree
+        import copy
+        contacts_xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
+        contacts_xml_tree = etree.parse(contacts_xml, parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True)) # To parse from a string, use the fromstring() function instead.
+        del contacts_xml
+        contacts_xml_root = contacts_xml_tree.getroot()
+        #etree.indent(contacts_xml_root, space="  ")
+        #print(etree.tostring(contacts_xml_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        #print(contact_name, contact_org_name, contact_email)
+        if contact_name is None:
+            del contact_name, contact_org_name, contact_email
+            contact_name     = "Jonathan Molineaux"
+            contact_org_name = "NMFS Office of Protected Resources"
+            contact_email    = "jonathan.molineaux@noaa.gov"
+            new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+        elif contact_name == "Jonathan Molineaux":
+            #print("Found Jonathan Molineaux")
+            #print(contact_name, contact_org_name, contact_email)
+            del contact_name, contact_org_name, contact_email
+            contact_name     = "Jonathan Molineaux"
+            contact_org_name = "NMFS Office of Protected Resources"
+            contact_email    = "jonathan.molineaux@noaa.gov"
+            # #new_contact_xml  = get_new_contact(contact_name, contact_org_name, contact_email)
+            new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+            #new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #new_contact_root = new_contact_tree[0].getroot()
+            #print(etree.tostring(new_contact_tree[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        elif contact_name == "NMFS Office of Protected Resources":
+            #print("Found NMFS Office of Protected Resources")
+            #print(contact_name, contact_org_name, contact_email)
+            del contact_name, contact_org_name, contact_email
+            contact_name     = "NMFS Office of Protected Resources"
+            contact_org_name = "NMFS Office of Protected Resources"
+            contact_email    = "jonathan.molineaux@noaa.gov"
+            new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+            #new_contact_xml  = get_new_contact(contact_name, contact_org_name, contact_email)
+            #new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #new_contact_root = new_contact_tree.getroot()
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        elif contact_name == "Jennifer Schultz":
+            #print("Found Jennifer Schultz")
+            #print(contact_name, contact_org_name, contact_email)
+            del contact_name, contact_org_name, contact_email
+            contact_name     = "Jennifer Schultz"
+            contact_org_name = "NMFS Office of Protected Resources"
+            contact_email    = "jennifer.schultz@noaa.gov"
+            new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+            #new_contact_xml  = get_new_contact(contact_name, contact_org_name, contact_email)
+            #new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #new_contact_root = new_contact_tree.getroot()
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+        else:
+            pass
+            #print("Found Nothing")
+            #print(contact_name, contact_org_name, contact_email)
+            #print(contact_name, contact_org_name, contact_email)
+            del contact_name, contact_org_name, contact_email
+            contact_name     = "Jonathan Molineaux"
+            contact_org_name = "NMFS Office of Protected Resources"
+            contact_email    = "jonathan.molineaux@noaa.gov"
+            # #new_contact_xml  = get_new_contact(contact_name, contact_org_name, contact_email)
+            new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+            #new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #new_contact_root = new_contact_tree[0].getroot()
+            #print(etree.tostring(new_contact_tree[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #new_contact_tree = etree.parse(BytesIO(new_contact_xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #new_contact_root = new_contact_tree.getroot()
+            #print(etree.tostring(new_contact_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+
+        #print(contact_name, contact_org_name, contact_email)
+        #new_contact_tree = contacts_xml_tree.xpath(f'//contact[./rpIndName="{contact_name}" and ./rpOrgName="{contact_org_name}" and ./rpCntInfo/cntAddress/eMailAdd="{contact_email}" and editorSave="True"]')
+        #print(new_contact_tree)
+
+        if isinstance(new_contact_tree, type(list())):
+            #print(len(new_contact_tree))
+            if len(new_contact_tree) == 0:
+                #print("Nothing Found!!")
+                return False
+            elif len(new_contact_tree) == 1:
+                #print("Found it!!")
+                #return True
+                return etree.tostring(new_contact_tree[0], encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
+            elif len(new_contact_tree) > 1:
+                #print("Too Many Man!!")
+                #return new_contact_tree[0]
+                for new_contact in new_contact_tree:
+                    #print(etree.tostring(new_contact, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+                    del new_contact
+            else:
+                pass
+        elif isinstance(new_contact_tree, type(bool())):
+            print(new_contact_tree)
+        del new_contact_tree
+
+    except:
+        traceback.print_exc()
+    else:
+        pass
+        # While in development, leave here. For test, move to finally
+        #rk = [key for key in locals().keys() if not key.startswith('__')]
+        #if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        #return True
+    finally:
+        # Declared variables
+        del contacts_xml_tree, contacts_xml_root, new_contact_tree
+        # Imports
+        del etree, copy
+        # Function Parameters
+        del contact_name, contact_org_name, contact_email
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
 
 def update_process_steps(dataset_path=""):
     try:
@@ -2383,7 +2381,7 @@ def update_process_steps(dataset_path=""):
                                 print(f"\tContacts Path: {target_tree.getpath(citRespParty)} {citRespParty_count} of {citRespPartys_count}")
                                 #print(etree.tostring(citRespParty, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
                                 contact_name  = citRespParty.find("./rpIndName").text if citRespParty.find("./rpIndName") is not None else None
-                                contact_email = citRespParty.find("./rpCntInfo/cntAddress/eMailAdd").text if citRespParty.find("./rpCntInfo/cntAddress/eMailAdd") is not None else ""
+                                contact_email = citRespParty.find("./rpCntInfo/cntAddress/eMailAdd").text if citRespParty.find("./rpCntInfo/cntAddress/eMailAdd") is not None else None
                                 print(f"\t\tProcesser: {contact_name}, {contact_email}")
                                 for source_stepProc in source_stepProcs:
                                     step_processer = source_stepProc.xpath(f"//{source_stepProc.tag}[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='True']]")
@@ -2420,7 +2418,7 @@ def update_process_steps(dataset_path=""):
                                 print(f"\tContacts Path: {target_tree.getpath(idPoC)} {idPoC_count} of {idPoCs_count}")
                                 #print(etree.tostring(idPoC, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
                                 contact_name  = idPoC.find("./rpIndName").text if idPoC.find("./rpIndName") is not None else None
-                                contact_email = idPoC.find("./rpCntInfo/cntAddress/eMailAdd").text if idPoC.find("./rpCntInfo/cntAddress/eMailAdd") is not None else ""
+                                contact_email = idPoC.find("./rpCntInfo/cntAddress/eMailAdd").text if idPoC.find("./rpCntInfo/cntAddress/eMailAdd") is not None else None
                                 print(f"\t\tProcesser: {contact_name}, {contact_email}")
                                 for source_stepProc in source_stepProcs:
                                     step_processer = source_stepProc.xpath(f"//{source_stepProc.tag}[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='True']]")
@@ -2660,19 +2658,22 @@ def update_process_steps(dataset_path=""):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         # No changes needed below
-        #print(etree.tostring(target_tree.xpath("//dataIdInfo")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #print(etree.tostring(target_tree.xpath("./dataIdInfo")[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
         #print(etree.tostring(target_tree, encoding='UTF-8', method='xml', pretty_print=True).decode())
         etree.indent(target_tree, space='    ')
         dataset_md_xml = etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
-        SaveBackXml = True
+        SaveBackXml = False
         if SaveBackXml:
             dataset_md = md.Metadata(dataset_path)
             dataset_md.xml = dataset_md_xml
             dataset_md.save()
             dataset_md.synchronize("ALWAYS")
             dataset_md.save()
-            #dataset_md.reload()
+            #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+            #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
             del dataset_md
         else:
             pass
@@ -2687,6 +2688,8 @@ def update_process_steps(dataset_path=""):
         # Functiona Parameters
         del dataset_path
 
+    except KeyboardInterrupt:
+        raise SystemExit
     except Exception:
         raise Exception
     except:
@@ -2743,7 +2746,6 @@ def add_update_contacts(dataset_path=""):
         with open(json_path, "r") as json_file:
             tpCat_dict = json.load(json_file)
         del json_file
-
         del json_path
         del json
 
@@ -2761,10 +2763,14 @@ def add_update_contacts(dataset_path=""):
         #print(f"\tDataset Location: {os.path.basename(os.path.dirname(dataset_path))}")
 
 ##        dataset_md = md.Metadata(dataset_path)
+##        dataset_md.xml = dataset_md_xml
+##        dataset_md.save()
 ##        dataset_md.synchronize("ALWAYS")
 ##        dataset_md.save()
-##        dataset_md.reload()
-##        dataset_md_xml = dataset_md.xml
+##        #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+##        #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+##        #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+##        #del _target_tree
 ##        del dataset_md
 ##
 ##        # Parse the XML
@@ -2846,28 +2852,18 @@ def add_update_contacts(dataset_path=""):
         #print(etree.tostring(target_root, encoding='UTF-8', method='xml', pretty_print=True).decode())
 
         # Remove duplicates
-        mdContacts = target_root.xpath(f"./mdContact")
+        #mdContacts = target_root.xpath(f"./mdContact")
         #remove_duplicate_elements(mdContacts[0].getparent())
-        del mdContacts
+        #del mdContacts
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #print(etree.tostring(target_root.find("./dqInfo"), encoding='UTF-8', method='xml', pretty_print=True).decode())
 
-        '''mdContact exists?
-                if no, then insert new prefered contact element
-                if yes, does it have content? yes or no
-                    if yes, then two questions
-                        check if is in step processors
-                            if no, copy over
-                            if yes, ignore
-                        check if prefered contact element
-                            if yes, ignore
-                            if no, remove mdcontact
-        '''
-       #print(f"\tmdContact Section")
-        # Get list of mdContact elements
+        #print(f"\tmdContact Section")
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         mdContacts = target_root.xpath(f"./mdContact")
         if len(mdContacts) == 0:
-           #print("\tMissing Element. Inserting prefered contact element")
+            #print("\tBad News! Missing Element. Inserting prefered contact element")
             new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}'] and ./editorSave[text()='True']]")
             new_contact = copy.deepcopy(new_contact_tree[0])
             new_contact.tag = "mdContact"
@@ -2877,15 +2873,12 @@ def add_update_contacts(dataset_path=""):
             del _root, _xml
             target_root.insert(root_dict["mdContact"], new_contact)
             del new_contact, new_contact_tree
-        del mdContacts
-
-        mdContacts = target_root.xpath(f"./mdContact")
-        #print(len(mdContacts))
-        if len(mdContacts) >= 1:
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        elif len(mdContacts) >= 1:
+            #print(f"\tGood News! Contacts ({len(mdContacts)}) found in '{mdContacts[0].tag}'\n")
+            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
             prefered_mdContact = target_root.xpath(f"./mdContact[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
-            #print(len(prefered_mdContact))
             if len(prefered_mdContact) == 0:
+                #print(f"\tBad News! Prefered mdContact not found in mdContact. Inserting now.'\n")
                 new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}'] and ./editorSave[text()='True']]")
                 new_contact = copy.deepcopy(new_contact_tree[0])
                 new_contact.tag = "mdContact"
@@ -2896,107 +2889,242 @@ def add_update_contacts(dataset_path=""):
                 target_root.insert(root_dict["mdContact"], new_contact)
                 del new_contact, new_contact_tree
             elif len(prefered_mdContact) == 1:
-                #print(len(prefered_mdContact))
                 pass
             elif len(prefered_mdContact) > 1:
-               #print(len(prefered_mdContact))
                 pass
             else:
                 pass
             del prefered_mdContact
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        else:
+            pass
+        del mdContacts
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            empty_mdContacts = [mdC for mdC in target_root.xpath(f"./mdContact") if len(mdC) == 0]
-            for empty_mdContact in empty_mdContacts:
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}'] and ./editorSave[text()='True']]")
-                new_contact = copy.deepcopy(new_contact_tree[0])
-                new_contact.tag = "mdContact"
-                _xml = f'<role><RoleCd value="011"></RoleCd></role>'
-                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-                new_contact.insert(100, _root)
-                del _root, _xml
-                element.getparent().replace(element, new_contact)
-                del new_contact, new_contact_tree
-                del empty_mdContact
-            del empty_mdContacts
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            non_empty_mdContacts = [mdC for mdC in target_root.xpath(f"./mdContact") if len(mdC) != 0]
-            for non_empty_mdContact in non_empty_mdContacts:
-                #print(etree.tostring(non_empty_mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
-                contact_name = non_empty_mdContact.find("./rpIndName").text if non_empty_mdContact.find("rpIndName") is not None else None
-                contact_email = non_empty_mdContact.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_mdContact.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
-               #print(f"\t\tName and email: {contact_name}, {contact_email}")
-
-                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        non_empty_mdContacts = [mdC for mdC in target_root.xpath(f"./mdContact") if len(mdC) != 0]
+        for non_empty_mdContact in non_empty_mdContacts:
+            contact_name  = non_empty_mdContact.find("./rpIndName").text if non_empty_mdContact.find("rpIndName") is not None else None
+            contact_email = non_empty_mdContact.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_mdContact.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
+            #print(f"\t\tName and email: {contact_name}, {contact_email}")
+            #print(f"\t\t\tStep Desc Oringinal. Not 2025 or Pre-2025")
+            stepDesc = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text() !='pre-Update Metadata 2025' or text() !='Update Metadata 2025']")
+            if len(stepDesc) >= 1 and contact_name == mdContact_rpIndName and contact_email == mdContact_eMailAdd:
+                step_processers = stepDesc[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{mdContact_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDesc = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDesc.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDesc
+            elif len(stepDesc) >= 1 and contact_name != mdContact_rpIndName and contact_email != mdContact_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDesc = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDesc.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDesc
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
                 if len(step_processers) == 0:
-                   #print(f"\t\t\tContact '{contact_name}' is not in step processors")
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
                     _non_empty_mdContact = copy.deepcopy(non_empty_mdContact)
                     _non_empty_mdContact.tag = "stepProc"
                     _non_empty_mdContact.find(f"./role/RoleCd").set('value', "009")
-
-                    empty_step_procs = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[not(text())] and ./rpCntInfo/cntAddress/eMailAdd[not(text())]]")
-                    if len(empty_step_procs) == 0:
-                        prcStep = target_root.xpath(f"./dqInfo/dataLineage/prcStep")[0]
-                        prcStep.insert(-1, _non_empty_mdContact)
-                        del prcStep
-                        if contact_name != mdContact_rpIndName and contact_email != mdContact_eMailAdd:
+                    stepDesc.getparent().insert(10, _non_empty_mdContact)
+                    del _non_empty_mdContact
+                    non_empty_mdContact.getparent().remove(non_empty_mdContact)
+                elif len(step_processers) >= 1:
+                    if isinstance(non_empty_mdContact, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_mdContact, type(None)):
+                        if isinstance(non_empty_mdContact.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_mdContact.getparent(), type(None)):
                             non_empty_mdContact.getparent().remove(non_empty_mdContact)
                         else:
                             pass
-                    elif len(empty_step_procs) == 1:
-                        empty_step_procs[0].getparent().replace(empty_step_procs[0], _non_empty_mdContact)
                     else:
                         pass
-                    del _non_empty_mdContact
-                    del empty_step_procs
-                elif len(step_processers) == 1:
-                   #print(f"\t\t\tContact '{contact_name}' is in step processors. Removing from mdContact")
-                    if contact_name != mdContact_rpIndName and contact_email != mdContact_eMailAdd:
-                        non_empty_mdContact.getparent().remove(non_empty_mdContact)
-                    else:
-                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
                 del step_processers
-                del contact_name, contact_email
-                del non_empty_mdContact
-            del non_empty_mdContacts
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+            else:
+                pass
+            del stepDesc
+
+            #print(f"\t\t\tStep Desc pre-2025")
+            stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")
+            if len(stepDescPre2025) >= 1 and contact_name == mdContact_rpIndName and contact_email == mdContact_eMailAdd:
+                step_processers = stepDescPre2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{mdContact_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDescPre2025) >= 1 and contact_name != mdContact_rpIndName and contact_email != mdContact_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+                if len(step_processers) == 0:
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_mdContact = copy.deepcopy(non_empty_mdContact)
+                    _non_empty_mdContact.tag = "stepProc"
+                    _non_empty_mdContact.find(f"./role/RoleCd").set('value', "009")
+                    stepDescPre2025.getparent().insert(10, _non_empty_mdContact)
+                    del _non_empty_mdContact
+                    non_empty_mdContact.getparent().remove(non_empty_mdContact)
+                elif len(step_processers) >= 1:
+                    #print(f"\t\t\t\t\t\tContact '{contact_name}' is in step processors. Removing from mdContact")
+                    if isinstance(non_empty_mdContact, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_mdContact, type(None)):
+                        if isinstance(non_empty_mdContact.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_mdContact.getparent(), type(None)):
+                            non_empty_mdContact.getparent().remove(non_empty_mdContact)
+                        else:
+                            pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
+                del step_processers
+            else:
+                pass
+            del stepDescPre2025
+
+            #print(f"\t\t\tStep Desc 2025")
+            stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='Update Metadata 2025']")
+            if len(stepDesc2025) >= 1 and contact_name == mdContact_rpIndName and contact_email == mdContact_eMailAdd:
+                step_processers = stepDesc2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{mdContact_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDesc2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDesc2025
+            elif len(stepDesc2025) >= 1 and contact_name != mdContact_rpIndName and contact_email != mdContact_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDesc2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDesc2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+                if len(step_processers) == 0:
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_mdContact = copy.deepcopy(non_empty_mdContact)
+                    _non_empty_mdContact.tag = "stepProc"
+                    _non_empty_mdContact.find(f"./role/RoleCd").set('value', "009")
+                    stepDesc2025.getparent().insert(10, _non_empty_mdContact)
+                    del _non_empty_mdContact
+                    non_empty_mdContact.getparent().remove(non_empty_mdContact)
+                elif len(step_processers) >= 1:
+                    pass
+                    #print(f"\t\t\t\t\t\tContact '{contact_name}' is in step processors. Removing from mdContact")
+                    if isinstance(non_empty_mdContact, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_mdContact, type(None)):
+                        if isinstance(non_empty_mdContact.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_mdContact.getparent(), type(None)):
+                            non_empty_mdContact.getparent().remove(non_empty_mdContact)
+                        else:
+                            pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
+                del step_processers
+            else:
+                pass
+            del stepDesc2025
+            del contact_name, contact_email
+            del non_empty_mdContact
         else:
             pass
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        prefered_mdContact = target_root.xpath(f"./mdContact[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
-        #print(len(prefered_mdContact))
-        if len(prefered_mdContact) == 0:
-            #print(len(prefered_mdContact))
+        del non_empty_mdContacts
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        mdContacts = target_root.xpath(f'./mdContact')
+        if len(mdContacts) == 1:
             pass
-        elif len(prefered_mdContact) == 1:
-            #print(len(prefered_mdContact))
-            pass
-        elif len(prefered_mdContact) > 1:
-            #print(len(prefered_mdContact))
-            pass
+            #print(f"\tThis dataset as the correct number of mdContacts!!! Count: {len(target_root.xpath(f'./mdContact'))}")
+        elif len(mdContacts) > 1:
+            print(f"\tToo many mdContacts!!! Count: {len(mdContacts)}")
+            for mdContact in mdContacts:
+                #print(etree.tostring(mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del mdContact
         else:
             pass
-        del prefered_mdContact
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
         del mdContacts
-
-        for mdContact in target_root.xpath(f"./mdContact"):
-            #print(etree.tostring(mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
-            del mdContact
-
-        for prcStep in target_root.xpath(f"./dqInfo/dataLineage/prcStep"): # /stepProc
-            #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #print(f"Process Step")
+        prcSteps = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()!='pre-Update Metadata 2025' or text()!='Update Metadata 2025']]")
+        if len(prcSteps) == 1:
+            #print(f'\tProcess Step: {prcSteps[0].find("stepDesc").text}')
+            #print(etree.tostring(prcSteps[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
             del prcStep
+        if len(prcSteps) > 1:
+            for prcStep in prcSteps:
+                pass
+                #print(f'\tProcess Step: {prcStep.find("stepDesc").text}')
+                #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep
+        else:
+            pass
+        del prcSteps
+        #print(f"Process Step Pre-2025")
+        prcStepPre2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='pre-Update Metadata 2025']]")
+        if len(prcStepPre2025s) > 0:
+            for prcStepPre2025 in prcStepPre2025s:
+                pass
+                #print(f'\tProcess Step: {prcStepPre2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStepPre2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStepPre2025
+        else:
+            pass
+        del prcStepPre2025s
+        #print(f"Process Step 2025")
+        prcStep2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='Update Metadata 2025']]")
+        if len(prcStep2025s) > 0:
+            for prcStep2025 in prcStep2025s:
+                pass
+                #print(f'\tProcess Step: {prcStep2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStep2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep2025
+        else:
+            pass
+        del prcStep2025s
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-       #print(f"\tidPoCs Section")
-        # Get list of idPoCs elements
+        #print(f"\tidPoCs Section")
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         idPoCs = target_tree.xpath("./dataIdInfo/idPoC")
-        #print(f"idPoCs: {len(idPoCs)}")
         if len(idPoCs) == 0:
-           #print("\tMissing Element. Inserting prefered contact element")
+            #print("\tBad News! Missing Element. Inserting prefered contact element")
             new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{idPoC_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}'] and ./editorSave[text()='True']]")
             new_contact = copy.deepcopy(new_contact_tree[0])
             new_contact.tag = "idPoC"
@@ -3006,14 +3134,12 @@ def add_update_contacts(dataset_path=""):
             del _root, _xml
             target_root.find("./dataIdInfo").insert(dataIdInfo_dict["idPoC"], new_contact)
             del new_contact, new_contact_tree
-        del idPoCs
-
-        idPoCs = target_root.xpath(f"./dataIdInfo/idPoC")
-        if len(idPoCs) >= 1:
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        elif len(idPoCs) >= 1:
+            #print(f"\tGood News! Contacts ({len(idPoCs)}) found in '{idPoCs[0].tag}'\n")
+            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
             prefered_idPoC = target_root.xpath(f"./dataIdInfo/idPoC[./rpIndName[text()='{idPoC_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}']]")
-            #print(f"prefered_idPoC: {len(prefered_idPoC)}")
             if len(prefered_idPoC) == 0:
+                #print(f"\tBad News! Prefered idPoCs not found.'\n")
                 new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{idPoC_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}'] and ./editorSave[text()='True']]")
                 new_contact = copy.deepcopy(new_contact_tree[0])
                 new_contact.tag = "idPoC"
@@ -3024,84 +3150,260 @@ def add_update_contacts(dataset_path=""):
                 target_root.find("./dataIdInfo").insert(dataIdInfo_dict["idPoC"], new_contact)
                 del new_contact, new_contact_tree
             elif len(prefered_idPoC) == 1:
-                #print(len(prefered_idPoC))
                 pass
             elif len(prefered_idPoC) > 1:
-                #print(len(prefered_idPoC))
                 pass
             else:
                 pass
             del prefered_idPoC
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        else:
+            pass
+        del idPoCs
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            empty_idPoCs = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idPoC") if len(mdC) == 0]
-            #print(len(empty_idPoCs))
-            for empty_idPoC in empty_idPoCs:
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{idPoC_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}'] and ./editorSave[text()='True']]")
-                new_contact = copy.deepcopy(new_contact_tree[0])
-                new_contact.tag = "idPoC"
-                _xml = f'<role><RoleCd value="007"></RoleCd></role>'
-                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-                new_contact.insert(100, _root)
-                del _root, _xml
-                target_root.find("./dataIdInfo").replace(empty_idPoC, new_contact)
-                del new_contact, new_contact_tree
-                del empty_idPoC
-            del empty_idPoCs
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            non_empty_idPoCs = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idPoC") if len(mdC) != 0]
-            #print(f"non_empty_idPoCs: {len(non_empty_idPoCs)}")
-            for non_empty_idPoC in non_empty_idPoCs:
-                #print(etree.tostring(non_empty_idPoC, encoding='UTF-8', method='xml', pretty_print=True).decode())
-                contact_name = non_empty_idPoC.find("./rpIndName").text if non_empty_idPoC.find("rpIndName") is not None else None
-                contact_email = non_empty_idPoC.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_idPoC.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
-               #print(f"\t\tName and email: {contact_name}, {contact_email}")
-
-                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        non_empty_idPoCs = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idPoC") if len(mdC) != 0]
+        for non_empty_idPoC in non_empty_idPoCs:
+            contact_name = non_empty_idPoC.find("./rpIndName").text if non_empty_idPoC.find("rpIndName") is not None else None
+            contact_email = non_empty_idPoC.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_idPoC.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
+            #print(f"\t\tName and email: {contact_name}, {contact_email}")
+            #print(f"\t\t\tStep Desc Original. Not 2025 or Pre-2025")
+            stepDesc = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text() !='pre-Update Metadata 2025' or text() !='Update Metadata 2025']")
+            if len(stepDesc) >= 1 and contact_name == idPoC_rpIndName and contact_email == idPoC_eMailAdd:
+                step_processers = stepDesc[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{idPoC_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDesc) >= 1 and contact_name != idPoC_rpIndName and contact_email != idPoC_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
                 if len(step_processers) == 0:
-                   #print(f"\t\t\tContact '{contact_name}' is not in step processors")
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
                     _non_empty_idPoC = copy.deepcopy(non_empty_idPoC)
                     _non_empty_idPoC.tag = "stepProc"
                     _non_empty_idPoC.find(f"./role/RoleCd").set('value', "009")
-
-                    empty_step_procs = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[not(text())] and ./rpCntInfo/cntAddress/eMailAdd[not(text())]]")
-                    if len(empty_step_procs) == 0:
-                        prcStep = target_root.xpath(f"./dqInfo/dataLineage/prcStep")[0]
-                        prcStep.insert(-1, _non_empty_idPoC)
-                        del prcStep
-                        if contact_name != idPoC_rpIndName and contact_email != idPoC_eMailAdd:
+                    stepDesc[0].getparent().insert(10, _non_empty_idPoC)
+                    del _non_empty_idPoC
+                    non_empty_idPoC.getparent().remove(non_empty_idPoC)
+                elif len(step_processers) >= 1:
+                    if isinstance(non_empty_idPoC, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_idPoC, type(None)):
+                        if isinstance(non_empty_idPoC.getparent(), type(None)):
                             pass
+                        elif not isinstance(non_empty_idPoC.getparent(), type(None)):
                             non_empty_idPoC.getparent().remove(non_empty_idPoC)
                         else:
                             pass
-                    elif len(empty_step_procs) == 1:
-                        empty_step_procs[0].getparent().replace(empty_step_procs[0], _non_empty_idPoC)
                     else:
                         pass
-                    del _non_empty_idPoC
-                    del empty_step_procs
-                elif len(step_processers) == 1:
-                   #print(f"\t\t\tContact '{contact_name}' is in step processors. Removing from idPoCs")
-                    if contact_name != idPoC_rpIndName and contact_email != idPoC_eMailAdd:
-                        pass
-                        #non_empty_idPoC.getparent().remove(non_empty_idPoC)
-                    else:
-                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
                 del step_processers
-                del contact_name, contact_email
-                del non_empty_idPoC
-            del non_empty_idPoCs
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        del idPoCs
+            else:
+                pass
+            del stepDesc
 
-       #print(f"\tcitRespPartys Section")
+            #print(f"\t\t\tStep Desc pre-2025")
+            stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")
+            if len(stepDescPre2025) >= 1 and contact_name == idPoC_rpIndName and contact_email == idPoC_eMailAdd:
+                step_processers = stepDescPre2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{idPoC_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDescPre2025) >= 1 and contact_name != idPoC_rpIndName and contact_email != idPoC_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+                if len(step_processers) == 0:
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_idPoC = copy.deepcopy(non_empty_idPoC)
+                    _non_empty_idPoC.tag = "stepProc"
+                    _non_empty_idPoC.find(f"./role/RoleCd").set('value', "009")
+                    stepDescPre2025[0].getparent().insert(10, _non_empty_idPoC)
+                    del _non_empty_idPoC
+                    non_empty_idPoC.getparent().remove(non_empty_idPoC)
+                elif len(step_processers) >= 1:
+                    #print(f"\t\t\t\t\t\tContact '{contact_name}' is in step processors. Removing from idPoC")
+                    if isinstance(non_empty_idPoC, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_idPoC, type(None)):
+                        if isinstance(non_empty_idPoC.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_idPoC.getparent(), type(None)):
+                            non_empty_idPoC.getparent().remove(non_empty_idPoC)
+                        else:
+                            pass
+                    else:
+                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
+                del step_processers
+            else:
+                pass
+            del stepDescPre2025
+
+            #print(f"\t\t\tStep Desc 2025")
+            stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='Update Metadata 2025']")
+            if len(stepDesc2025) >= 1 and contact_name == idPoC_rpIndName and contact_email == idPoC_eMailAdd:
+                step_processers = stepDesc2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{idPoC_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{idPoC_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDesc2025) >= 1 and contact_name != idPoC_rpIndName and contact_email != idPoC_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+                if len(step_processers) == 0:
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_idPoC = copy.deepcopy(non_empty_idPoC)
+                    _non_empty_idPoC.tag = "stepProc"
+                    _non_empty_idPoC.find(f"./role/RoleCd").set('value', "009")
+                    stepDesc2025[0].getparent().insert(10, _non_empty_idPoC)
+                    del _non_empty_idPoC
+                    non_empty_idPoC.getparent().remove(non_empty_idPoC)
+                elif len(step_processers) >= 1:
+                    #print(f"\t\t\t\t\t\tContact '{contact_name}' is in step processors. Removing from citRespParty")
+                    if isinstance(non_empty_idPoC, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_idPoC, type(None)):
+                        if isinstance(non_empty_idPoC.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_idPoC.getparent(), type(None)):
+                            non_empty_idPoC.getparent().remove(non_empty_idPoC)
+                        else:
+                            pass
+                    else:
+                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
+                del step_processers
+            else:
+                pass
+            del stepDesc2025
+            del contact_name, contact_email
+            del non_empty_idPoC
+        else:
+            pass
+        del non_empty_idPoCs
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        idPoCs = target_root.xpath(f'./dataIdInfo/idPoC')
+        if len(idPoCs) == 1:
+            pass
+            #print(f"\tThis dataset as the correct number of mdContacts!!! Count: {len(target_root.xpath(f'./mdContact'))}")
+        elif len(idPoCs) > 1:
+            print(f"\tToo many mdContacts!!! Count: {len(idPoCs)}")
+            for idPoC in idPoCs:
+                #print(etree.tostring(mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del idPoC
+        else:
+            pass
+        del idPoCs
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        for mdContact in target_root.xpath(f"./mdContact"):
+            #print(etree.tostring(mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del mdContact
+        for idPoC in target_root.xpath(f"./dataIdInfo/idPoC"):
+            #print(etree.tostring(idPoC, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del idPoC
+        #print(f"Process Step")
+        prcSteps = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()!='pre-Update Metadata 2025' or text()!='Update Metadata 2025']]")
+        if len(prcSteps) == 1:
+            #print(f'\tProcess Step: {prcSteps[0].find("stepDesc").text}')
+            #print(etree.tostring(prcSteps[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del prcStep
+        if len(prcSteps) > 1:
+            for prcStep in prcSteps:
+                pass
+                #print(f'\tProcess Step: {prcStep.find("stepDesc").text}')
+                #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep
+        else:
+            pass
+        del prcSteps
+        #print(f"Process Step Pre-2025")
+        prcStepPre2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='pre-Update Metadata 2025']]")
+        if len(prcStepPre2025s) > 0:
+            for prcStepPre2025 in prcStepPre2025s:
+                pass
+                #print(f'\tProcess Step: {prcStepPre2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStepPre2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStepPre2025
+        else:
+            pass
+        del prcStepPre2025s
+        #print(f"Process Step 2025")
+        prcStep2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='Update Metadata 2025']]")
+        if len(prcStep2025s) > 0:
+            for prcStep2025 in prcStep2025s:
+                pass
+                #print(f'\tProcess Step: {prcStep2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStep2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep2025
+        else:
+            pass
+        del prcStep2025s
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #print(f"Step Desc Pre-2025")
+        #stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+        #print(etree.tostring(stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #del stepDescPre2025
+        #print(f"Step Desc 2025")
+        #stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='Update Metadata 2025']")[0]
+        #print(etree.tostring(stepDesc2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+        #del stepDesc2025
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        #print(f"\tcitRespPartys Section")
         citRespPartys = target_tree.xpath("./dataIdInfo/idCitation/citRespParty")
-       #print(f"\t\tcitRespPartys: {len(citRespPartys)}")
         if len(citRespPartys) == 0:
-           #print("\tMissing the citRespParty element. Inserting prefered contact element")
+            #print("\tBad News! Missing Element. Inserting prefered contact element")
             new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
             new_contact = copy.deepcopy(new_contact_tree[0])
             new_contact.tag = "citRespParty"
@@ -3109,16 +3411,14 @@ def add_update_contacts(dataset_path=""):
             _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
             new_contact.insert(100, _root)
             del _root, _xml
-            #target_root.find("./dataIdInfo/idCitation").insert(dataIdInfo_dict["citRespParty"], new_contact)
+            target_root.find("./dataIdInfo/idCitation").insert(dataIdInfo_dict["citRespParty"], new_contact)
             del new_contact, new_contact_tree
-        del citRespPartys
-
-        citRespPartys = target_root.xpath(f"./dataIdInfo/idCitation/citRespParty")
-        if len(citRespPartys) >= 1:
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        elif len(citRespPartys) >= 1:
+            #print(f"\tGood News! Contacts ({len(citRespPartys)}) found in '{citRespPartys[0].tag}'\n")
+            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
             prefered_citRespParty = target_root.xpath(f"./dataIdInfo/idCitation/citRespParty[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}']]")
-           #print(f"\t\tprefered_citRespParty: {len(prefered_citRespParty)}")
             if len(prefered_citRespParty) == 0:
+                #print(f"\tBad News! Prefered citRespParty not found.'\n")
                 new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
                 new_contact = copy.deepcopy(new_contact_tree[0])
                 new_contact.tag = "citRespParty"
@@ -3129,307 +3429,282 @@ def add_update_contacts(dataset_path=""):
                 target_root.find("./dataIdInfo/idCitation").insert(dataIdInfo_dict["citRespParty"], new_contact)
                 del new_contact, new_contact_tree
             elif len(prefered_citRespParty) == 1:
-                #print(len(prefered_citRespParty))
                 pass
             elif len(prefered_citRespParty) > 1:
-                #print(f"\t\tprefered_citRespParty: {len(prefered_citRespParty)}")
                 pass
             else:
                 pass
             del prefered_citRespParty
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+        else:
+            pass
+        del citRespPartys
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            empty_citRespPartys = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idCitation/citRespParty") if len(mdC) == 0]
-           #print(f"\t\tempty_citRespPartys: {len(empty_citRespPartys)}")
-            for empty_citRespParty in empty_citRespPartys:
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{citRespParty_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
-                new_contact = copy.deepcopy(new_contact_tree[0])
-                new_contact.tag = "citRespParty"
-                _xml = f'<role><RoleCd value="002"></RoleCd></role>'
-                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-                new_contact.insert(100, _root)
-                del _root, _xml
-                target_root.find("./dataIdInfo/idCitation").replace(empty_citRespParty, new_contact)
-                del new_contact, new_contact_tree
-                del empty_citRespParty
-            del empty_citRespPartys
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            non_empty_citRespPartys = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idCitation/citRespParty") if len(mdC) != 0]
-           #print(f"\t\tnon_empty_citRespPartys: {len(non_empty_citRespPartys)}")
-            for non_empty_citRespParty in non_empty_citRespPartys:
-                #print(etree.tostring(non_empty_citRespParty, encoding='UTF-8', method='xml', pretty_print=True).decode())
-                contact_name = non_empty_citRespParty.find("./rpIndName").text if non_empty_citRespParty.find("rpIndName") is not None else None
-                contact_email = non_empty_citRespParty.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_citRespParty.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
-               #print(f"\t\tName and email: {contact_name}, {contact_email}")
-
-                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        non_empty_citRespPartys = [mdC for mdC in target_root.xpath(f"./dataIdInfo/idCitation/citRespParty") if len(mdC) != 0]
+        for non_empty_citRespParty in non_empty_citRespPartys:
+            contact_name  = non_empty_citRespParty.find("./rpIndName").text if non_empty_citRespParty.find("rpIndName") is not None else None
+            contact_email = non_empty_citRespParty.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_citRespParty.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
+            #print(f"\t\tName and email: {contact_name}, {contact_email}")
+            #print(f"\t\t\tStep Desc Original. Not 2025 or Pre-2025")
+            stepDesc = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text() !='pre-Update Metadata 2025' or text() !='Update Metadata 2025']")
+            if len(stepDesc) >= 1 and contact_name == citRespParty_rpIndName and contact_email == citRespParty_eMailAdd:
+                step_processers = stepDesc[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{citRespParty_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDesc) >= 1 and contact_name != citRespParty_rpIndName and contact_email != citRespParty_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = stepDesc[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
                 if len(step_processers) == 0:
-                   #print(f"\t\t\tContact '{contact_name}' is not in step processors")
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
                     _non_empty_citRespParty = copy.deepcopy(non_empty_citRespParty)
                     _non_empty_citRespParty.tag = "stepProc"
                     _non_empty_citRespParty.find(f"./role/RoleCd").set('value', "009")
-
-                    empty_step_procs = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[not(text())] and ./rpCntInfo/cntAddress/eMailAdd[not(text())]]")
-                    if len(empty_step_procs) == 0:
-                        prcStep = target_root.xpath(f"./dqInfo/dataLineage/prcStep")[0]
-                        prcStep.insert(-1, _non_empty_citRespParty)
-                        del prcStep
-                        if contact_name != citRespParty_rpIndName and contact_email != citRespParty_eMailAdd:
+                    stepDesc[0].getparent().insert(10, _non_empty_citRespParty)
+                    del _non_empty_citRespParty
+                    non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
+                elif len(step_processers) >= 1:
+                    if isinstance(non_empty_citRespParty, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_citRespParty, type(None)):
+                        if isinstance(non_empty_citRespParty.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_citRespParty.getparent(), type(None)):
                             non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
                         else:
                             pass
-                    elif len(empty_step_procs) == 1:
-                        empty_step_procs[0].getparent().replace(empty_step_procs[0], _non_empty_citRespParty)
                     else:
                         pass
-                    del _non_empty_citRespParty
-                    del empty_step_procs
-                elif len(step_processers) == 1:
-                   #print(f"\t\t\tContact '{contact_name}' is in step processors. Removing from citRespParty")
-                    if contact_name != citRespParty_rpIndName and contact_email != citRespParty_eMailAdd:
-                        pass
-                        # non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
-                    else:
-                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
                 del step_processers
-                del contact_name, contact_email
-                del non_empty_citRespParty
-            del non_empty_citRespPartys
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        prefered_citRespParty = target_root.xpath(f"./dataIdInfo/idCitation/citRespParty[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
-        #print(len(prefered_citRespParty))
-        if len(prefered_citRespParty) == 0:
-            #print(len(prefered_citRespParty))
-            pass
-        elif len(prefered_citRespParty) == 1:
-            #print(len(prefered_citRespParty))
-            pass
-        elif len(prefered_citRespParty) > 1:
-            #print(len(prefered_citRespParty))
-            for i in range(1, len(prefered_citRespParty)):
-                prefered_citRespParty[i].getparent().remove(prefered_citRespParty[i])
-                del i
-            pass
-        else:
-            pass
-        del prefered_citRespParty
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        del citRespPartys
-
-       #print(f"\tdistorCont Section")
-        distorConts = target_tree.xpath("./distInfo/distributor/distorCont")
-       #print(f"\t\tdistorConts: {len(distorConts)}")
-        if len(distorConts) == 0:
-           #print("\tMissing the citRespParty element. Inserting prefered contact element")
-            new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{distorCont_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{distorCont_eMailAdd}'] and ./editorSave[text()='True']]")
-            new_contact = copy.deepcopy(new_contact_tree[0])
-            new_contact.tag = "distorCont"
-            _xml = f'<role><RoleCd value="005"></RoleCd></role>'
-            _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-            new_contact.insert(100, _root)
-            del _root, _xml
-            #target_root.find("./dataIdInfo/idCitation").insert(dataIdInfo_dict["citRespParty"], new_contact)
-            del new_contact, new_contact_tree
-        del distorConts
-
-        distorConts = target_root.xpath(f"./distInfo/distributor/distorCont")
-        if len(distorConts) >= 1:
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            prefered_distorCont = target_root.xpath(f"./distInfo/distributor/distorCont[./rpIndName[text()='{distorCont_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{distorCont_eMailAdd}']]")
-           #print(f"\t\tprefered_citRespParty: {len(prefered_distorCont)}")
-            if len(prefered_distorCont) == 0:
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{distorCont_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}'] and ./editorSave[text()='True']]")
-                new_contact = copy.deepcopy(new_contact_tree[0])
-                new_contact.tag = "distorCont"
-                _xml = f'<role><RoleCd value="005"></RoleCd></role>'
-                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-                new_contact.insert(100, _root)
-                del _root, _xml
-                target_root.find("./distInfo/distributor").insert(distInfo_dict["distorCont"], new_contact)
-                del new_contact, new_contact_tree
-            elif len(prefered_distorCont) == 1:
-                #print(len(prefered_distorCont))
-                pass
-            elif len(prefered_distorCont) > 1:
-                #print(f"\t\tprefered_citRespParty: {len(prefered_distorCont)}")
-                pass
             else:
                 pass
-            del prefered_distorCont
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
+            del stepDesc
 
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            empty_distorConts = [mdC for mdC in target_root.xpath(f"./distInfo/distributor/distorCont") if len(mdC) == 0]
-           #print(f"\t\tempty_distorConts: {len(empty_distorConts)}")
-            for empty_distorCont in empty_distorConts:
-                new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{distorCont_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{distorCont_eMailAdd}'] and ./editorSave[text()='True']]")
-                new_contact = copy.deepcopy(new_contact_tree[0])
-                new_contact.tag = "distorCont"
-                _xml = f'<role><RoleCd value="005"></RoleCd></role>'
-                _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-                new_contact.insert(100, _root)
-                del _root, _xml
-                target_root.find("./distInfo/distributor").replace(empty_distorCont, new_contact)
-                del new_contact, new_contact_tree
-                del empty_distorCont
-            del empty_distorConts
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-
-            # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-            non_empty_distorConts = [mdC for mdC in target_root.xpath(f"./distInfo/distributor/distorCont") if len(mdC) != 0]
-           #print(f"\t\tnon_empty_citRespPartys: {len(non_empty_distorConts)}")
-            for non_empty_distorCont in non_empty_distorConts:
-                #print(etree.tostring(non_empty_distorCont, encoding='UTF-8', method='xml', pretty_print=True).decode())
-                contact_name = non_empty_distorCont.find("./rpIndName").text if non_empty_distorCont.find("rpIndName") is not None else None
-                contact_email = non_empty_distorCont.find("./rpCntInfo/cntAddress/eMailAdd").text if non_empty_distorCont.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
-               #print(f"\t\tName and email: {contact_name}, {contact_email}")
-
-                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+            #print(f"\t\t\tStep Desc pre-2025")
+            stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")
+            if len(stepDescPre2025) >= 1 and contact_name == citRespParty_rpIndName and contact_email == citRespParty_eMailAdd:
+                step_processers = stepDescPre2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{citRespParty_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDescPre2025) >= 1 and contact_name != citRespParty_rpIndName and contact_email != citRespParty_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
                 if len(step_processers) == 0:
-                   #print(f"\t\t\tContact '{contact_name}' is not in step processors")
-                    _non_empty_distorCont = copy.deepcopy(non_empty_distorCont)
-                    _non_empty_distorCont.tag = "stepProc"
-                    _non_empty_distorCont.find(f"./role/RoleCd").set('value', "009")
-
-                    empty_step_procs = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[not(text())] and ./rpCntInfo/cntAddress/eMailAdd[not(text())]]")
-                    if len(empty_step_procs) == 0:
-                        prcStep = target_root.xpath(f"./dqInfo/dataLineage/prcStep")[0]
-                        prcStep.insert(-1, _non_empty_distorCont)
-                        del prcStep
-                        if contact_name != distorCont_rpIndName and contact_email != distorCont_eMailAdd:
-                            non_empty_distorCont.getparent().remove(non_empty_distorCont)
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_citRespParty = copy.deepcopy(non_empty_citRespParty)
+                    _non_empty_citRespParty.tag = "stepProc"
+                    _non_empty_citRespParty.find(f"./role/RoleCd").set('value', "009")
+                    stepDescPre2025.getparent().insert(10, _non_empty_citRespParty)
+                    del _non_empty_citRespParty
+                elif len(step_processers) >= 1:
+                    if isinstance(non_empty_citRespParty, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_citRespParty, type(None)):
+                        if isinstance(non_empty_citRespParty.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_citRespParty.getparent(), type(None)):
+                            non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
                         else:
                             pass
-                    elif len(empty_step_procs) == 1:
-                        empty_step_procs[0].getparent().replace(empty_step_procs[0], _non_empty_distorCont)
                     else:
                         pass
-                    del _non_empty_distorCont
-                    del empty_step_procs
-                elif len(step_processers) == 1:
-                   #print(f"\t\t\tContact '{contact_name}' is in step processors. Removing from distorCont")
-                    if contact_name != distorCont_rpIndName and contact_email != distorCont_eMailAdd:
-                        pass
-                        # non_empty_distorCont.getparent().remove(non_empty_distorCont)
-                    else:
-                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
                 del step_processers
-                del contact_name, contact_email
-                del non_empty_distorCont
-            del non_empty_distorConts
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        prefered_distorCont = target_root.xpath(f"./distInfo/distributor/distorCont[./rpIndName[text()='{mdContact_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{mdContact_eMailAdd}']]")
-        #print(len(prefered_distorCont))
-        if len(prefered_distorCont) == 0:
-            #print(len(prefered_distorCont))
-            pass
-        elif len(prefered_distorCont) == 1:
-            #print(len(prefered_distorCont))
-            pass
-        elif len(prefered_distorCont) > 1:
-            #print(len(prefered_distorCont))
-            for i in range(1, len(prefered_distorCont)):
-                prefered_distorCont[i].getparent().remove(prefered_distorCont[i])
-                del i
-            pass
+            else:
+                pass
+            del stepDescPre2025
+
+            #print(f"\t\t\tStep Desc pre-2025")
+            stepDesc2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='Update Metadata 2025']")
+            if len(stepDesc2025) >=1 and contact_name == citRespParty_rpIndName and contact_email == citRespParty_eMailAdd:
+                step_processers = stepDesc2025[0].xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{citRespParty_rpIndName}'] or ./rpCntInfo/cntAddress/eMailAdd[text()='{citRespParty_eMailAdd}']]")
+                if len(step_processers) == 1:
+                    #print(f"\t\t\t\tRemoving Prefered Contact from pre-Update Metadata 2025")
+                    step_processers[0].getparent().remove(step_processers[0])
+                else:
+                    pass
+                del step_processers
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+            elif len(stepDesc2025) >=1 and contact_name != citRespParty_rpIndName and contact_email != citRespParty_eMailAdd:
+                #print(f"\t\t\t\tStep Processor: {contact_name}, {contact_email}")
+                #_stepDescPre2025 = target_root.xpath("./dqInfo/dataLineage/prcStep/stepDesc[text()='pre-Update Metadata 2025']")[0]
+                #print(etree.tostring(_stepDescPre2025.getparent(), encoding='UTF-8', method='xml', pretty_print=True).decode())
+                #del _stepDescPre2025
+                step_processers = target_root.xpath(f"./dqInfo/dataLineage/prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}']]")
+                #print(step_processers)
+                #print(etree.tostring(step_processers[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+                if len(step_processers) == 0:
+                    #print(f"\t\t\t\t\tContact '{contact_name}' is not in step processors. Copying contact")
+                    _non_empty_citRespParty = copy.deepcopy(non_empty_citRespParty)
+                    _non_empty_citRespParty.tag = "stepProc"
+                    _non_empty_citRespParty.find(f"./role/RoleCd").set('value', "009")
+                    stepDesc2025.getparent().insert(10, _non_empty_citRespParty)
+                    non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
+                    del _non_empty_citRespParty
+                elif len(step_processers) >= 1:
+                    if isinstance(non_empty_citRespParty, type(None)):
+                        pass
+                        #print("isinstance is None")
+                    elif not isinstance(non_empty_citRespParty, type(None)):
+                        if isinstance(non_empty_citRespParty.getparent(), type(None)):
+                            pass
+                        elif not isinstance(non_empty_citRespParty.getparent(), type(None)):
+                            non_empty_citRespParty.getparent().remove(non_empty_citRespParty)
+                        else:
+                            pass
+                    else:
+                        pass
+                    for i in range(1, len(step_processers)):
+                        #print(f"\t\t\t\t\t\tRemoving '{contact_name}' from step processors.")
+                        step_processers[i].getparent().remove(step_processers[i])
+                        del i
+                else:
+                    pass
+                del step_processers
+            else:
+                pass
+            del stepDesc2025
+            del contact_name, contact_email
+            del non_empty_citRespParty
         else:
             pass
-        del prefered_distorCont
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #####
-        del distorConts
-
-        for distorCont in target_root.xpath(f"./distInfo/distributor/distorCont"):
-            #print(etree.tostring(distorCont, encoding='UTF-8', method='xml', pretty_print=True).decode())
-            del distorCont
-
-        for idCitation in target_root.xpath(f"./dataIdInfo/idCitation"):
-            #print(etree.tostring(idCitation, encoding='UTF-8', method='xml', pretty_print=True).decode())
-            del idCitation
-
-        for idPoC in target_root.xpath(f"./dataIdInfo/idPoC"):
-            #print(etree.tostring(idPoC, encoding='UTF-8', method='xml', pretty_print=True).decode())
-            del idPoC
-
-        for prcStep in target_root.xpath(f"./dqInfo/dataLineage/prcStep"): # /stepProc
-            #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
-            del prcStep
-
+        del non_empty_citRespPartys
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        citRespPartys = target_root.xpath(f'./dataIdInfo/idCitation/citRespParty')
+        if len(citRespPartys) == 1:
+            pass
+            #print(f"\tThis dataset as the correct number of mdContacts!!! Count: {len(target_root.xpath(f'./mdContact'))}")
+        elif len(citRespPartys) > 1:
+            print(f"\tToo many citRespPartys!!! Count: {len(citRespPartys)}")
+            for citRespParty in citRespPartys:
+                #print(etree.tostring(citRespParty, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del citRespParty
+        else:
+            pass
+        del citRespPartys
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         for mdContact in target_root.xpath(f"./mdContact"):
             #print(etree.tostring(mdContact, encoding='UTF-8', method='xml', pretty_print=True).decode())
             del mdContact
+        for idPoC in target_root.xpath(f"./dataIdInfo/idPoC"):
+            #print(etree.tostring(idPoC, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del idPoC
+        for citRespParty in target_root.xpath(f"./dataIdInfo/idCitation/citRespParty"):
+            #print(etree.tostring(citRespParty, encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del citRespParty
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-##       #print(f"\tsrcCitatns")
-##        srcCitatns = target_root.xpath(f"./dqInfo/dataLineage/dataSource/srcCitatn[./rpIndName[text()!='{srcCitatn_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()!='{srcCitatn_eMailAdd}'] and ./editorSave[text()='True']]")
-##        if srcCitatns is not None and len(srcCitatns) >= 1 and len(srcCitatns[0]) > 0:
-##            for srcCitatn in srcCitatns:
-##                #print(etree.tostring(srcCitatns, encoding='UTF-8', method='xml', pretty_print=True).decode())
-##                contact_name  = srcCitatn.find("rpIndName").text if srcCitatn.find("rpIndName") is not None else None
-##                contact_email = srcCitatn.find("rpCntInfo/cntAddress/eMailAdd").text if srcCitatn.find("rpCntInfo/cntAddress/eMailAdd") is not None else None
-##                #print(contact_name, contact_email)
-##                if contact_name is not None and contact_email is not None :
-##                    pass
-##                    print(f"\t\tName and email: {contact_name}, {contact_email}")
-##                    print(f"\t\t\t{target_root.getpath(srcCitatn)}\n")
-##                    step_processers = target_root.xpath(f"//prcStep/stepProc[./rpIndName[text()='{contact_name}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{contact_email}'] and ./editorSave[text()='True']]")
-##                    if step_processers is not None and len(step_processers) == 1:
-##                        pass
-##                        print(f"\t\t{srcCitatn.tag} Contact in Step Processors")
-##                    if step_processers is not None and len(step_processers) == 0:
-##                        print(f"\t\t{srcCitatn.tag} Contact is not in Step Processors. Need to copy over")
-##                        _step_processers = target_root.xpath(f"//prcStep/stepProc")
-##                        #print(_step_processers)
-##                        #print(_step_processers.getparent())
-##                        _srcCitatn = copy.deepcopy(srcCitatn)
-##                        _srcCitatn.tag = "stepProc"
-##                        _step_processers.getparent().insert(10, _srcCitatn)
-##                        del _srcCitatn
-##                        del _step_processers
-##                        new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{srcCitatn_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{srcCitatn_eMailAdd}'] and ./editorSave[text()='True']]")
-##                        new_contact = copy.deepcopy(new_contact_tree[0])
-##                        new_contact.tag = "srcCitatn"
-##                        _xml = f'<role><RoleCd value="008"></RoleCd></role>'
-##                        _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-##                        new_contact.insert(100, _root)
-##                        del _root, _xml
-##                        srcCitatn.getparent().replace(srcCitatn, new_contact)
-##                        del new_contact, new_contact_tree
-##                    elif step_processers is not None and len(step_processers) > 1:
-##                        print(f"\t\tToo many {srcCitatn.tag} Contact in Step Processors.")
-##                        _srcCitatn = copy.deepcopy(srcCitatn)
-##                        _srcCitatn.tag = "stepProc"
-##                        step_processers.getparent().insert(10, _srcCitatn)
-##                    del step_processers
-##                elif contact_name is None and contact_email is None :
-##                    print(f"\t\tContact is empty in {srcCitatn.tag}. Name and email: {contact_name}, {contact_email}")
-##                    new_contact_tree = contacts_xml_tree.xpath(f"//contact[./rpIndName[text()='{srcCitatn_rpIndName}'] and ./rpCntInfo/cntAddress/eMailAdd[text()='{srcCitatn_eMailAdd}'] and ./editorSave[text()='True']]")
-##                    new_contact = copy.deepcopy(new_contact_tree[0])
-##                    new_contact.tag = "srcCitatn"
-##                    _xml = f'<role><RoleCd value="008"></RoleCd></role>'
-##                    _root = etree.XML(_xml, etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
-##                    new_contact.insert(100, _root)
-##                    del _root, _xml
-##                    srcCitatn.getparent().replace(srcCitatn, new_contact)
-##                    del new_contact, new_contact_tree
-##                del contact_name, contact_email
-##                del srcCitatn
-##        del srcCitatns
-##        for srcCitatn in target_root.xpath(f"./dqInfo/dataLineage/dataSource/srcCitatn"):
-##            #print(etree.tostring(srcCitatn, encoding='UTF-8', method='xml', pretty_print=True).decode())
-##            del srcCitatn
+        #print(f"Process Step")
+        prcSteps = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()!='pre-Update Metadata 2025' or text()!='Update Metadata 2025']]")
+        if len(prcSteps) == 1:
+            #print(f'\tProcess Step: {prcSteps[0].find("stepDesc").text}')
+            #print(etree.tostring(prcSteps[0], encoding='UTF-8', method='xml', pretty_print=True).decode())
+            del prcStep
+        if len(prcSteps) > 1:
+            for prcStep in prcSteps:
+                pass
+                #print(f'\tProcess Step: {prcStep.find("stepDesc").text}')
+                #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep
+        else:
+            pass
+        del prcSteps
+        #print(f"Process Step Pre-2025")
+        prcStepPre2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='pre-Update Metadata 2025']]")
+        if len(prcStepPre2025s) > 0:
+            for prcStepPre2025 in prcStepPre2025s:
+                pass
+                #print(f'\tProcess Step: {prcStepPre2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStepPre2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStepPre2025
+        else:
+            pass
+        del prcStepPre2025s
+        #print(f"Process Step 2025")
+        prcStep2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='Update Metadata 2025']]")
+        if len(prcStep2025s) > 0:
+            for prcStep2025 in prcStep2025s:
+                pass
+                #print(f'\tProcess Step: {prcStep2025.find("stepDesc").text}')
+                #print(etree.tostring(prcStep2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep2025
+        else:
+            pass
+        del prcStep2025s
 
-##        <dataLineage>
-##            <statement>[Enter a thorough lineage statement detailing how range was created. This should provide a description of all sources and data layer inputs including documentation of how they were used. Further this should document any process steps used to create the range]</statement>
-##            <dataSource type="">
-##                <srcDesc>[Provide a description of the data sources used]</srcDesc>
-##                <srcMedName>
-##                    <MedNameCd value="015"/>
-##                </srcMedName>
-##                <srcCitatn>
-
-
+        #print(f"Step Desc")
+        prcSteps = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text() !='pre-Update Metadata 2025' or text() !='Update Metadata 2025']]")
+        if len(prcSteps) > 0:
+            for prcStep in prcSteps:
+                #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                remove_duplicate_elements(prcStep)
+                #print(etree.tostring(prcStep, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep
+        else:
+            pass
+        del prcSteps
+        #print(f"Step Desc Pre-2025")   # prcStep/stepProc[./rpIndName[text()='{contact_name}']
+        prcStepPre2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='pre-Update Metadata 2025']]")
+        if len(prcStepPre2025s) > 0:
+            for prcStepPre2025 in prcStepPre2025s:
+                #print(etree.tostring(prcStepPre2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                remove_duplicate_elements(prcStepPre2025)
+                #print(etree.tostring(prcStepPre2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStepPre2025
+        else:
+            pass
+        del prcStepPre2025s
+        #print(f"Step Desc 2025")
+        prcStep2025s = target_root.xpath("./dqInfo/dataLineage/prcStep[./stepDesc[text()='Update Metadata 2025']]")
+        if len(prcStep2025s) > 0:
+            for prcStep2025 in prcStep2025s:
+                #print(etree.tostring(prcStep2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                remove_duplicate_elements(prcStep2025)
+                #print(etree.tostring(prcStep2025, encoding='UTF-8', method='xml', pretty_print=True).decode())
+                del prcStep2025
+        else:
+            pass
+        del prcStep2025s
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 ##                RoleCd_dict = {"001" : "Resource Provider", "002" : "Custodian",
@@ -3440,8 +3715,6 @@ def add_update_contacts(dataset_path=""):
 ##                               "011" : "Author",            "012" : "Collaborator",
 ##                               "013" : "Editor",            "014" : "Mediator",
 ##                               "015" : "Rights Holder",}
-
-
 ##                contact_dict = {"citRespParty" : [{"role"  : "Custodian",         "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
 ##                                 "idPoC"        : [{"role"  : "Point of Contact", "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
 ##                                 "distorCont"   : [{"role"  : "Distributor",      "rpIndName" : "Nikki Wildart",       "eMailAdd" : "nikki.wildart@noaa.gov"},],
@@ -3456,25 +3729,25 @@ def add_update_contacts(dataset_path=""):
 ##                                                   {"role" : "Processor",         "rpIndName" : "Susan Wang",          "eMailAdd" : "susan.wang@noaa.gov"},
 ##                                                 ],}
 
-##        for child in target_root.xpath("/metadata"):
-##            child[:] = sorted(child, key=lambda x: root_dict[x.tag])
-##            del child
-##
-##        for child in target_root.xpath("/metadata/Esri"):
-##            child[:] = sorted(child, key=lambda x: esri_dict[x.tag])
-##            del child
-##
-##        for child in target_root.xpath("/metadata/dataIdInfo"):
-##            child[:] = sorted(child, key=lambda x: dataIdInfo_dict[x.tag])
-##            del child
-##
-##        for child in target_root.xpath("/metadata/dqInfo"):
-##            child[:] = sorted(child, key=lambda x: dqInfo_dict[x.tag])
-##            del child
+        for child in target_root.xpath("/metadata"):
+            child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+            del child
+
+        for child in target_root.xpath("/metadata/Esri"):
+            child[:] = sorted(child, key=lambda x: esri_dict[x.tag])
+            del child
+
+        for child in target_root.xpath("/metadata/dataIdInfo"):
+            child[:] = sorted(child, key=lambda x: dataIdInfo_dict[x.tag])
+            del child
+
+        for child in target_root.xpath("/metadata/dqInfo"):
+            child[:] = sorted(child, key=lambda x: dqInfo_dict[x.tag])
+            del child
 
         # No changes needed below
-        #print(etree.tostring(target_tree, encoding='UTF-8', method='xml', pretty_print=True).decode())
         etree.indent(target_tree, space='    ')
+        #print(etree.tostring(target_tree, encoding='UTF-8', method='xml', pretty_print=True).decode())
         dataset_md_xml = etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
         SaveBackXml = True
@@ -3484,7 +3757,10 @@ def add_update_contacts(dataset_path=""):
             dataset_md.save()
             dataset_md.synchronize("ALWAYS")
             dataset_md.save()
-            #dataset_md.reload()
+            #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+            #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
             del dataset_md
         else:
             pass
@@ -3514,8 +3790,13 @@ def add_update_contacts(dataset_path=""):
         # Functiona Parameters
         del dataset_path
 
+    except KeyboardInterrupt:
+        raise SystemExit
+    except Warning as w:
+        print(w)
+        # traceback.print_exc()
     except Exception:
-        raise Exception
+        traceback.print_exc()
     except:
         traceback.print_exc()
     else:
@@ -3530,8 +3811,7 @@ def update_eainfo_xml_elements(dataset_path=""):
     try:
         # Imports
         from lxml import etree
-        from io import StringIO, BytesIO
-        import copy
+        from io import StringIO
         from arcpy import metadata as md
 
         arcpy.env.overwriteOutput          = True
@@ -3548,36 +3828,9 @@ def update_eainfo_xml_elements(dataset_path=""):
         json_path = rf"{project_folder}\root_dict.json"
         with open(json_path, "r") as json_file:
             root_dict = json.load(json_file)
-        json_path = rf"{project_folder}\esri_dict.json"
-        with open(json_path, "r") as json_file:
-            esri_dict = json.load(json_file)
-        json_path = rf"{project_folder}\dataIdInfo_dict.json"
-        with open(json_path, "r") as json_file:
-            dataIdInfo_dict = json.load(json_file)
-        json_path = rf"{project_folder}\contact_dict.json"
-        with open(json_path, "r") as json_file:
-            contact_dict = json.load(json_file)
-        json_path = rf"{project_folder}\dqInfo_dict.json"
-        with open(json_path, "r") as json_file:
-            dqInfo_dict = json.load(json_file)
-        json_path = rf"{project_folder}\RoleCd_dict.json"
-        with open(json_path, "r") as json_file:
-            RoleCd_dict = json.load(json_file)
-        json_path = rf"{project_folder}\tpCat_dict.json"
-        with open(json_path, "r") as json_file:
-            tpCat_dict = json.load(json_file)
         del json_file
         del json_path
         del json
-
-        contacts_xml = rf"{os.environ['USERPROFILE']}\Documents\ArcGIS\Descriptions\contacts.xml"
-        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
-        contacts_xml_tree = etree.parse(contacts_xml, parser=parser) # To parse from a string, use the fromstring() function instead.
-        del parser
-        del contacts_xml
-        contacts_xml_root = contacts_xml_tree.getroot()
-        #etree.indent(contacts_xml_root, space="  ")
-        #print(etree.tostring(contacts_xml_root, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
 
         xml_file = rf"{project_folder}\eainfo.xml"
         parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
@@ -3598,6 +3851,20 @@ def update_eainfo_xml_elements(dataset_path=""):
         target_tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
         target_root = target_tree.getroot()
         del parser, dataset_md_xml
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        # Remove stuff not needed
+        mdStanName = target_root.xpath("./mdStanName")
+        for _mdStanName in mdStanName:
+            _mdStanName.getparent().remove(_mdStanName)
+            del _mdStanName
+        del mdStanName
+        mdStanVer = target_root.xpath("./mdStanVer")
+        for _mdStanVer in mdStanVer:
+            _mdStanVer.getparent().remove(_mdStanVer)
+            del _mdStanVer
+        del mdStanVer
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         dataset_name = os.path.basename(dataset_path)
         print(f"Processing Entity Attributes for dataset: '{dataset_name}'")
@@ -3642,18 +3909,6 @@ def update_eainfo_xml_elements(dataset_path=""):
             child[:] = sorted(child, key=lambda x: root_dict[x.tag])
             del child
 
-        for child in target_root.xpath("/metadata/Esri"):
-            child[:] = sorted(child, key=lambda x: esri_dict[x.tag])
-            del child
-
-        for child in target_root.xpath("/metadata/dataIdInfo"):
-            child[:] = sorted(child, key=lambda x: dataIdInfo_dict[x.tag])
-            del child
-
-        for child in target_root.xpath("/metadata/dqInfo"):
-            child[:] = sorted(child, key=lambda x: dqInfo_dict[x.tag])
-            del child
-
         # No changes needed below
         #print(etree.tostring(target_tree, encoding='UTF-8', method='xml', pretty_print=True).decode())
         etree.indent(target_tree, space='    ')
@@ -3664,9 +3919,12 @@ def update_eainfo_xml_elements(dataset_path=""):
             dataset_md = md.Metadata(dataset_path)
             dataset_md.xml = dataset_md_xml
             dataset_md.save()
-            dataset_md.synchronize("ALWAYS")
+            dataset_md.synchronize("CREATED")
             dataset_md.save()
-            #dataset_md.reload()
+            #_target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+            #_target_tree.write(rf"{export_folder}\{dataset_name}.xml", pretty_print=True)
+            #print(etree.tostring(_target_tree.find("./eainfo"), encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+            #del _target_tree
             del dataset_md
         else:
             pass
@@ -3675,9 +3933,7 @@ def update_eainfo_xml_elements(dataset_path=""):
 
         # Declared Variables
         del dataset_name
-        del contacts_xml_tree, contacts_xml_root
-        del dqInfo_dict, dataIdInfo_dict, esri_dict, root_dict, tpCat_dict
-        del contact_dict, RoleCd_dict
+        del root_dict
         del project_folder, scratch_folder
         del project_gdb
 
@@ -3685,9 +3941,12 @@ def update_eainfo_xml_elements(dataset_path=""):
         del source_tree, source_root
         del target_tree, target_root
         # Imports
-        del StringIO, BytesIO, etree, md, copy
+        del StringIO, etree, md
         # Functiona Parameters
         del dataset_path
+
+    except KeyboardInterrupt:
+        raise SystemExit
     except:
         traceback.print_exc()
     else:
@@ -3907,6 +4166,8 @@ def add_update_dates(dataset_path=""):
         # Function Parameters
         del dataset_path
 
+    except KeyboardInterrupt:
+        raise SystemExit
     except Exception:
         traceback.print_exc()
     except:
@@ -4043,7 +4304,7 @@ def add_update_titles(dataset_path=""):
         etree.indent(target_root, space='    ')
         dataset_md_xml = etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
 
-        SaveBackXml = True
+        SaveBackXml = False
         if SaveBackXml:
             dataset_md = md.Metadata(dataset_path)
             dataset_md.xml = dataset_md_xml
@@ -4065,8 +4326,203 @@ def add_update_titles(dataset_path=""):
         # Function Parameters
         del dataset_path
 
+    except KeyboardInterrupt:
+        raise SystemExit
     except Exception:
         traceback.print_exc()
+    except:
+        traceback.print_exc()
+    else:
+        # While in development, leave here. For test, move to finally
+        rk = [key for key in locals().keys() if not key.startswith('__')]
+        if rk: print(f"WARNING!! Remaining Keys in the '{inspect.stack()[0][3]}' function: ##--> '{', '.join(rk)}' <--##"); del rk
+        return True
+    finally:
+        pass
+
+def create_feature_class_layers(dataset_path=""):
+    try:
+        # Import
+        from lxml import etree
+        from arcpy import metadata as md
+        from io import BytesIO, StringIO
+        import copy
+
+        project_gdb    = os.path.dirname(dataset_path)
+        project_folder = os.path.dirname(project_gdb)
+        export_folder  = rf"{project_folder}\Export"
+        scratch_folder = rf"{project_folder}\Scratch"
+        project_file   = rf"{project_folder}\Dev Species Range.aprx"
+
+        # Set basic workkpace variables
+        arcpy.env.workspace                = project_gdb
+        arcpy.env.scratchWorkspace         = rf"{scratch_folder}\scratch.gdb"
+        arcpy.env.overwriteOutput          = True
+        arcpy.env.parallelProcessingFactor = "100%"
+
+        del project_folder, scratch_folder
+
+        aprx = arcpy.mp.ArcGISProject(project_file)
+        home_folder = aprx.homeFolder
+        del project_file
+
+        dataset_name = os.path.basename(dataset_path)
+
+        feature_service_title = dataset_name.replace("_", " ")
+
+        print(f"Dataset: {dataset_name}")
+        print(f"\tTitle: {feature_service_title}")
+
+        print(f"\tMake Feature Layer")
+        feature_class_layer = arcpy.management.MakeFeatureLayer(dataset_path, feature_service_title)
+        feature_class_layer_file = rf"{home_folder}\Layers\{feature_class_layer}.lyrx"
+
+        print(f"\tSave Layer File")
+        _result = arcpy.management.SaveToLayerFile(
+                                                   in_layer         = feature_class_layer,
+                                                   out_layer        = feature_class_layer_file,
+                                                   is_relative_path = "RELATIVE",
+                                                   version          = "CURRENT"
+                                                  )
+        del _result
+
+        arcpy.management.Delete(feature_class_layer)
+        del feature_class_layer
+
+        layer_file = arcpy.mp.LayerFile(feature_class_layer_file)
+
+        # aprx.listBasemaps() to get a list of available basemaps
+        #
+        #    ['Charted Territory Map',
+        #     'Colored Pencil Map',
+        #     'Community Map',
+        #     'Dark Gray Canvas',
+        #     'Firefly Imagery Hybrid',
+        #     'GEBCO Basemap (NOAA NCEI Visualization)',
+        #     'GEBCO Basemap/Contours (NOAA NCEI Visualization)',
+        #     'GEBCO Gray Basemap (NOAA NCEI Visualization)',
+        #     'GEBCO Gray Basemap/Contours (NOAA NCEI Visualization)',
+        #     'Human Geography Dark Map',
+        #     'Human Geography Map',
+        #     'Imagery',
+        #     'Imagery Hybrid',
+        #     'Light Gray Canvas',
+        #     'Mid-Century Map',
+        #     'Modern Antique Map',
+        #     'National Geographic Style Map',
+        #     'Navigation',
+        #     'Navigation (Dark)',
+        #     'Newspaper Map',
+        #     'NOAA Charts',
+        #     'NOAA ENC® Charts',
+        #     'Nova Map',
+        #     'Oceans',
+        #     'OpenStreetMap',
+        #     'Streets',
+        #     'Streets (Night)',
+        #     'Terrain with Labels',
+        #     'Topographic']
+
+        if aprx.listMaps(feature_service_title):
+            aprx.deleteItem(aprx.listMaps(feature_service_title)[0])
+            aprx.save()
+        else:
+            pass
+
+        print(f"\tCreating Map: {feature_service_title}")
+        aprx.createMap(f"{feature_service_title}", "Map")
+        aprx.save()
+
+        current_map = aprx.listMaps(feature_service_title)[0]
+
+        basemap = "Terrain with Labels"
+        current_map.addLayer(layer_file)
+        current_map.addBasemap(basemap)
+        aprx.save()
+        del basemap
+
+        fc_md = md.Metadata(dataset_path)
+
+        if not fc_md.thumbnailUri:
+            print(f"\t\tCreate map thumbnail and update metadata")
+            current_map_view = current_map.defaultView
+            current_map_view.exportToPNG(
+                                         rf"{home_folder}\Layers\{feature_service_title}.png",
+                                         width=288,
+                                         height=192,
+                                         resolution=96,
+                                         color_mode="24-BIT_TRUE_COLOR",
+                                         embed_color_profile=True,
+                                        )
+            del current_map_view
+
+            fc_md.thumbnailUri = rf"{home_folder}\Layers\{feature_service_title}.png"
+            fc_md.save()
+
+        del fc_md
+
+        in_md = md.Metadata(dataset_path)
+        layer_file.metadata.copy(in_md)
+        layer_file.metadata.save()
+        layer_file.save()
+        current_map.metadata.copy(in_md)
+        current_map.metadata.save()
+        aprx.save()
+        del in_md
+
+        print(f"\t\tLayer File Path:     {layer_file.filePath}")
+        print(f"\t\tLayer File Version:  {layer_file.version}")
+        print(f"\t\tLayer File Metadata:")
+        print(f"\t\t\tLayer File Title:              {layer_file.metadata.title}")
+        #print(f"\t\t\tLayer File Tags:               {layer_file.metadata.tags}")
+        #print(f"\t\t\tLayer File Summary:            {layer_file.metadata.summary}")
+        #print(f"\t\t\tLayer File Description:        {layer_file.metadata.description}")
+        #print(f"\t\t\tLayer File Credits:            {layer_file.metadata.credits}")
+        #print(f"\t\t\tLayer File Access Constraints: {layer_file.metadata.accessConstraints}")
+
+        print(f"\t\tList of layers or tables in Layer File:")
+        if current_map.listLayers(feature_service_title):
+            layer = current_map.listLayers(feature_service_title)[0]
+        elif current_map.listTables(feature_service_title):
+            layer = current_map.listTables(feature_service_title)[0]
+        else:
+            arcpy.AddWarning(f"Something wrong")
+
+        in_md = md.Metadata(dataset_path)
+        layer.metadata.copy(in_md)
+        layer.metadata.save()
+        layer_file.save()
+        aprx.save()
+        del in_md
+
+        print(f"\t\t\tLayer Name: {layer.name}")
+        print(f"\t\t\tLayer Metadata:")#
+        print(f"\t\t\t\tLayer Title:              {layer.metadata.title}")
+        #print(f"\t\t\t\tLayer Tags:               {layer.metadata.tags}")
+        #print(f"\t\t\t\tLayer Summary:            {layer.metadata.summary}")
+        #print(f"\t\t\t\tLayer Description:        {layer.metadata.description}")
+        #print(f"\t\t\t\tLayer Credits:            {layer.metadata.credits}")
+        #print(f"\t\t\t\tLayer Access Constraints: {layer.metadata.accessConstraints}")
+        del layer
+        del layer_file
+        del feature_class_layer_file
+
+        aprx.deleteItem(current_map)
+        del current_map
+        aprx.save()
+
+        # Declared Variables
+        del dataset_name, feature_service_title
+        del aprx
+        del home_folder
+        del project_gdb, export_folder
+        # Imports
+        del etree, StringIO, BytesIO, copy, md
+        # Function Parameters
+        del dataset_path
+
+    except KeyboardInterrupt:
+        raise SystemExit
     except:
         traceback.print_exc()
     else:
@@ -4156,9 +4612,10 @@ def main(project_gdb="", contacts="", collective_title=""):
         # Missing: mdContact
         #for dataset_path in sorted([d for d in datasets if d.endswith("WhaleBlue_20201014")]):
         #for dataset_path in sorted([d for d in datasets if d.endswith("CoralElkhorn_20210712")]):
+        #for dataset_path in sorted([d for d in datasets if os.path.basename(d).startswith("Coral")]):
         #for dataset_path in sorted([d for d in datasets if d.endswith("SeaTurtleLeatherback_20210129")]):
         #for dataset_path in sorted([d for d in datasets if d.endswith("WhaleSperm_20211220")]):
-        for dataset_path in sorted([d for d in datasets if d.endswith("AbaloneBlack_20210712")]):
+        #for dataset_path in sorted([d for d in datasets if d.endswith("AbaloneBlack_20210712")]):
         # has all three in stepProc
         #for dataset_path in sorted([d for d in datasets if d.endswith("AbaloneWhite_20210728")]):
         # Missing: mdContact
@@ -4167,10 +4624,25 @@ def main(project_gdb="", contacts="", collective_title=""):
         #for dataset_path in sorted([d for d in datasets if d.endswith("WhaleNorthPacificRight_20201015")]):
         #for dataset_path in sorted([d for d in datasets if d.endswith("SpeciesRangeTable20241212")]):
         # ALL
-        #for dataset_path in sorted(datasets):
+        for dataset_path in sorted(datasets):
         #for dataset_path in sorted([d for d in datasets if not d.endswith("SpeciesRangeTable20241212")]):
 
             # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+            # A keeper. Adds entity attribute details
+            UpdateEaInfoXmlElements = True
+            if UpdateEaInfoXmlElements:
+                update_eainfo_xml_elements(dataset_path)
+            else:
+                pass
+            del UpdateEaInfoXmlElements
+
+            UpdateExistingContacts = True
+            if UpdateExistingContacts:
+                update_existing_contacts(dataset_path)
+            else:
+                pass
+            del UpdateExistingContacts
+
             InsertMissingElements = True
             if InsertMissingElements:
                 insert_missing_elements(dataset_path)
@@ -4178,34 +4650,27 @@ def main(project_gdb="", contacts="", collective_title=""):
                 pass
             del InsertMissingElements
 
-            # A keeper. Adds entity attribute details
-            UpdateEaInfoXmlElements = False
-            if UpdateEaInfoXmlElements:
-                update_eainfo_xml_elements(dataset_path)
-            else:
-                pass
-            del UpdateEaInfoXmlElements
-
-            UpdateExistingContacts = False
-            if UpdateExistingContacts:
-                update_existing_contacts(dataset_path)
-            else:
-                pass
-            del UpdateExistingContacts
-
-            AddUpdateContacts = False
+            AddUpdateContacts = True
             if AddUpdateContacts:
                 add_update_contacts(dataset_path=dataset_path)
             else:
                 pass
             del AddUpdateContacts
 
-            AddUpdateDates = False
+            AddUpdateDates = True
             if AddUpdateDates:
                 add_update_dates(dataset_path)
             else:
                 pass
             del AddUpdateDates
+
+            CreateFeatureClassLayers = False
+            if CreateFeatureClassLayers:
+                create_feature_class_layers(dataset_path=dataset_path)
+            else:
+                pass
+            del CreateFeatureClassLayers
+
             AddUpdateTitles = False
             if AddUpdateTitles:
                 add_update_titles(dataset_path)
@@ -4221,21 +4686,20 @@ def main(project_gdb="", contacts="", collective_title=""):
                 pass
             del UpdateProcessSteps
 
-            PrintTargetTree = False
+            PrintTargetTree = True
             if PrintTargetTree:
                 dataset_md = md.Metadata(dataset_path)
-                dataset_md.synchronize("ALWAYS")
-                dataset_md.save()
-                dataset_md.reload()
-                dataset_md_xml = dataset_md.xml
-                del dataset_md
+                #dataset_md.synchronize("ALWAYS")
+                #dataset_md.save()
+                #dataset_md.reload()
                 # Parse the XML
-                parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
-                target_tree = etree.parse(StringIO(dataset_md_xml), parser=parser)
-                target_root = target_tree.getroot()
-                del parser, dataset_md_xml
-                print(etree.tostring(target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
-                del target_tree, target_root
+                export_folder  = rf"{os.path.dirname(os.path.dirname(dataset_path))}\Export"
+                _target_tree = etree.parse(StringIO(dataset_md.xml), parser=etree.XMLParser(encoding='UTF-8', remove_blank_text=True))
+                etree.indent(_target_tree, "    ")
+                _target_tree.write(rf"{export_folder}\{os.path.basename(dataset_path)}.xml", encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
+                #print(etree.tostring(_target_tree, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True).decode())
+                del _target_tree, export_folder
+                del dataset_md
             else:
                 pass
             del PrintTargetTree
@@ -4267,7 +4731,9 @@ def main(project_gdb="", contacts="", collective_title=""):
         del elapse_time, end_time, start_time
         del gmtime, localtime, strftime, time
 
-    except Exception:
+    except KeyboardInterrupt:
+        raise SystemExit
+    except Exception as e:
         raise Exception
     except:
         traceback.print_exc()
@@ -4334,8 +4800,8 @@ if __name__ == "__main__":
                         }
 
         collective_title = "NMFS ESA Range Geodatabase 2024"
-        project_name     = "National Mapper"
-        #project_name    = "NMFS_ESA_Range"
+        #project_name     = "National Mapper"
+        project_name    = "NMFS_ESA_Range_20250122"
         project_folder   = rf"{base_project_folder}"
         project_gdb      = rf"{project_folder}\{project_name}.gdb"
 
@@ -4347,6 +4813,8 @@ if __name__ == "__main__":
 
         # Imports
 
+    except KeyboardInterrupt:
+        raise SystemExit
     except:
         traceback.print_exc()
     else:

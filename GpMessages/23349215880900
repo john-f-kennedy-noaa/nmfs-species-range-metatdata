@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?><messages><msg code="0" type="2">Start Time: Monday, March 31, 2025 4:37:51 PM</msg><msg code="-2147467259" type="100">﻿Traceback (most recent call last):
+﻿  File "c:\users\john.f.kennedy\appdata\local\programs\arcgis\pro\Resources\ArcToolbox\scripts\ExcelToTable.py", line 558, in &lt;module&gt;
+﻿    ExcelToTableX.excel_to_table(**kwargs)
+﻿  File "c:\users\john.f.kennedy\appdata\local\programs\arcgis\pro\Resources\ArcToolbox\Scripts\ExcelToTableX.py", line 568, in excel_to_table
+﻿    cell_range = gen_cell_range(cell_range, sheet)
+﻿                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+﻿  File "c:\users\john.f.kennedy\appdata\local\programs\arcgis\pro\Resources\ArcToolbox\Scripts\ExcelToTableX.py", line 504, in gen_cell_range
+﻿    'right': min(right, sheet.max_column),
+﻿             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+﻿TypeError: '&lt;' not supported between instances of 'NoneType' and 'int'
+</msg><msg code="0" type="0">Failed script Excel To Table...</msg><msg code="-2147467259" type="100">Failed to execute (ExcelToTable).</msg><msg code="0" type="3">Failed at Monday, March 31, 2025 4:37:51 PM (Elapsed Time: 0.35 seconds)</msg></messages>

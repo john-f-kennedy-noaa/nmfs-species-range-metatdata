@@ -95,9 +95,9 @@ def main():
 
         xml = '''<metadata><mdContact>
             <editorSource>extermal</editorSource>
-            <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+            <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
             <rpIndName>Nikki Wildart</rpIndName>
-            <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
             <rpPosName>Biologist</rpPosName>
             <rpCntInfo>
                 <cntAddress addressType="both">
@@ -419,9 +419,9 @@ def main():
 
         xml_file = b'''<metadata><mdContact>
             <editorSource>extermal</editorSource>
-            <editorDigest>9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce</editorDigest>
+            <editorDigest>7f5dd3d1346a40f0aee0e04601dff44733c88af1</editorDigest>
             <rpIndName>Nikki Wildart</rpIndName>
-            <rpOrgName>Office of Protected Resources, National Marine Fisheries Service</rpOrgName>
+            <rpOrgName>NMFS Office of Protected Resources</rpOrgName>
             <rpPosName>Biologist</rpPosName>
             <rpCntInfo>
                 <cntAddress addressType="both">

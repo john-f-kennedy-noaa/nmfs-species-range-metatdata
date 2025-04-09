@@ -102,6 +102,7 @@ def main(project_folder=""):
                     "scaleRange"     : 11,
                     "minScale"       : 12,
                     "maxScale"       : 13,
+                    "locales"        : 14,
                    }
 
         import json
@@ -279,30 +280,34 @@ def main(project_folder=""):
         del json_path
         del json
 
-        contact_dict = {"editorSource" : 0, "editorDigest" : 1,"rpIndName"     : 2,
-                        "rpOrgName"    : 3, "rpPosName"    : 4, "rpCntInfo"    : 5,
-                        "cntAddress"   : 0, "delPoint"     : 0, "city"         : 1,
-                        "adminArea"    : 2, "postCode"     : 3, "eMailAdd"     : 4,
-                        "country"      : 5, "cntPhone"     : 1, "voiceNum"     : 0,
-                        "faxNum"       : 1, "cntHours"     : 2, "cntOnlineRes" : 3,
-                        "linkage"      : 0, "protocol"     : 1, "orName"       : 2,
-                        "orDesc"       : 3, "orFunct"      : 4, "OnFunctCd"    : 0,
-                        "editorSave"   : 6, "displayName"  : 7, "role"         : 8,
-                        "RoleCd"       : 0,
-                        }
+        contact_element_order_dict = {"editorSource" : 0, "editorDigest" : 1,"rpIndName"     : 2,
+                                      "rpOrgName"    : 3, "rpPosName"    : 4, "rpCntInfo"    : 5,
+                                      "cntAddress"   : 0, "delPoint"     : 0, "city"         : 1,
+                                      "adminArea"    : 2, "postCode"     : 3, "eMailAdd"     : 4,
+                                      "country"      : 5, "cntPhone"     : 1, "voiceNum"     : 0,
+                                      "faxNum"       : 1, "cntHours"     : 2, "cntOnlineRes" : 3,
+                                      "linkage"      : 0, "protocol"     : 1, "orName"       : 2,
+                                      "orDesc"       : 3, "orFunct"      : 4, "OnFunctCd"    : 0,
+                                      "editorSave"   : 6, "displayName"  : 7, "role"         : 8,
+                                      "RoleCd"       : 0, "srcCitatn"    : 1, "resTitle"     : 0,
+                                      "resAltTitle"  : 1, "collTitle"    : 2, "date"         : 10,
+                                      "createDate"   : 0, "pubDate"      : 1, "reviseDate"   : 2,
+                                      "presForm"     : 3, "PresFormCd"   : 0, "fgdcGeoform"  : 1,
+                                      "citRespParty" : 6, "citOnlineRes" : 2,
+                                     }
 
         import json
-        json_path = rf"{project_folder}\contact_dict.json"
+        json_path = rf"{project_folder}\contact_element_order_dict.json"
         # Write to File
         with open(json_path, 'w') as json_file:
-            json.dump(contact_dict, json_file, indent=4)
+            json.dump(contact_element_order_dict, json_file, indent=4)
         del json_file
-        del contact_dict
+        del contact_element_order_dict
         with open(json_path, "r") as json_file:
-            contact_dict = json.load(json_file)
+            contact_element_order_dict = json.load(json_file)
         del json_file
-        print(contact_dict)
-        del contact_dict
+        print(contact_element_order_dict)
+        del contact_element_order_dict
         del json_path
         del json
 

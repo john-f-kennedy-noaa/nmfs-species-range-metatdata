@@ -31,5 +31,6 @@
     "ModTime": 10,
     "scaleRange": 11,
     "minScale": 12,
-    "maxScale": 13
+    "maxScale": 13,
+    "locales": 14
 }

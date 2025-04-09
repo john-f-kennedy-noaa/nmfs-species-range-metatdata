@@ -212,7 +212,7 @@ def contact_search_dictionary_email(target_xml_name, target_tree, search_express
                               },
 
             "Nikki Wildart" : {"editorSource"                   : "extermal",
-                               "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                               "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                "rpIndName"                      : "Nikki Wildart",
                                "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                "rpPosName"                      : "Biologist",
@@ -531,7 +531,7 @@ def contact_search_dictionary_name(target_xml_name, target_tree, search_expressi
                               },
 
             "Nikki Wildart" : {"editorSource"                   : "extermal",
-                               "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                               "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                "rpIndName"                      : "Nikki Wildart",
                                "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                "rpPosName"                      : "Biologist",
@@ -879,7 +879,7 @@ def contact_search_dictionary(target_xml_name, target_tree, search_expression, s
                               },
 
             "Nikki Wildart" : {"editorSource"                   : "extermal",
-                               "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                               "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                "rpIndName"                      : "Nikki Wildart",
                                "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                "rpPosName"                      : "Biologist",
@@ -1265,7 +1265,7 @@ def contact_search(target_xml, search_element="", search_term=""):
                               },
 
             "Nikki Wildart" : {"editorSource"                   : "extermal",
-                               "editorDigest"                   : "9cc0fe80de5687cc4d79f50f3a254f2c3ceb08ce",
+                               "editorDigest"                   : "7f5dd3d1346a40f0aee0e04601dff44733c88af1",
                                "rpIndName"                      : "Nikki Wildart",
                                "rpOrgName"                      : "Office of Protected Resources, National Marine Fisheries Service",
                                "rpPosName"                      : "Biologist",
