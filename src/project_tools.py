@@ -22,13 +22,13 @@ import traceback, inspect
 def parse_xml_file_format_and_save(project_folder="", xml_file="", sort=False):
     try:
         # Moved dictionaries to JSON
-        import json
-        json_path = rf"{project_folder}\root_dict.json"
-        with open(json_path, "r") as json_file:
-            root_dict = json.load(json_file)
-        del json_file
-        del json_path
-        del json
+##        import json
+##        json_path = rf"{project_folder}\root_dict.json"
+##        with open(json_path, "r") as json_file:
+##            root_dict = json.load(json_file)
+##        del json_file
+##        del json_path
+##        del json
 
         from lxml import etree
 
@@ -36,17 +36,17 @@ def parse_xml_file_format_and_save(project_folder="", xml_file="", sort=False):
         tree = etree.parse(xml_file, parser=parser) # To parse from a string, use the fromstring() function instead.
         del parser
 
-        if sort:
-            root = tree.getroot()
-            for child in root.xpath("."):
-                child[:] = sorted(child, key=lambda x: root_dict[x.tag])
-                del child
-            del root
+##        if sort:
+##            root = tree.getroot()
+##            for child in root.xpath("."):
+##                child[:] = sorted(child, key=lambda x: root_dict[x.tag])
+##                del child
+##            del root
         del sort
         etree.indent(tree, space='   ')
         tree.write(xml_file, encoding='UTF-8', method='xml', xml_declaration=True, pretty_print=True)
         del tree
-        del root_dict
+##        del root_dict
         # Imports
         del etree
         # Funcion Parameters

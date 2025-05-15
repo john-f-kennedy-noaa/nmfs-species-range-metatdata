@@ -758,7 +758,6 @@ def insert_missing_elements(dataset_path):
                                         <accessConsts>
                                             <RestrictCd value="008"/>
                                         </accessConsts>
-                                            <othConsts>Other Constraints</othConsts>
                                     </LegConsts>
                                     <SecConsts xmlns="">
                                         <class>
@@ -4629,35 +4628,35 @@ def main(project_gdb="", contacts="", collective_title=""):
 
             # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
             # A keeper. Adds entity attribute details
-            UpdateEaInfoXmlElements = True
+            UpdateEaInfoXmlElements = False
             if UpdateEaInfoXmlElements:
                 update_eainfo_xml_elements(dataset_path)
             else:
                 pass
             del UpdateEaInfoXmlElements
 
-            UpdateExistingContacts = True
+            UpdateExistingContacts = False
             if UpdateExistingContacts:
                 update_existing_contacts(dataset_path)
             else:
                 pass
             del UpdateExistingContacts
 
-            InsertMissingElements = True
+            InsertMissingElements = False
             if InsertMissingElements:
                 insert_missing_elements(dataset_path)
             else:
                 pass
             del InsertMissingElements
 
-            AddUpdateContacts = True
+            AddUpdateContacts = False
             if AddUpdateContacts:
                 add_update_contacts(dataset_path=dataset_path)
             else:
                 pass
             del AddUpdateContacts
 
-            AddUpdateDates = True
+            AddUpdateDates = False
             if AddUpdateDates:
                 add_update_dates(dataset_path)
             else:
@@ -4686,7 +4685,7 @@ def main(project_gdb="", contacts="", collective_title=""):
                 pass
             del UpdateProcessSteps
 
-            PrintTargetTree = True
+            PrintTargetTree = False
             if PrintTargetTree:
                 dataset_md = md.Metadata(dataset_path)
                 #dataset_md.synchronize("ALWAYS")

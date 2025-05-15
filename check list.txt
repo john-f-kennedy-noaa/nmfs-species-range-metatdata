@@ -1,0 +1,28 @@
+ArcGIS Pro Metadata items to review
+
+Overview > Item Description > Title
+Overview > Item Description > Tags
+Overview > Item Description > Summary (Purpose)
+Overview > Item Description > Description (Abstract)
+Overview > Item Description > Credits
+Overview > Item Description > Use Limitation
+
+Resource > Extents > Description
+
+
+Resource > Distribution > Distributor > Contact > Linkage
+Resource > Distribution > Distributor > Contact > Protocol > ESRI File Geodatabase
+Resource > Distribution > Distributor > Contact > Name > File Geodatabase Name
+Resource > Distribution > Distributor > Contact > Description > 
+
+Resource > Distribution > Distributor > Contact > Linkage
+Resource > Distribution > Distributor > Contact > Protocol > ESRI REST Service
+Resource > Distribution > Distributor > Contact > Name > ESRI REST Service name
+Resource > Distribution > Distributor > Contact > Description > ESRI REST Service description
+
+Resource > Lineage > Statement > 
+Resource > Lineage > Data Source > Source Description
+Resource > Lineage > Data Source > Source Citation > Title
+Resource > Lineage > Data Source > Source Citation > Online Resource > Linkage
+Resource > Lineage > Data Source > Source Citation > Online Resource > Name
+Resource > Lineage > Data Source > Source Citation > Online Resource > Description
