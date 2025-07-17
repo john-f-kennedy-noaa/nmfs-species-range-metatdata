@@ -749,7 +749,7 @@ def import_metadata(project_gdb=""):
         arcpy.env.workspace = project_gdb
 
         fcs = arcpy.ListFeatureClasses()
-CRE
+
         arcpy.AddMessage(f"Import and synchronize feature classes metadata from Project GDB\n")
         for fc in sorted(fcs):
             arcpy.AddMessage(f"Importing the metadata record for: '{fc}'")

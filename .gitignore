@@ -248,5 +248,25 @@ Publish
 *.xlsx
 *.aprx
 *.atbx
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.txt
+*.json
+
+
 
 GpMessages
+.ipynb_checkpoints
+__pycache__
+.backups
+Archive
+data
+helpDoc
+ImportLog
+Metadata Export
+prod
+RasterFunctionTemplates
+samples
+user_credentials.py
